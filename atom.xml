@@ -1,0 +1,663 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>胡军的网络日志</title>
+  
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://yoursite.com/"/>
+  <updated>2016-03-11T10:20:23.000Z</updated>
+  <id>http://yoursite.com/</id>
+  
+  <author>
+    <name>胡军</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Clojure的sequence抽象</title>
+    <link href="http://yoursite.com/2016/03/11/clojure-abstraction-seq-collection/"/>
+    <id>http://yoursite.com/2016/03/11/clojure-abstraction-seq-collection/</id>
+    <published>2016-03-11T10:02:04.000Z</published>
+    <updated>2016-03-11T10:20:23.000Z</updated>
+    
+    <content type="html">&lt;p&gt;来源:&lt;a href=&quot;http://www.braveclojure.com/core-functions-in-depth/#Programming_to_Abstractions&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Clojure for the brave and true&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&quot;什么是Programming-to-Abstractions&quot;&gt;&lt;a href=&quot;#什么是Programming-to-Abstractions&quot; class=&quot;headerlink&quot; title=&quot;什么是Programming to Abstractions?&quot;&gt;&lt;/a&gt;什么是Programming to Abstractions?&lt;/h2&gt;&lt;p&gt;是一种设计函数库的原则,Clojure采用了这种原则.&lt;br&gt;即把具有相似特征的数据结构抽象成某个概念,比如&lt;code&gt;sequence&lt;/code&gt;.之后这些类的数据都可以用同一个函数操作.&lt;/p&gt;
+&lt;h2 id=&quot;类似的东西&quot;&gt;&lt;a href=&quot;#类似的东西&quot; class=&quot;headerlink&quot; title=&quot;类似的东西&quot;&gt;&lt;/a&gt;类似的东西&lt;/h2&gt;&lt;p&gt;Javascript的&lt;code&gt;Lodash&lt;/code&gt;库的&lt;a href=&quot;https://lodash.com/docs#map&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;map&lt;/a&gt;和&lt;a href=&quot;https://lodash.com/docs#reduce&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;reduce&lt;/a&gt;也可以同时接受数组和对象作为参数.&lt;/p&gt;
+&lt;h2 id=&quot;带来的好处&quot;&gt;&lt;a href=&quot;#带来的好处&quot; class=&quot;headerlink&quot; title=&quot;带来的好处&quot;&gt;&lt;/a&gt;带来的好处&lt;/h2&gt;&lt;p&gt;让你写程序时候,专注于这个数据结构能有哪些操作,同时尽可能地忽略它是如何实现的.&lt;/p&gt;
+&lt;h2 id=&quot;map函数例子&quot;&gt;&lt;a href=&quot;#map函数例子&quot; class=&quot;headerlink&quot; title=&quot;map函数例子&quot;&gt;&lt;/a&gt;map函数例子&lt;/h2&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;15&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;16&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;(defn titleize&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  [topic]&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  (str topic &amp;quot; for the Brave and True&amp;quot;))&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;(map titleize [&amp;quot;Hamsters&amp;quot; &amp;quot;Ragnarok&amp;quot;])&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;; =&amp;gt; (&amp;quot;Hamsters for the Brave and True&amp;quot; &amp;quot;Ragnarok for the Brave and True&amp;quot;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;(map titleize &amp;apos;(&amp;quot;Empathy&amp;quot; &amp;quot;Decorating&amp;quot;))&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;; =&amp;gt; (&amp;quot;Empathy for the Brave and True&amp;quot; &amp;quot;Decorating for the Brave and True&amp;quot;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;(map titleize #&amp;#123;&amp;quot;Elbows&amp;quot; &amp;quot;Soap Carving&amp;quot;&amp;#125;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;; =&amp;gt; (&amp;quot;Elbows for the Brave and True&amp;quot; &amp;quot;Soap Carving for the Brave and True&amp;quot;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;var list = [&amp;quot;Transylvania&amp;quot;, &amp;quot;Forks, WA&amp;quot;];&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;map(list, function (val) &amp;#123; return val + &amp;quot; mapped!&amp;quot;&amp;#125;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;// =&amp;gt; [&amp;quot;Transylvania mapped!&amp;quot;, &amp;quot;Forks, WA mapped!&amp;quot;]&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;从例子可以看出,Clojure的&lt;code&gt;map&lt;/code&gt;函数可以接受多种数据类型,包括List,Vector,Set,Map.&lt;code&gt;map&lt;/code&gt;不是基于特定的数据结构定义的,而是基于&lt;code&gt;sequence&lt;/code&gt;定义的.&lt;/p&gt;
+&lt;h2 id=&quot;sequence以及三个核心函数&quot;&gt;&lt;a href=&quot;#sequence以及三个核心函数&quot; class=&quot;headerlink&quot; title=&quot;sequence以及三个核心函数&quot;&gt;&lt;/a&gt;sequence以及三个核心函数&lt;/h2&gt;&lt;p&gt;&lt;code&gt;sequence&lt;/code&gt;是Clojure对某些数据结构的抽象,即序列结构.&lt;code&gt;sequence&lt;/code&gt;有三个核心函数&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;first&lt;/code&gt;: 参数(一个序列)序列的第一个值 &lt;a href=&quot;http://clojure.github.io/clojure/clojure.core-api.html#clojure.core/first&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;参考&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;rest&lt;/code&gt;: 参数(一个序列)除了第一个值构成的序列 &lt;a href=&quot;http://clojure.github.io/clojure/clojure.core-api.html#clojure.core/rest&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;参考&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;cons&lt;/code&gt;: 第一个参数(一个值)和第2个参数(一个序列)新组成的序列 &lt;a href=&quot;http://clojure.github.io/clojure/clojure.core-api.html#clojure.core/cons&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;参考&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;只要某种数据结构支持上面三个核心函数,就能把它视为&lt;code&gt;sequence&lt;/code&gt;,因此就能对它进行map(和其他基于&lt;code&gt;sequence&lt;/code&gt;定义的函数,包括&lt;code&gt;filter&lt;/code&gt;,&lt;code&gt;reduce&lt;/code&gt;,&lt;code&gt;group-by&lt;/code&gt;等)操作.&lt;/p&gt;
+&lt;h2 id=&quot;sequence函数运行机制&quot;&gt;&lt;a href=&quot;#sequence函数运行机制&quot; class=&quot;headerlink&quot; title=&quot;sequence函数运行机制&quot;&gt;&lt;/a&gt;sequence函数运行机制&lt;/h2&gt;&lt;p&gt;当某个&lt;code&gt;sequence&lt;/code&gt;函数(比如&lt;code&gt;map&lt;/code&gt;)运行时,会把参数通过&lt;code&gt;seq&lt;/code&gt;函数转换成类似List的,支持上述&lt;code&gt;sequence&lt;/code&gt;核心函数的数据结构.然后再用它进行相关计算.&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;(seq &amp;apos;(1 2 3))&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;; =&amp;gt; (1 2 3)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;(seq [1 2 3])&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;; =&amp;gt; (1 2 3)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;(seq #&amp;#123;1 2 3&amp;#125;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;; =&amp;gt; (1 2 3)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;(seq &amp;#123;:name &amp;quot;Bill Compton&amp;quot; :occupation &amp;quot;Dead mopey guy&amp;quot;&amp;#125;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;; =&amp;gt; ([:name &amp;quot;Bill Compton&amp;quot;] [:occupation &amp;quot;Dead mopey guy&amp;quot;])&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h2 id=&quot;sequence函数举例&quot;&gt;&lt;a href=&quot;#sequence函数举例&quot; class=&quot;headerlink&quot; title=&quot;sequence函数举例&quot;&gt;&lt;/a&gt;&lt;code&gt;sequence&lt;/code&gt;函数举例&lt;/h2&gt;&lt;p&gt;&lt;a href=&quot;http://www.braveclojure.com/core-functions-in-depth/#Seq_Function_Examples&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;参考这里&lt;/a&gt;&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;来源:&lt;a href=&quot;http://www.braveclojure.com/core-functions-in-depth/#Programming_to_Abstractions&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Clojure for 
+    
+    </summary>
+    
+    
+      <category term="Clojure" scheme="http://yoursite.com/tags/Clojure/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>今天听了陈天老师的函数式编程的分享</title>
+    <link href="http://yoursite.com/2016/02/27/compose-monad/"/>
+    <id>http://yoursite.com/2016/02/27/compose-monad/</id>
+    <published>2016-02-27T14:10:32.000Z</published>
+    <updated>2016-03-04T14:15:23.000Z</updated>
+    
+    <content type="html">&lt;h3 id=&quot;重点一&quot;&gt;&lt;a href=&quot;#重点一&quot; class=&quot;headerlink&quot; title=&quot;重点一&quot;&gt;&lt;/a&gt;重点一&lt;/h3&gt;&lt;p&gt;FP的核心是组合,一些比较难懂的概念(比如&lt;a href=&quot;https://en.wikipedia.org/wiki/Monad_(functional_programming&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;monad&lt;/a&gt;), &lt;a href=&quot;https://en.wikipedia.org/wiki/Functor&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;functor&lt;/a&gt;),都是为了强化FP的组合功能.&lt;/p&gt;
+&lt;h3 id=&quot;重点二&quot;&gt;&lt;a href=&quot;#重点二&quot; class=&quot;headerlink&quot; title=&quot;重点二&quot;&gt;&lt;/a&gt;重点二&lt;/h3&gt;&lt;p&gt;FP非常有利于实现OpenClose原则,既Open to extension, close to modification.&lt;/p&gt;
+&lt;h3 id=&quot;重点三&quot;&gt;&lt;a href=&quot;#重点三&quot; class=&quot;headerlink&quot; title=&quot;重点三&quot;&gt;&lt;/a&gt;重点三&lt;/h3&gt;&lt;p&gt;Javascript的&lt;code&gt;Promise&lt;/code&gt;是一种&lt;code&gt;monad&lt;/code&gt;.&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;重点一&quot;&gt;&lt;a href=&quot;#重点一&quot; class=&quot;headerlink&quot; title=&quot;重点一&quot;&gt;&lt;/a&gt;重点一&lt;/h3&gt;&lt;p&gt;FP的核心是组合,一些比较难懂的概念(比如&lt;a href=&quot;https://en.wikipedia.org/wiki/Monad_
+    
+    </summary>
+    
+    
+      <category term="Functional Programming" scheme="http://yoursite.com/tags/Functional-Programming/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Rails Many to Many Associations</title>
+    <link href="http://yoursite.com/2013/10/20/rails-many-to-many-associations/"/>
+    <id>http://yoursite.com/2013/10/20/rails-many-to-many-associations/</id>
+    <published>2013-10-19T16:00:00.000Z</published>
+    <updated>2016-02-27T09:48:59.000Z</updated>
+    
+    <content type="html">&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;has_many through&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;requires a join model&lt;/li&gt;
+&lt;li&gt;name your join table anything&lt;ul&gt;
+&lt;li&gt;ex: memberships&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Pros:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;more flexible, can add additional attributes(solumns) to join table&lt;br&gt;Cons:&lt;/li&gt;
+&lt;li&gt;additional join model required&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;has_and_belongs_to_many&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;no join model necesary&lt;/li&gt;
+&lt;li&gt;assumes join table based on convention&lt;ul&gt;
+&lt;li&gt;ex: groups_users&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Pors:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;easier, no join model&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Cons:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;not as flexible, can’t add additional attributes(solumns) to join table&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;ol&gt;
+&lt;li&gt;&lt;p&gt;has_many through&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;requires a join model&lt;/li&gt;
+&lt;li&gt;name your join table anything&lt;ul&gt;
+&lt;li&gt;ex: memberships&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Deployment Options</title>
+    <link href="http://yoursite.com/2013/09/27/deployment-options/"/>
+    <id>http://yoursite.com/2013/09/27/deployment-options/</id>
+    <published>2013-09-26T16:00:00.000Z</published>
+    <updated>2016-02-27T09:48:48.000Z</updated>
+    
+    <content type="html">&lt;ul&gt;
+&lt;li&gt;Managed&lt;ul&gt;
+&lt;li&gt;Google App Engine&lt;/li&gt;
+&lt;li&gt;Heroku&lt;ul&gt;
+&lt;li&gt;cons: no server access, constrained enviroment&lt;/li&gt;
+&lt;li&gt;pros: don’t need devops skills&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Self Service&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;VPS&lt;ul&gt;
+&lt;li&gt;pros: your own virtualized environment/server&lt;/li&gt;
+&lt;li&gt;cons: need devop/sysadmin skills&lt;/li&gt;
+&lt;li&gt;AWS, Rackspace, Digital Ocean, Linode&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Physical Machines&lt;ul&gt;
+&lt;li&gt;colocation&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ul&gt;
+&lt;li&gt;Shared host&lt;ul&gt;
+&lt;li&gt;your app in a dir, other apps in other dir&lt;/li&gt;
+&lt;li&gt;roomates&lt;/li&gt;
+&lt;li&gt;pro: very cheap&lt;/li&gt;
+&lt;li&gt;cons: too many to list&lt;/li&gt;
+&lt;li&gt;Vendors&lt;ul&gt;
+&lt;li&gt;Dreamhost&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;ul&gt;
+&lt;li&gt;Managed&lt;ul&gt;
+&lt;li&gt;Google App Engine&lt;/li&gt;
+&lt;li&gt;Heroku&lt;ul&gt;
+&lt;li&gt;cons: no server access, constrained enviroment&lt;/li&gt;
+&lt;li&gt;pros: don’t need 
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Tools of Modern Web Development</title>
+    <link href="http://yoursite.com/2013/09/17/tools-of-modern-web-development/"/>
+    <id>http://yoursite.com/2013/09/17/tools-of-modern-web-development/</id>
+    <published>2013-09-16T16:00:00.000Z</published>
+    <updated>2016-02-27T09:48:25.000Z</updated>
+    
+    <content type="html">&lt;h2 id=&quot;juggle-many-layers-of-technologies-all-with-different-syntax-amp-behaviors-and-understand-how-they-integrate-with-each-other&quot;&gt;&lt;a href=&quot;#juggle-many-layers-of-technologies-all-with-different-syntax-amp-behaviors-and-understand-how-they-integrate-with-each-other&quot; class=&quot;headerlink&quot; title=&quot;juggle many layers of technologies, all with different syntax &amp;amp; behaviors, and understand how they integrate with each other&quot;&gt;&lt;/a&gt;juggle many layers of technologies, all with different syntax &amp;amp; behaviors, and understand how they integrate with each other&lt;/h2&gt;&lt;h2 id=&quot;Other-things-web-developers-must-be-aware-of&quot;&gt;&lt;a href=&quot;#Other-things-web-developers-must-be-aware-of&quot; class=&quot;headerlink&quot; title=&quot;Other things web developers must be aware of:&quot;&gt;&lt;/a&gt;Other things web developers must be aware of:&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;best practices&lt;/li&gt;
+&lt;li&gt;security concerns&lt;/li&gt;
+&lt;li&gt;browser compatibility&lt;/li&gt;
+&lt;li&gt;mobile operating systems&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;FrontEnd&quot;&gt;&lt;a href=&quot;#FrontEnd&quot; class=&quot;headerlink&quot; title=&quot;FrontEnd&quot;&gt;&lt;/a&gt;FrontEnd&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;Javascript&lt;ul&gt;
+&lt;li&gt;frameworks&lt;ul&gt;
+&lt;li&gt;jquery&lt;/li&gt;
+&lt;li&gt;…&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;MVC&lt;ul&gt;
+&lt;li&gt;backbone.js&lt;/li&gt;
+&lt;li&gt;Ember.js&lt;/li&gt;
+&lt;li&gt;…&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;ajax&lt;/li&gt;
+&lt;li&gt;coffeesript&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;HTML&lt;ul&gt;
+&lt;li&gt;erb&lt;/li&gt;
+&lt;li&gt;haml&lt;/li&gt;
+&lt;li&gt;…&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;CSS&lt;ul&gt;
+&lt;li&gt;sass&lt;/li&gt;
+&lt;li&gt;…&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;mobile&lt;ul&gt;
+&lt;li&gt;responsive&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;MiddleWare&quot;&gt;&lt;a href=&quot;#MiddleWare&quot; class=&quot;headerlink&quot; title=&quot;MiddleWare&quot;&gt;&lt;/a&gt;MiddleWare&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;APIs&lt;/li&gt;
+&lt;li&gt;URLs&lt;/li&gt;
+&lt;li&gt;REST&lt;/li&gt;
+&lt;li&gt;request/response processing&lt;/li&gt;
+&lt;li&gt;security&lt;ul&gt;
+&lt;li&gt;xss, crsf, code injection, etc&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;BackEnd&quot;&gt;&lt;a href=&quot;#BackEnd&quot; class=&quot;headerlink&quot; title=&quot;BackEnd&quot;&gt;&lt;/a&gt;BackEnd&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;database&lt;ul&gt;
+&lt;li&gt;relational&lt;ul&gt;
+&lt;li&gt;MySql&lt;/li&gt;
+&lt;li&gt;Postgres&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;NoSql&lt;ul&gt;
+&lt;li&gt;document&lt;ul&gt;
+&lt;li&gt;MangoDB&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;web services&lt;/li&gt;
+&lt;li&gt;REST&lt;/li&gt;
+&lt;li&gt;SOAP&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;MISC&quot;&gt;&lt;a href=&quot;#MISC&quot; class=&quot;headerlink&quot; title=&quot;MISC&quot;&gt;&lt;/a&gt;MISC&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;deployment&lt;/li&gt;
+&lt;li&gt;background processing&lt;/li&gt;
+&lt;li&gt;git&lt;/li&gt;
+&lt;li&gt;bundler&lt;/li&gt;
+&lt;li&gt;rvm&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;juggle-many-layers-of-technologies-all-with-different-syntax-amp-behaviors-and-understand-how-they-integrate-with-each-other&quot;&gt;&lt;a hre
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>HTTP and MVC</title>
+    <link href="http://yoursite.com/2013/09/17/http-and-mvc/"/>
+    <id>http://yoursite.com/2013/09/17/http-and-mvc/</id>
+    <published>2013-09-16T16:00:00.000Z</published>
+    <updated>2016-02-27T09:48:01.000Z</updated>
+    
+    <content type="html">&lt;h2 id=&quot;HTTP&quot;&gt;&lt;a href=&quot;#HTTP&quot; class=&quot;headerlink&quot; title=&quot;HTTP:&quot;&gt;&lt;/a&gt;HTTP:&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;Request&lt;ul&gt;
+&lt;li&gt;verb/method (GET or POST)&lt;/li&gt;
+&lt;li&gt;url&lt;/li&gt;
+&lt;li&gt;parameters&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Response&lt;ul&gt;
+&lt;li&gt;status code (200, 301, 404, 500)&lt;/li&gt;
+&lt;li&gt;payload&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Stateless: we have to rebuild the world at every request.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;MVC&quot;&gt;&lt;a href=&quot;#MVC&quot; class=&quot;headerlink&quot; title=&quot;MVC:&quot;&gt;&lt;/a&gt;MVC:&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;Model, View, Controller&lt;/li&gt;
+&lt;li&gt;Controller&lt;ul&gt;
+&lt;li&gt;routes to appropriate action based on request&lt;/li&gt;
+&lt;li&gt;action my talk to model, and then either redirect (301) or render view (200) as the response&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;Important-Sinatra-concepts&quot;&gt;&lt;a href=&quot;#Important-Sinatra-concepts&quot; class=&quot;headerlink&quot; title=&quot;Important Sinatra concepts:&quot;&gt;&lt;/a&gt;Important Sinatra concepts:&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;Rendering template allows access by template to ivars set up in action&lt;/li&gt;
+&lt;li&gt;Template have access seeeion hash&lt;/li&gt;
+&lt;li&gt;session&lt;/li&gt;
+&lt;li&gt;params&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;HTTP&quot;&gt;&lt;a href=&quot;#HTTP&quot; class=&quot;headerlink&quot; title=&quot;HTTP:&quot;&gt;&lt;/a&gt;HTTP:&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;Request&lt;ul&gt;
+&lt;li&gt;verb/method (GET or POST)&lt;/li&gt;
+&lt;li&gt;url
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Porcess of Building Web App using Rails</title>
+    <link href="http://yoursite.com/2013/09/17/porcess-of-building-web-app-using-rails/"/>
+    <id>http://yoursite.com/2013/09/17/porcess-of-building-web-app-using-rails/</id>
+    <published>2013-09-16T16:00:00.000Z</published>
+    <updated>2016-02-27T09:48:13.000Z</updated>
+    
+    <content type="html">&lt;ol&gt;
+&lt;li&gt;build mock up&lt;/li&gt;
+&lt;li&gt;build domain model&lt;/li&gt;
+&lt;li&gt;build relation DB that support all business logic&lt;/li&gt;
+&lt;li&gt;build url points, control actions, template&lt;/li&gt;
+&lt;/ol&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;ol&gt;
+&lt;li&gt;build mock up&lt;/li&gt;
+&lt;li&gt;build domain model&lt;/li&gt;
+&lt;li&gt;build relation DB that support all business logic&lt;/li&gt;
+&lt;li&gt;build url points, con
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Ruby&#39;s composition</title>
+    <link href="http://yoursite.com/2013/09/12/rubys-composition/"/>
+    <id>http://yoursite.com/2013/09/12/rubys-composition/</id>
+    <published>2013-09-11T16:00:00.000Z</published>
+    <updated>2016-02-27T09:47:27.000Z</updated>
+    
+    <content type="html">&lt;pre&gt;&lt;code&gt;module Swimmable
+  def swim
+    &amp;quot;#{ name } is swimming!&amp;quot;
+  end
+end
+
+module Fetchable
+  def fetch
+    &amp;quot;#{ name } is fetching!&amp;quot;
+  end
+end    
+
+class Animal
+  attr_accessor :name
+
+  def initialize(name)
+    @name = name
+  end
+
+  def speak
+    &amp;quot;#{ name } is speaking!&amp;quot;
+  end
+end
+
+class Mammal &amp;lt; Animal
+  def warm_blooded?
+    true
+  end
+end
+
+class Dog &amp;lt; Mammal
+  include Swimmable
+  include Fetchable
+
+  def speak
+    &amp;quot;#{ name } is barking!&amp;quot;
+  end
+end
+
+fido = Dog.new(&amp;apos;fido&amp;apos;)
+puts fido.swim
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;produce&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;fido is swimming!
+Dog
+Fetchable
+Swimmable
+Mammal
+Animal
+Object
+Kernel
+BasicObject
+&lt;/code&gt;&lt;/pre&gt;</content>
+    
+    <summary type="html">
+    
+      &lt;pre&gt;&lt;code&gt;module Swimmable
+  def swim
+    &amp;quot;#{ name } is swimming!&amp;quot;
+  end
+end
+
+module Fetchable
+  def fetch
+    &amp;quot;#{ name } is
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Ruby&#39;s inheritance</title>
+    <link href="http://yoursite.com/2013/09/12/rubys-inheritance/"/>
+    <id>http://yoursite.com/2013/09/12/rubys-inheritance/</id>
+    <published>2013-09-11T16:00:00.000Z</published>
+    <updated>2016-02-27T09:47:43.000Z</updated>
+    
+    <content type="html">&lt;pre&gt;&lt;code&gt;class Animal
+  attr_accessor :name
+
+  def initialize(name)
+    @name = name
+  end
+
+  def speak
+    &amp;quot;#{ name } is speaking!&amp;quot;
+  end
+end
+
+class Dog &amp;lt; Animal
+  def speak
+    &amp;quot;#{ name } is barking!&amp;quot;
+  end
+end
+
+class Cat &amp;lt; Animal
+end
+
+fido = Dog.new(&amp;apos;fido&amp;apos;)
+puts fido.name
+puts fido.speak
+
+kitty = Cat.new(&amp;apos;kitty&amp;apos;)
+puts kitty.name
+puts kitty.speak
+
+puts Dog.ancestors
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;produce&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;fido
+fido is barking!
+kitty
+kitty is speaking!
+Dog
+Animal
+Object
+Kernel
+BasicObject
+&lt;/code&gt;&lt;/pre&gt;</content>
+    
+    <summary type="html">
+    
+      &lt;pre&gt;&lt;code&gt;class Animal
+  attr_accessor :name
+
+  def initialize(name)
+    @name = name
+  end
+
+  def speak
+    &amp;quot;#{ name } is speaking!&amp;q
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>process of design app&#39;s class and module</title>
+    <link href="http://yoursite.com/2013/09/12/process-of-design-apps-class-and-module/"/>
+    <id>http://yoursite.com/2013/09/12/process-of-design-apps-class-and-module/</id>
+    <published>2013-09-11T16:00:00.000Z</published>
+    <updated>2016-02-27T09:47:09.000Z</updated>
+    
+    <content type="html">&lt;ol&gt;
+&lt;li&gt;Write out the detailed specs&lt;/li&gt;
+&lt;li&gt;Extract out major nouns; these are your classes.&lt;/li&gt;
+&lt;li&gt;Extract out major verbs; these are your behaviors/methods.&lt;/li&gt;
+&lt;li&gt;Create objects out of those classes; these are your actors in your program.&lt;/li&gt;
+&lt;/ol&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;ol&gt;
+&lt;li&gt;Write out the detailed specs&lt;/li&gt;
+&lt;li&gt;Extract out major nouns; these are your classes.&lt;/li&gt;
+&lt;li&gt;Extract out major verbs; these are 
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Ruby method scope</title>
+    <link href="http://yoursite.com/2013/09/11/ruby-method-scope/"/>
+    <id>http://yoursite.com/2013/09/11/ruby-method-scope/</id>
+    <published>2013-09-10T16:00:00.000Z</published>
+    <updated>2016-02-27T09:46:44.000Z</updated>
+    
+    <content type="html">&lt;h2 id=&quot;Ruby-method-scope-convention&quot;&gt;&lt;a href=&quot;#Ruby-method-scope-convention&quot; class=&quot;headerlink&quot; title=&quot;Ruby method scope convention&quot;&gt;&lt;/a&gt;Ruby method scope convention&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;Ruby method not have a strict pass by value or pass by reference.&lt;/li&gt;
+&lt;li&gt;if you passing an argument, and the argument calls a method that mutates the caller which may or may not have a &lt;code&gt;!&lt;/code&gt;, then it’s going to change that object.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;This is very common source bug.&lt;/p&gt;
+&lt;h2 id=&quot;example&quot;&gt;&lt;a href=&quot;#example&quot; class=&quot;headerlink&quot; title=&quot;example&quot;&gt;&lt;/a&gt;example&lt;/h2&gt;&lt;h3 id=&quot;pass-by-value-not-mutate-argument-in-method&quot;&gt;&lt;a href=&quot;#pass-by-value-not-mutate-argument-in-method&quot; class=&quot;headerlink&quot; title=&quot;pass by value(not mutate argument in method):&quot;&gt;&lt;/a&gt;pass by value(not mutate argument in method):&lt;/h3&gt;&lt;pre&gt;&lt;code&gt;a = [1, 2, 1]
+def my_method(a)
+  a.uniq
+end
+puts a
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;will produce:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;1
+2
+1
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&quot;pass-by-reference-mutate-argument-in-method&quot;&gt;&lt;a href=&quot;#pass-by-reference-mutate-argument-in-method&quot; class=&quot;headerlink&quot; title=&quot;pass by reference(mutate argument in method):&quot;&gt;&lt;/a&gt;pass by reference(mutate argument in method):&lt;/h3&gt;&lt;pre&gt;&lt;code&gt;a = [1, 2, 1]
+def my_method(a)
+  a.uniq!
+end
+puts a
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;will produce:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;1
+2
+&lt;/code&gt;&lt;/pre&gt;</content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;Ruby-method-scope-convention&quot;&gt;&lt;a href=&quot;#Ruby-method-scope-convention&quot; class=&quot;headerlink&quot; title=&quot;Ruby method scope convention&quot;&gt;&lt;/a&gt;Ru
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Ruby class template</title>
+    <link href="http://yoursite.com/2013/09/11/ruby-class-template/"/>
+    <id>http://yoursite.com/2013/09/11/ruby-class-template/</id>
+    <published>2013-09-10T16:00:00.000Z</published>
+    <updated>2016-02-27T09:46:30.000Z</updated>
+    
+    <content type="html">&lt;pre&gt;&lt;code&gt;class Dog
+  attr_accessor :name, :height, :weight
+
+  @@count = 0
+
+  def initialize(name, height, weight)
+    @name = name
+    @height = height
+    @weight = weight
+    @@count += 1
+  end
+
+  def bark
+    &amp;quot;#{ name } bark!&amp;quot;
+  end
+
+  def info
+    &amp;quot;#{ name } weights #{ weight } lbs and is #{ height } feet tall&amp;quot;
+  end
+
+  def update_info(n, h, w)
+    self.name = n
+    self.height = h
+    self.weight = w
+  end
+
+end
+
+teddy = Dog.new(&amp;apos;teddy&amp;apos;, 3, 100)
+fido = Dog.new(&amp;apos;fido&amp;apos;, 1.5, 150)
+
+puts teddy.info
+teddy.update_info(&amp;apos;ted&amp;apos;, 2, 90)
+puts teddy.info
+&lt;/code&gt;&lt;/pre&gt;</content>
+    
+    <summary type="html">
+    
+      &lt;pre&gt;&lt;code&gt;class Dog
+  attr_accessor :name, :height, :weight
+
+  @@count = 0
+
+  def initialize(name, height, weight)
+    @name = name
+    @he
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>use vpn for git</title>
+    <link href="http://yoursite.com/2013/09/10/use-vpn-for-git/"/>
+    <id>http://yoursite.com/2013/09/10/use-vpn-for-git/</id>
+    <published>2013-09-09T16:00:00.000Z</published>
+    <updated>2016-03-10T13:37:38.000Z</updated>
+    
+    <content type="html">&lt;p&gt;In China, if you git command can’t connect to github, get this tip:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;ssh: connect to host github.com port 22: Operation timed out
+fatal: Could not read from remote repository.
+
+Please make sure you have the correct access rights
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;maybe(and very possible) beacuse of &lt;a href=&quot;http://en.wikipedia.org/wiki/Great_Firewall_of_China&quot; target=&quot;_blank&quot;&gt;GFW&lt;/a&gt;, use VPN can solve this problem.&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;In China, if you git command can’t connect to github, get this tip:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;ssh: connect to host github.com port 22: Operation tim
+    
+    </summary>
+    
+    
+  </entry>
+  
+</feed>
