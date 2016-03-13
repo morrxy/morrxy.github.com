@@ -59,25 +59,19 @@
 
 
 
-<meta name="description" content="来源:Clojure for the brave and true
-什么是Programming to Abstractions?是一种设计函数库的原则,Clojure采用了这种原则.即把具有相似特征的数据结构抽象成某个概念,比如sequence.之后这些类的数据都可以用同一个函数操作.
-类似的东西Javascript的Lodash库的map和reduce也可以同时接受数组和对象作为参数.
-带来的">
+<meta name="description" content="&amp;#x6765;&amp;#x6E90;:Clojure for the brave and true
+&amp;#x4EC0;&amp;#x4E48;&amp;#x662F;Programming to Abstractions?&amp;#x662F;&amp;#x4E00;&amp;#x79CD;&amp;#x8BBE;&amp;#x8BA1;&amp;#x51FD;&amp;#x6570;&amp;#x5E93;&amp;#x7684;&amp;#x539F;&amp;#x5219;,Clojure&amp;#x9">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Clojure的sequence抽象">
 <meta property="og:url" content="http://yoursite.com/2016/03/11/clojure-abstraction-seq-collection/index.html">
 <meta property="og:site_name" content="胡军的网络日志">
-<meta property="og:description" content="来源:Clojure for the brave and true
-什么是Programming to Abstractions?是一种设计函数库的原则,Clojure采用了这种原则.即把具有相似特征的数据结构抽象成某个概念,比如sequence.之后这些类的数据都可以用同一个函数操作.
-类似的东西Javascript的Lodash库的map和reduce也可以同时接受数组和对象作为参数.
-带来的">
+<meta property="og:description" content="&amp;#x6765;&amp;#x6E90;:Clojure for the brave and true
+&amp;#x4EC0;&amp;#x4E48;&amp;#x662F;Programming to Abstractions?&amp;#x662F;&amp;#x4E00;&amp;#x79CD;&amp;#x8BBE;&amp;#x8BA1;&amp;#x51FD;&amp;#x6570;&amp;#x5E93;&amp;#x7684;&amp;#x539F;&amp;#x5219;,Clojure&amp;#x9">
 <meta property="og:updated_time" content="2016-03-11T10:20:23.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Clojure的sequence抽象">
-<meta name="twitter:description" content="来源:Clojure for the brave and true
-什么是Programming to Abstractions?是一种设计函数库的原则,Clojure采用了这种原则.即把具有相似特征的数据结构抽象成某个概念,比如sequence.之后这些类的数据都可以用同一个函数操作.
-类似的东西Javascript的Lodash库的map和reduce也可以同时接受数组和对象作为参数.
-带来的">
+<meta name="twitter:description" content="&amp;#x6765;&amp;#x6E90;:Clojure for the brave and true
+&amp;#x4EC0;&amp;#x4E48;&amp;#x662F;Programming to Abstractions?&amp;#x662F;&amp;#x4E00;&amp;#x79CD;&amp;#x8BBE;&amp;#x8BA1;&amp;#x51FD;&amp;#x6570;&amp;#x5E93;&amp;#x7684;&amp;#x539F;&amp;#x5219;,Clojure&amp;#x9">
 
 
 
@@ -291,22 +285,22 @@
       
 
       
-        <p>来源:<a href="http://www.braveclojure.com/core-functions-in-depth/#Programming_to_Abstractions" target="_blank" rel="external">Clojure for the brave and true</a></p>
-<h2 id="什么是Programming-to-Abstractions"><a href="#什么是Programming-to-Abstractions" class="headerlink" title="什么是Programming to Abstractions?"></a>什么是Programming to Abstractions?</h2><p>是一种设计函数库的原则,Clojure采用了这种原则.<br>即把具有相似特征的数据结构抽象成某个概念,比如<code>sequence</code>.之后这些类的数据都可以用同一个函数操作.</p>
-<h2 id="类似的东西"><a href="#类似的东西" class="headerlink" title="类似的东西"></a>类似的东西</h2><p>Javascript的<code>Lodash</code>库的<a href="https://lodash.com/docs#map" target="_blank" rel="external">map</a>和<a href="https://lodash.com/docs#reduce" target="_blank" rel="external">reduce</a>也可以同时接受数组和对象作为参数.</p>
-<h2 id="带来的好处"><a href="#带来的好处" class="headerlink" title="带来的好处"></a>带来的好处</h2><p>让你写程序时候,专注于这个数据结构能有哪些操作,同时尽可能地忽略它是如何实现的.</p>
-<h2 id="map函数例子"><a href="#map函数例子" class="headerlink" title="map函数例子"></a>map函数例子</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">(defn titleize</span><br><span class="line">  [topic]</span><br><span class="line">  (str topic &quot; for the Brave and True&quot;))</span><br><span class="line"></span><br><span class="line">(map titleize [&quot;Hamsters&quot; &quot;Ragnarok&quot;])</span><br><span class="line">; =&gt; (&quot;Hamsters for the Brave and True&quot; &quot;Ragnarok for the Brave and True&quot;)</span><br><span class="line"></span><br><span class="line">(map titleize &apos;(&quot;Empathy&quot; &quot;Decorating&quot;))</span><br><span class="line">; =&gt; (&quot;Empathy for the Brave and True&quot; &quot;Decorating for the Brave and True&quot;)</span><br><span class="line"></span><br><span class="line">(map titleize #&#123;&quot;Elbows&quot; &quot;Soap Carving&quot;&#125;)</span><br><span class="line">; =&gt; (&quot;Elbows for the Brave and True&quot; &quot;Soap Carving for the Brave and True&quot;)</span><br><span class="line"></span><br><span class="line">var list = [&quot;Transylvania&quot;, &quot;Forks, WA&quot;];</span><br><span class="line">map(list, function (val) &#123; return val + &quot; mapped!&quot;&#125;)</span><br><span class="line">// =&gt; [&quot;Transylvania mapped!&quot;, &quot;Forks, WA mapped!&quot;]</span><br></pre></td></tr></table></figure>
-<p>从例子可以看出,Clojure的<code>map</code>函数可以接受多种数据类型,包括List,Vector,Set,Map.<code>map</code>不是基于特定的数据结构定义的,而是基于<code>sequence</code>定义的.</p>
-<h2 id="sequence以及三个核心函数"><a href="#sequence以及三个核心函数" class="headerlink" title="sequence以及三个核心函数"></a>sequence以及三个核心函数</h2><p><code>sequence</code>是Clojure对某些数据结构的抽象,即序列结构.<code>sequence</code>有三个核心函数</p>
+        <p>&#x6765;&#x6E90;:<a href="http://www.braveclojure.com/core-functions-in-depth/#Programming_to_Abstractions" target="_blank" rel="external">Clojure for the brave and true</a></p>
+<h2 id="&#x4EC0;&#x4E48;&#x662F;Programming-to-Abstractions"><a href="#&#x4EC0;&#x4E48;&#x662F;Programming-to-Abstractions" class="headerlink" title="&#x4EC0;&#x4E48;&#x662F;Programming to Abstractions?"></a>&#x4EC0;&#x4E48;&#x662F;Programming to Abstractions?</h2><p>&#x662F;&#x4E00;&#x79CD;&#x8BBE;&#x8BA1;&#x51FD;&#x6570;&#x5E93;&#x7684;&#x539F;&#x5219;,Clojure&#x91C7;&#x7528;&#x4E86;&#x8FD9;&#x79CD;&#x539F;&#x5219;.<br>&#x5373;&#x628A;&#x5177;&#x6709;&#x76F8;&#x4F3C;&#x7279;&#x5F81;&#x7684;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x62BD;&#x8C61;&#x6210;&#x67D0;&#x4E2A;&#x6982;&#x5FF5;,&#x6BD4;&#x5982;<code>sequence</code>.&#x4E4B;&#x540E;&#x8FD9;&#x4E9B;&#x7C7B;&#x7684;&#x6570;&#x636E;&#x90FD;&#x53EF;&#x4EE5;&#x7528;&#x540C;&#x4E00;&#x4E2A;&#x51FD;&#x6570;&#x64CD;&#x4F5C;.</p>
+<h2 id="&#x7C7B;&#x4F3C;&#x7684;&#x4E1C;&#x897F;"><a href="#&#x7C7B;&#x4F3C;&#x7684;&#x4E1C;&#x897F;" class="headerlink" title="&#x7C7B;&#x4F3C;&#x7684;&#x4E1C;&#x897F;"></a>&#x7C7B;&#x4F3C;&#x7684;&#x4E1C;&#x897F;</h2><p>Javascript&#x7684;<code>Lodash</code>&#x5E93;&#x7684;<a href="https://lodash.com/docs#map" target="_blank" rel="external">map</a>&#x548C;<a href="https://lodash.com/docs#reduce" target="_blank" rel="external">reduce</a>&#x4E5F;&#x53EF;&#x4EE5;&#x540C;&#x65F6;&#x63A5;&#x53D7;&#x6570;&#x7EC4;&#x548C;&#x5BF9;&#x8C61;&#x4F5C;&#x4E3A;&#x53C2;&#x6570;.</p>
+<h2 id="&#x5E26;&#x6765;&#x7684;&#x597D;&#x5904;"><a href="#&#x5E26;&#x6765;&#x7684;&#x597D;&#x5904;" class="headerlink" title="&#x5E26;&#x6765;&#x7684;&#x597D;&#x5904;"></a>&#x5E26;&#x6765;&#x7684;&#x597D;&#x5904;</h2><p>&#x8BA9;&#x4F60;&#x5199;&#x7A0B;&#x5E8F;&#x65F6;&#x5019;,&#x4E13;&#x6CE8;&#x4E8E;&#x8FD9;&#x4E2A;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x80FD;&#x6709;&#x54EA;&#x4E9B;&#x64CD;&#x4F5C;,&#x540C;&#x65F6;&#x5C3D;&#x53EF;&#x80FD;&#x5730;&#x5FFD;&#x7565;&#x5B83;&#x662F;&#x5982;&#x4F55;&#x5B9E;&#x73B0;&#x7684;.</p>
+<h2 id="map&#x51FD;&#x6570;&#x4F8B;&#x5B50;"><a href="#map&#x51FD;&#x6570;&#x4F8B;&#x5B50;" class="headerlink" title="map&#x51FD;&#x6570;&#x4F8B;&#x5B50;"></a>map&#x51FD;&#x6570;&#x4F8B;&#x5B50;</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">(defn titleize</span><br><span class="line">  [topic]</span><br><span class="line">  (str topic &quot; for the Brave and True&quot;))</span><br><span class="line"></span><br><span class="line">(map titleize [&quot;Hamsters&quot; &quot;Ragnarok&quot;])</span><br><span class="line">; =&gt; (&quot;Hamsters for the Brave and True&quot; &quot;Ragnarok for the Brave and True&quot;)</span><br><span class="line"></span><br><span class="line">(map titleize &apos;(&quot;Empathy&quot; &quot;Decorating&quot;))</span><br><span class="line">; =&gt; (&quot;Empathy for the Brave and True&quot; &quot;Decorating for the Brave and True&quot;)</span><br><span class="line"></span><br><span class="line">(map titleize #{&quot;Elbows&quot; &quot;Soap Carving&quot;})</span><br><span class="line">; =&gt; (&quot;Elbows for the Brave and True&quot; &quot;Soap Carving for the Brave and True&quot;)</span><br><span class="line"></span><br><span class="line">var list = [&quot;Transylvania&quot;, &quot;Forks, WA&quot;];</span><br><span class="line">map(list, function (val) { return val + &quot; mapped!&quot;})</span><br><span class="line">// =&gt; [&quot;Transylvania mapped!&quot;, &quot;Forks, WA mapped!&quot;]</span><br></pre></td></tr></table></figure>
+<p>&#x4ECE;&#x4F8B;&#x5B50;&#x53EF;&#x4EE5;&#x770B;&#x51FA;,Clojure&#x7684;<code>map</code>&#x51FD;&#x6570;&#x53EF;&#x4EE5;&#x63A5;&#x53D7;&#x591A;&#x79CD;&#x6570;&#x636E;&#x7C7B;&#x578B;,&#x5305;&#x62EC;List,Vector,Set,Map.<code>map</code>&#x4E0D;&#x662F;&#x57FA;&#x4E8E;&#x7279;&#x5B9A;&#x7684;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x5B9A;&#x4E49;&#x7684;,&#x800C;&#x662F;&#x57FA;&#x4E8E;<code>sequence</code>&#x5B9A;&#x4E49;&#x7684;.</p>
+<h2 id="sequence&#x4EE5;&#x53CA;&#x4E09;&#x4E2A;&#x6838;&#x5FC3;&#x51FD;&#x6570;"><a href="#sequence&#x4EE5;&#x53CA;&#x4E09;&#x4E2A;&#x6838;&#x5FC3;&#x51FD;&#x6570;" class="headerlink" title="sequence&#x4EE5;&#x53CA;&#x4E09;&#x4E2A;&#x6838;&#x5FC3;&#x51FD;&#x6570;"></a>sequence&#x4EE5;&#x53CA;&#x4E09;&#x4E2A;&#x6838;&#x5FC3;&#x51FD;&#x6570;</h2><p><code>sequence</code>&#x662F;Clojure&#x5BF9;&#x67D0;&#x4E9B;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x7684;&#x62BD;&#x8C61;,&#x5373;&#x5E8F;&#x5217;&#x7ED3;&#x6784;.<code>sequence</code>&#x6709;&#x4E09;&#x4E2A;&#x6838;&#x5FC3;&#x51FD;&#x6570;</p>
 <ol>
-<li><code>first</code>: 参数(一个序列)序列的第一个值 <a href="http://clojure.github.io/clojure/clojure.core-api.html#clojure.core/first" target="_blank" rel="external">参考</a></li>
-<li><code>rest</code>: 参数(一个序列)除了第一个值构成的序列 <a href="http://clojure.github.io/clojure/clojure.core-api.html#clojure.core/rest" target="_blank" rel="external">参考</a></li>
-<li><code>cons</code>: 第一个参数(一个值)和第2个参数(一个序列)新组成的序列 <a href="http://clojure.github.io/clojure/clojure.core-api.html#clojure.core/cons" target="_blank" rel="external">参考</a></li>
+<li><code>first</code>: &#x53C2;&#x6570;(&#x4E00;&#x4E2A;&#x5E8F;&#x5217;)&#x5E8F;&#x5217;&#x7684;&#x7B2C;&#x4E00;&#x4E2A;&#x503C; <a href="http://clojure.github.io/clojure/clojure.core-api.html#clojure.core/first" target="_blank" rel="external">&#x53C2;&#x8003;</a></li>
+<li><code>rest</code>: &#x53C2;&#x6570;(&#x4E00;&#x4E2A;&#x5E8F;&#x5217;)&#x9664;&#x4E86;&#x7B2C;&#x4E00;&#x4E2A;&#x503C;&#x6784;&#x6210;&#x7684;&#x5E8F;&#x5217; <a href="http://clojure.github.io/clojure/clojure.core-api.html#clojure.core/rest" target="_blank" rel="external">&#x53C2;&#x8003;</a></li>
+<li><code>cons</code>: &#x7B2C;&#x4E00;&#x4E2A;&#x53C2;&#x6570;(&#x4E00;&#x4E2A;&#x503C;)&#x548C;&#x7B2C;2&#x4E2A;&#x53C2;&#x6570;(&#x4E00;&#x4E2A;&#x5E8F;&#x5217;)&#x65B0;&#x7EC4;&#x6210;&#x7684;&#x5E8F;&#x5217; <a href="http://clojure.github.io/clojure/clojure.core-api.html#clojure.core/cons" target="_blank" rel="external">&#x53C2;&#x8003;</a></li>
 </ol>
-<p>只要某种数据结构支持上面三个核心函数,就能把它视为<code>sequence</code>,因此就能对它进行map(和其他基于<code>sequence</code>定义的函数,包括<code>filter</code>,<code>reduce</code>,<code>group-by</code>等)操作.</p>
-<h2 id="sequence函数运行机制"><a href="#sequence函数运行机制" class="headerlink" title="sequence函数运行机制"></a>sequence函数运行机制</h2><p>当某个<code>sequence</code>函数(比如<code>map</code>)运行时,会把参数通过<code>seq</code>函数转换成类似List的,支持上述<code>sequence</code>核心函数的数据结构.然后再用它进行相关计算.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">(seq &apos;(1 2 3))</span><br><span class="line">; =&gt; (1 2 3)</span><br><span class="line"></span><br><span class="line">(seq [1 2 3])</span><br><span class="line">; =&gt; (1 2 3)</span><br><span class="line"></span><br><span class="line">(seq #&#123;1 2 3&#125;)</span><br><span class="line">; =&gt; (1 2 3)</span><br><span class="line"></span><br><span class="line">(seq &#123;:name &quot;Bill Compton&quot; :occupation &quot;Dead mopey guy&quot;&#125;)</span><br><span class="line">; =&gt; ([:name &quot;Bill Compton&quot;] [:occupation &quot;Dead mopey guy&quot;])</span><br></pre></td></tr></table></figure>
-<h2 id="sequence函数举例"><a href="#sequence函数举例" class="headerlink" title="sequence函数举例"></a><code>sequence</code>函数举例</h2><p><a href="http://www.braveclojure.com/core-functions-in-depth/#Seq_Function_Examples" target="_blank" rel="external">参考这里</a></p>
+<p>&#x53EA;&#x8981;&#x67D0;&#x79CD;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x652F;&#x6301;&#x4E0A;&#x9762;&#x4E09;&#x4E2A;&#x6838;&#x5FC3;&#x51FD;&#x6570;,&#x5C31;&#x80FD;&#x628A;&#x5B83;&#x89C6;&#x4E3A;<code>sequence</code>,&#x56E0;&#x6B64;&#x5C31;&#x80FD;&#x5BF9;&#x5B83;&#x8FDB;&#x884C;map(&#x548C;&#x5176;&#x4ED6;&#x57FA;&#x4E8E;<code>sequence</code>&#x5B9A;&#x4E49;&#x7684;&#x51FD;&#x6570;,&#x5305;&#x62EC;<code>filter</code>,<code>reduce</code>,<code>group-by</code>&#x7B49;)&#x64CD;&#x4F5C;.</p>
+<h2 id="sequence&#x51FD;&#x6570;&#x8FD0;&#x884C;&#x673A;&#x5236;"><a href="#sequence&#x51FD;&#x6570;&#x8FD0;&#x884C;&#x673A;&#x5236;" class="headerlink" title="sequence&#x51FD;&#x6570;&#x8FD0;&#x884C;&#x673A;&#x5236;"></a>sequence&#x51FD;&#x6570;&#x8FD0;&#x884C;&#x673A;&#x5236;</h2><p>&#x5F53;&#x67D0;&#x4E2A;<code>sequence</code>&#x51FD;&#x6570;(&#x6BD4;&#x5982;<code>map</code>)&#x8FD0;&#x884C;&#x65F6;,&#x4F1A;&#x628A;&#x53C2;&#x6570;&#x901A;&#x8FC7;<code>seq</code>&#x51FD;&#x6570;&#x8F6C;&#x6362;&#x6210;&#x7C7B;&#x4F3C;List&#x7684;,&#x652F;&#x6301;&#x4E0A;&#x8FF0;<code>sequence</code>&#x6838;&#x5FC3;&#x51FD;&#x6570;&#x7684;&#x6570;&#x636E;&#x7ED3;&#x6784;.&#x7136;&#x540E;&#x518D;&#x7528;&#x5B83;&#x8FDB;&#x884C;&#x76F8;&#x5173;&#x8BA1;&#x7B97;.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">(seq &apos;(1 2 3))</span><br><span class="line">; =&gt; (1 2 3)</span><br><span class="line"></span><br><span class="line">(seq [1 2 3])</span><br><span class="line">; =&gt; (1 2 3)</span><br><span class="line"></span><br><span class="line">(seq #{1 2 3})</span><br><span class="line">; =&gt; (1 2 3)</span><br><span class="line"></span><br><span class="line">(seq {:name &quot;Bill Compton&quot; :occupation &quot;Dead mopey guy&quot;})</span><br><span class="line">; =&gt; ([:name &quot;Bill Compton&quot;] [:occupation &quot;Dead mopey guy&quot;])</span><br></pre></td></tr></table></figure>
+<h2 id="sequence&#x51FD;&#x6570;&#x4E3E;&#x4F8B;"><a href="#sequence&#x51FD;&#x6570;&#x4E3E;&#x4F8B;" class="headerlink" title="sequence&#x51FD;&#x6570;&#x4E3E;&#x4F8B;"></a><code>sequence</code>&#x51FD;&#x6570;&#x4E3E;&#x4F8B;</h2><p><a href="http://www.braveclojure.com/core-functions-in-depth/#Seq_Function_Examples" target="_blank" rel="external">&#x53C2;&#x8003;&#x8FD9;&#x91CC;</a></p>
 
       
     </div>
@@ -337,6 +331,10 @@
           </div>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/03/13/bluebird-serendipity/" rel="prev" title="bluebird带给我的惊喜">
+                bluebird带给我的惊喜 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -411,7 +409,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">13</span>
+              <span class="site-state-item-count">14</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -421,7 +419,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-count">5</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
