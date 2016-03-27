@@ -1193,8 +1193,8 @@ build url points, control actions, template
             
               
                 
-                <a class="post-title-link" href="/2013/09/12/rubys-inheritance/" itemprop="url">
-                  Ruby's inheritance
+                <a class="post-title-link" href="/2013/09/12/rubys-composition/" itemprop="url">
+                  Ruby's composition
                 </a>
               
             
@@ -1218,8 +1218,8 @@ build url points, control actions, template
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2013/09/12/rubys-inheritance/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2013/09/12/rubys-inheritance/" itemprop="commentsCount"></span>
+                <a href="/2013/09/12/rubys-composition/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2013/09/12/rubys-composition/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -1243,23 +1243,20 @@ build url points, control actions, template
       
         
           
-          class Animal
-  attr_accessor :name
-
-  def initialize(name)
-    @name = name
-  end
-
-  def speak
-    &quot;#{ name } is speaking!&quot;
+          module Swimmable
+  def swim
+    &quot;#{ name } is swimming!&quot;
   end
 end
 
-class
+module Fetchable
+  def fetch
+    &quot;#{ name } is fetching!&quot;
+  en
           ...
 
           <div class="post-more-link text-center">
-            <a class="btn" href="/2013/09/12/rubys-inheritance/#more" rel="contents">
+            <a class="btn" href="/2013/09/12/rubys-composition/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
