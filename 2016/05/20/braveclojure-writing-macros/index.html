@@ -1,0 +1,1377 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Clojure,Clojure For The Branve And True," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="胡军的网络日志" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.5.0" />
+
+
+
+
+
+
+<meta name="description" content="&amp;#x672C;&amp;#x6587;&amp;#x662F;&amp;#x6211;&amp;#x5BF9;Clojure&amp;#x4E66;&amp;#x7C4D; CLOJURE FOR THE BRAVE AND TRUE&amp;#x7B2C;&amp;#x516B;&amp;#x7AE0;Writing Macros &amp;#x505A;&amp;#x7684;&amp;#x7FFB;&amp;#x8BD1;&amp;#x3002;&amp;#x7FFB;&amp;#x8BD1;&amp;#x5F62;&amp;#x">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【译】写宏">
+<meta property="og:url" content="http://yoursite.com/2016/05/20/braveclojure-writing-macros/index.html">
+<meta property="og:site_name" content="胡军的网络日志">
+<meta property="og:description" content="&amp;#x672C;&amp;#x6587;&amp;#x662F;&amp;#x6211;&amp;#x5BF9;Clojure&amp;#x4E66;&amp;#x7C4D; CLOJURE FOR THE BRAVE AND TRUE&amp;#x7B2C;&amp;#x516B;&amp;#x7AE0;Writing Macros &amp;#x505A;&amp;#x7684;&amp;#x7FFB;&amp;#x8BD1;&amp;#x3002;&amp;#x7FFB;&amp;#x8BD1;&amp;#x5F62;&amp;#x">
+<meta property="og:updated_time" content="2016-05-20T09:03:14.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【译】写宏">
+<meta name="twitter:description" content="&amp;#x672C;&amp;#x6587;&amp;#x662F;&amp;#x6211;&amp;#x5BF9;Clojure&amp;#x4E66;&amp;#x7C4D; CLOJURE FOR THE BRAVE AND TRUE&amp;#x7B2C;&amp;#x516B;&amp;#x7AE0;Writing Macros &amp;#x505A;&amp;#x7684;&amp;#x7FFB;&amp;#x8BD1;&amp;#x3002;&amp;#x7FFB;&amp;#x8BD1;&amp;#x5F62;&amp;#x">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 【译】写宏 | 胡军的网络日志 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">胡军的网络日志</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'wmG9FieA3KCB8x2CXpVc','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                【译】写宏
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-20T17:03:14+08:00" content="2016-05-20">
+              2016-05-20
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/05/20/braveclojure-writing-macros/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/05/20/braveclojure-writing-macros/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>&#x672C;&#x6587;&#x662F;&#x6211;&#x5BF9;Clojure&#x4E66;&#x7C4D; <a href="http://www.braveclojure.com/clojure-for-the-brave-and-true/" target="_blank" rel="external">CLOJURE FOR THE BRAVE AND TRUE</a>&#x7B2C;&#x516B;&#x7AE0;<a href="http://www.braveclojure.com/writing-macros/" target="_blank" rel="external">Writing Macros</a> &#x505A;&#x7684;&#x7FFB;&#x8BD1;&#x3002;&#x7FFB;&#x8BD1;&#x5F62;&#x5F0F;&#xFF0C;&#x4E2D;&#x82F1;&#x5BF9;&#x7167;&#xFF0C;&#x82F1;&#x6587;&#x5F15;&#x7528;&#x8DDF;&#x7740;&#x4E2D;&#x6587;&#x7FFB;&#x8BD1;&#x3002;&#x5982;&#x6709;&#x9519;&#x8BEF;&#xFF0C;&#x5728;&#x6240;&#x96BE;&#x514D;&#xFF0C;&#x6B22;&#x8FCE;&#x6307;&#x6B63;&#x3002;</p>
+<p>&#x5982;&#x679C;&#x5BF9;Clojure&#x5B8F;&#x7684;&#x6C42;&#x503C;&#x8FC7;&#x7A0B;&#x6A21;&#x578B;(&#x7279;&#x522B;&#x662F;&#x5B8F;&#x5C55;&#x5F00;)&#x4E0D;&#x719F;&#x6089;&#xFF0C;&#x53EF;&#x4EE5;&#x5148;&#x770B;&#x770B;<a href="http://www.braveclojure.com/read-and-eval" target="_blank" rel="external">&#x539F;&#x6587;&#x7B2C;&#x4E03;&#x7AE0;</a>,&#x6216;<a href="http://morrxy.github.io/2016/05/11/braveclojure-read-and-eval/" target="_blank" rel="external">&#x82F1;&#x4E2D;&#x5BF9;&#x7167;&#x7FFB;&#x8BD1;</a></p>
+<p>&#x5982;&#x679C;&#x4F60;&#x5BF9;Clojure&#x4E0D;&#x719F;&#x6089;&#xFF0C;&#x53EF;&#x4EE5;&#x5148;&#x770B;&#x4E00;&#x4E0B;&#x7B2C;3&#x7AE0;<a href="http://www.braveclojure.com/do-things/" target="_blank" rel="external">A Clojure Crash Course</a>&#x3002;</p>
+<p>&#x5982;&#x679C;&#x5BF9;&#x67D0;&#x4E2A;&#x51FD;&#x6570;&#xFF0C;&#x5B8F;&#xFF0C;&#x7279;&#x6B8A;&#x5F62;&#x5F0F;&#x4E0D;&#x719F;&#x6089;&#xFF0C;&#x53EF;&#x4EE5;&#x67E5;&#x770B;<a href="http://clojuredocs.org/" target="_blank" rel="external">coojuredocs</a>&#x7684;&#x53C2;&#x8003;&#xFF0C;&#x6BCF;&#x4E2A;&#x6587;&#x6863;&#x90FD;&#x6709;&#x4F8B;&#x5B50;&#xFF0C;&#x975E;&#x5E38;&#x597D;&#x3002;</p>
+<p>&#x8BD1;&#x6587;&#x5F00;&#x59CB;&#x3002;</p>
+<hr>
+<blockquote>
+<p>When I was 18, I got a job as a night auditor at a hotel in Santa Fe, New Mexico, working four nights a week from 11 pm till 7 am. After a few months of this sleepless schedule, my emotions took on a life of their own. One night, at about 3 am, I was watching an infomercial for a product claiming to restore men&#x2019;s hair. As I watched the story of a formerly bald individual, I became overwhelmed with sincere joy. &#x201C;At last!&#x201D; my brain gushed. &#x201C;This man has gotten the love and success he deserves! What an incredible product, giving hope to the hopeless!&#x201D;</p>
+</blockquote>
+<p>18&#x5C81;&#x7684;&#x4E8B;&#x3002;</p>
+<blockquote>
+<p>Just as a potion would allow me to temporarily alter my fundamental nature, macros allow you to modify Clojure in ways that just aren&#x2019;t possible with other languages. With macros, you can extend Clojure to suit your problem space, building up the language.</p>
+</blockquote>
+<p>&#x5B8F;&#x4F7F;&#x4F60;&#x80FD;&#x591F;&#x7528;&#x5176;&#x4ED6;&#x8BED;&#x8A00;&#x4E0D;&#x53EF;&#x80FD;&#x7684;&#x65B9;&#x5F0F;&#x4FEE;&#x6539;Clojure&#x3002;&#x6709;&#x4E86;&#x5B8F;&#xFF0C;&#x4F60;&#x53EF;&#x4EE5;&#x6269;&#x5C55;Clojure&#x4F7F;&#x5176;&#x7B26;&#x5408;&#x81EA;&#x5DF1;&#x7684;&#x95EE;&#x9898;&#xFF0C;&#x4E5F;&#x53EF;&#x4EE5;&#x589E;&#x5F3A;&#x8FD9;&#x95E8;&#x8BED;&#x8A00;&#x3002;</p>
+<blockquote>
+<p>In this chapter, you&#x2019;ll thoroughly examine how to write macros, starting with basic examples and moving up in complexity. You&#x2019;ll close by donning your make-believe cap and using macros to validate customer orders in your imaginary online potion store.</p>
+</blockquote>
+<p>&#x8FD9;&#x7AE0;&#x4F1A;&#x900F;&#x5F7B;&#x8BB2;&#x89E3;&#x5199;&#x5B8F;&#xFF0C;&#x6700;&#x540E;&#x4F1A;&#x7528;&#x5B8F;&#x9A8C;&#x8BC1;&#x5BA2;&#x6237;&#x8BA2;&#x5355;&#x3002;</p>
+<blockquote>
+<p>By the end of the chapter, you&#x2019;ll understand all the tools you&#x2019;ll use to write macros: quote, syntax quote, unquote, unquote splicing (aka the pi&#xF1;ata tool), and gensym. You&#x2019;ll also learn about the dangers lying in wait for unsuspecting macro authors: double evaluation, variable capture, and macro infection.</p>
+</blockquote>
+<p>&#x5B66;&#x4E60;&#x5B8C;&#x8FD9;&#x7AE0;&#xFF0C;&#x4F60;&#x4F1A;&#x7406;&#x89E3;&#x6240;&#x6709;&#x5199;&#x5B8F;&#x5DE5;&#x5177;&#xFF1A;&#x5F15;&#x7528;(quote),&#x8BED;&#x6CD5;&#x5F15;&#x7528;(syntax quote),&#x4E0D;&#x5F15;&#x7528;(unquote),&#x6253;&#x5F00;&#x4E0D;&#x5F15;&#x7528;(unquote splicing)&#x548C;&#x7B26;&#x53F7;&#x751F;&#x6210;(gensym)&#x3002;&#x4F60;&#x4E5F;&#x4F1A;&#x4E86;&#x89E3;&#x5199;&#x5B8F;&#x65F6;&#x5019;&#x9047;&#x5230;&#x7684;&#x95EE;&#x9898;&#xFF1A;&#x4E8C;&#x6B21;&#x6C42;&#x503C;&#xFF0C;&#x53D8;&#x91CF;&#x6355;&#x83B7;&#xFF0C;&#x5B8F;&#x4F20;&#x67D3;&#x3002;</p>
+<blockquote>
+<p>Macros Are Essential</p>
+</blockquote>
+<h2 id="&#x5B8F;&#x7684;&#x5FC5;&#x8981;&#x6027;"><a href="#&#x5B8F;&#x7684;&#x5FC5;&#x8981;&#x6027;" class="headerlink" title="&#x5B8F;&#x7684;&#x5FC5;&#x8981;&#x6027;"></a>&#x5B8F;&#x7684;&#x5FC5;&#x8981;&#x6027;</h2><blockquote>
+<p>Before you start writing macros, I want to help you put them in the proper context. Yes, macros are cooler than a polar bear&#x2019;s toenails, but you shouldn&#x2019;t think of macros as some esoteric tool you pull out when you feel like getting extra fancy with your code. In fact, macros allow Clojure to derive a lot of its built-in functionality from a tiny core of functions and special forms. Take <code>when</code>, for example. <code>when</code> has this general form:</p>
+</blockquote>
+<p>&#x5F00;&#x59CB;&#x5199;&#x5B8F;&#x524D;&#xFF0C;&#x4F60;&#x5E94;&#x8BE5;&#x5BF9;&#x5B8F;&#x7684;&#x4F7F;&#x7528;&#x573A;&#x666F;&#x6709;&#x4E2A;&#x6070;&#x5F53;&#x7684;&#x8BA4;&#x8BC6;&#x3002;&#x5B8F;&#x5F88;&#x9177;&#xFF0C;&#x4F46;&#x4E0D;&#x5E94;&#x8BE5;&#x628A;&#x5B83;&#x5F53;&#x6210;&#x4EC0;&#x4E48;&#x6DF1;&#x5965;&#x7684;&#x5DE5;&#x5177;&#x3002;&#x5B9E;&#x9645;&#x4E0A;&#xFF0C;&#x5229;&#x7528;&#x5B8F;&#xFF0C;&#x7528;&#x975E;&#x5E38;&#x5C11;&#x91CF;&#x7684;&#x6838;&#x5FC3;&#x51FD;&#x6570;&#x548C;&#x7279;&#x6B8A;&#x5F62;&#x5F0F;&#xFF0C;&#x5C31;&#x80FD;&#x5F97;&#x5230;&#x8BB8;&#x591A;Clojure&#x5185;&#x7F6E;&#x529F;&#x80FD;&#x3002;&#x6BD4;&#x5982;<code>when</code>&#x901A;&#x5E38;&#x662F;&#x8FD9;&#x79CD;&#x5F62;&#x5F0F;&#xFF1A;</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">when</span></span> boolean-expression</span><br><span class="line">  expression-1</span><br><span class="line">  expression-2</span><br><span class="line">  expression-3</span><br><span class="line">  ...</span><br><span class="line">  expression-x)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>You might think that <code>when</code> is a special form like <code>if</code>. Well guess what? It&#x2019;s not! In most other languages, you can only create conditional expressions using special keywords, and there&#x2019;s no way to create your own conditional operators. However, <code>when</code> is actually a macro.</p>
+</blockquote>
+<p>&#x4E5F;&#x8BB8;&#x4F60;&#x89C9;&#x5F97;<code>when</code>&#x50CF;<code>if</code>&#x4E00;&#x6837;&#xFF0C;&#x662F;&#x4E2A;&#x7279;&#x6B8A;&#x5F62;&#x5F0F;&#x3002;&#x4F46;&#x5B83;&#x4E0D;&#x662F;&#x3002;&#x5927;&#x591A;&#x6570;&#x8BED;&#x8A00;&#x91CC;&#xFF0C;&#x4F60;&#x53EA;&#x80FD;&#x7528;&#x4E13;&#x95E8;&#x7684;&#x5173;&#x952E;&#x5B57;&#x521B;&#x5EFA;&#x6761;&#x4EF6;&#x8868;&#x8FBE;&#x5F0F;&#xFF0C;&#x5E76;&#x4E14;&#x65E0;&#x6CD5;&#x521B;&#x5EFA;&#x4F60;&#x81EA;&#x5DF1;&#x7684;&#x6761;&#x4EF6;&#x64CD;&#x4F5C;&#x7B26;&#x3002;&#x4F46;<code>when</code>&#x662F;&#x4E2A;&#x5B8F;&#x3002;</p>
+<blockquote>
+<p>In this macro expansion, you can see that <code>when</code> is implemented in terms of <code>if</code> and <code>do</code>:</p>
+</blockquote>
+<p>&#x5728;&#x5B8F;&#x5C55;&#x5F00;&#x91CC;&#x53EF;&#x4EE5;&#x770B;&#x89C1;&#xFF0C;<code>when</code>&#x662F;&#x7528;<code>if</code>&#x548C;<code>do</code>&#x5B9E;&#x73B0;&#x7684;&#xFF1A;</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(macroexpand &apos;(when boolean-expression</span><br><span class="line">                expression-1</span><br><span class="line">                expression-2</span><br><span class="line">                expression-3))</span><br><span class="line">; =&gt; (if boolean-expression</span><br><span class="line">       (do expression-1</span><br><span class="line">           expression-2</span><br><span class="line">           expression-3))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>This shows that macros are an integral part of Clojure development&#x2014;they&#x2019;re even used to provide fundamental operations. Macros aren&#x2019;t reserved for exotic special cases; you should think of macro writing as just another tool in your tool satchel. As you learn to write your own macros, you&#x2019;ll see how they allow you to extend the language even further so that it fits the shape of your particular problem domain.</p>
+</blockquote>
+<p>&#x8FD9;&#x8BF4;&#x660E;&#x5B8F;&#x662F;Clojure&#x5F00;&#x53D1;&#x5FC5;&#x4E0D;&#x53EF;&#x5C11;&#x7684;&#x90E8;&#x5206;&#x2013;&#x751A;&#x81F3;&#x7528;&#x6765;&#x63D0;&#x4F9B;&#x57FA;&#x7840;&#x64CD;&#x4F5C;&#x3002;&#x5B8F;&#x4E0D;&#x662F;&#x7559;&#x7ED9;&#x7279;&#x6B8A;&#x60C5;&#x51B5;&#x4F7F;&#x7528;&#x7684;&#xFF0C;&#x5B8F;&#x53EA;&#x662F;&#x5DE5;&#x5177;&#x888B;&#x91CC;&#x7684;&#x53E6;&#x4E00;&#x4E2A;&#x5DE5;&#x5177;&#x3002;&#x4F60;&#x81EA;&#x5DF1;&#x5199;&#x5B8F;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x4F1A;&#x770B;&#x5230;&#x5B8F;&#x4F7F;&#x4F60;&#x80FD;&#x8FDB;&#x4E00;&#x6B65;&#x6269;&#x5C55;&#x8BED;&#x8A00;&#xFF0C;&#x4F7F;&#x4E4B;&#x7B26;&#x5408;&#x7279;&#x5B9A;&#x7684;&#x95EE;&#x9898;&#x3002;</p>
+<blockquote>
+<p>Anatomy of a Macro</p>
+</blockquote>
+<h2 id="&#x5B8F;&#x89E3;&#x6784;&#x5206;&#x6790;"><a href="#&#x5B8F;&#x89E3;&#x6784;&#x5206;&#x6790;" class="headerlink" title="&#x5B8F;&#x89E3;&#x6784;&#x5206;&#x6790;"></a>&#x5B8F;&#x89E3;&#x6784;&#x5206;&#x6790;</h2><blockquote>
+<p>Macro definitions look much like function definitions. They have a name, an optional document string, an argument list, and a body. The body will almost always return a list. This makes sense because macros are a way of transforming a data structure into a form Clojure can evaluate, and Clojure uses lists to represent function calls, special form calls, and macro calls. You can use any function, macro, or special form within the macro body, and you call macros just like you would a function or special form.</p>
+</blockquote>
+<p>&#x5B8F;&#x5B9A;&#x4E49;&#x5F88;&#x50CF;&#x51FD;&#x6570;&#x5B9A;&#x4E49;&#x3002;&#x4E00;&#x4E2A;&#x540D;&#x5B57;&#xFF0C;&#x4E00;&#x4E2A;&#x53EF;&#x9009;&#x6587;&#x6863;&#x5B57;&#x7B26;&#x4E32;&#xFF0C;&#x4E00;&#x4E2A;&#x53C2;&#x6570;&#x5217;&#x8868;&#xFF0C;&#x4E00;&#x4E2A;&#x4E3B;&#x4F53;&#x3002;&#x4E3B;&#x4F53;&#x51E0;&#x4E4E;&#x603B;&#x662F;&#x8FD4;&#x56DE;&#x4E00;&#x4E2A;list&#x3002;&#x8FD9;&#x662F;&#x6709;&#x610F;&#x4E49;&#x7684;&#xFF0C;&#x56E0;&#x4E3A;&#x5B8F;&#x662F;&#x4E00;&#x79CD;&#x628A;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x8F6C;&#x6362;&#x6210;Clojure&#x80FD;&#x591F;&#x6C42;&#x503C;&#x7684;&#x5F62;&#x5F0F;&#x7684;&#x65B9;&#x6CD5;&#xFF0C;&#x5E76;&#x4E14;Clojure&#x7528;list&#x4EE3;&#x8868;&#x51FD;&#x6570;&#x8C03;&#x7528;&#xFF0C;&#x7279;&#x6B8A;&#x5F62;&#x5F0F;&#x8C03;&#x7528;&#xFF0C;&#x548C;&#x5B8F;&#x8C03;&#x7528;&#x3002;&#x5728;&#x5B8F;&#x4E3B;&#x4F53;&#x5185;&#x90E8;&#xFF0C;&#x4F60;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x4EFB;&#x4F55;&#x51FD;&#x6570;&#xFF0C;&#x5B8F;&#xFF0C;&#x6216;&#x7279;&#x6B8A;&#x5F62;&#x5F0F;&#xFF0C;&#x5E76;&#x4E14;&#x4F60;&#x53EF;&#x4EE5;&#x50CF;&#x8C03;&#x7528;&#x51FD;&#x6570;&#x6216;&#x7279;&#x6B8A;&#x5F62;&#x5F0F;&#x90A3;&#x6837;&#x8C03;&#x7528;&#x5B8F;&#x3002;</p>
+<blockquote>
+<p>As an example, here&#x2019;s our old friend the <code>infix</code> macro:</p>
+</blockquote>
+<p>&#x4F8B;&#x5982;&#xFF0C;&#x770B;&#x4E0B;<code>infix</code>&#x5B8F;&#xFF1A;</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">defmacro</span></span> infix</span><br><span class="line">  <span class="string">&quot;Use this macro when you pine for the notation of your childhood&quot;</span></span><br><span class="line">  [infixed]</span><br><span class="line">  (<span class="name"><span class="builtin-name">list</span></span> (<span class="name"><span class="builtin-name">second</span></span> infixed) (<span class="name"><span class="builtin-name">first</span></span> infixed) (<span class="name"><span class="builtin-name">last</span></span> infixed)))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>This macro rearranges a list into the correct order for infix notation. Here&#x2019;s an example:</p>
+</blockquote>
+<p>&#x8FD9;&#x4E2A;&#x5B8F;&#x628A;&#x4E2D;&#x7F6E;&#x8868;&#x793A;&#x6CD5;&#x7684;list&#x91CD;&#x65B0;&#x5B89;&#x6392;&#x6210;&#x6B63;&#x786E;&#x7684;&#x987A;&#x5E8F;&#xFF1A;</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">infix</span> (<span class="number">1</span> + <span class="number">1</span>))</span><br><span class="line"><span class="comment">; =&gt; 2</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>One key difference between functions and macros is that function arguments are fully evaluated before they&#x2019;re passed to the function, whereas macros receive arguments as unevaluated data. You can see this in the example. If you tried evaluating <code>(1 + 1)</code> on its own, you would get an exception. However, because you&#x2019;re making a macro call, the unevaluated list <code>(1 + 1)</code> is passed to <code>infix</code>. Then the macro can use <code>first</code>, <code>second</code>, and <code>last</code> to rearrange the list so Clojure can evaluate it:</p>
+</blockquote>
+<p>&#x51FD;&#x6570;&#x548C;&#x5B8F;&#x7684;&#x4E00;&#x4E2A;&#x5173;&#x952E;&#x5DEE;&#x522B;&#x662F;&#x51FD;&#x6570;&#x53C2;&#x6570;&#x88AB;&#x5168;&#x90E8;&#x6C42;&#x503C;&#xFF0C;&#x518D;&#x4F20;&#x7ED9;&#x51FD;&#x6570;&#xFF0C;&#x800C;&#x5B8F;&#x53C2;&#x6570;&#x4E0D;&#x88AB;&#x6C42;&#x503C;&#x3002;&#x53EF;&#x4EE5;&#x4ECE;&#x4F8B;&#x5B50;&#x91CC;&#x770B;&#x5230;&#x8FD9;&#x70B9;&#x3002;&#x5982;&#x679C;&#x5C1D;&#x8BD5;&#x6C42;&#x503C;<code>(1 + 1)</code>&#x672C;&#x8EAB;&#xFF0C;&#x4F1A;&#x51FA;&#x73B0;&#x5F02;&#x5E38;&#x3002;&#x4F46;&#x56E0;&#x4E3A;&#x8FDB;&#x884C;&#x7684;&#x662F;&#x5B8F;&#x8C03;&#x7528;&#xFF0C;&#x672A;&#x88AB;&#x6C42;&#x503C;&#x7684;list<code>(1 +  1)</code>&#x4F20;&#x7ED9;&#x4E86;<code>infxi</code>&#x3002;&#x7136;&#x540E;&#x5B8F;&#x4F7F;&#x7528;<code>first</code>, <code>second</code>, <code>last</code>&#x91CD;&#x65B0;&#x5B89;&#x6392;list,&#x6240;&#x4EE5;Clojure&#x80FD;&#x5BF9;&#x5B83;&#x6C42;&#x503C;&#xFF1A;</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">macroexpand</span></span> &apos;(<span class="name">infix</span> (<span class="number">1</span> + <span class="number">1</span>)))</span><br><span class="line"><span class="comment">; =&gt; (+ 1 1)</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>By expanding the macro, you can see that <code>infix</code> rearranges <code>(1 + 1)</code> into <code>(+ 1 1)</code>. Handy!</p>
+</blockquote>
+<p>&#x5B8F;&#x5C55;&#x5F00;&#x4EE5;&#x540E;&#xFF0C;&#x53EF;&#x4EE5;&#x770B;&#x5230;<code>infix</code>&#x628A;<code>(1 + 1)</code>&#x91CD;&#x65B0;&#x5B89;&#x6392;&#x6210;&#x4E86;<code>(+ 1 1)</code>&#x3002;&#x5F88;&#x65B9;&#x4FBF;&#xFF01;</p>
+<blockquote>
+<p>You can also use argument destructuring in macro definitions, just like you can with functions:</p>
+</blockquote>
+<p>&#x4E0E;&#x51FD;&#x6570;&#x4E00;&#x6837;&#xFF0C;&#x5B8F;&#x5B9A;&#x4E49;&#x91CC;&#x4E5F;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x53C2;&#x6570;&#x89E3;&#x6784;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">defmacro</span></span> infix-2</span><br><span class="line">  [[operand1 op operand2]]</span><br><span class="line">  (<span class="name"><span class="builtin-name">list</span></span> op operand1 operand2))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Destructuring arguments lets you succinctly bind values to symbols based on their position in a sequential argument. Here, <code>infix-2</code> takes a sequential data structure as an argument and destructures by position so the first value is named <code>operand1</code>, the second value is named <code>op</code>, and the third value is named <code>operand2</code> within the macro.</p>
+</blockquote>
+<p>&#x53C2;&#x6570;&#x89E3;&#x6784;&#x8BA9;&#x4F60;&#x80FD;&#x591F;&#x7B80;&#x6D01;&#x5730;&#x57FA;&#x4E8E;&#x503C;&#x5728;&#x5E8F;&#x5217;&#x53C2;&#x6570;&#x91CC;&#x7684;&#x4F4D;&#x7F6E;&#x7ED1;&#x5B9A;&#x7B26;&#x53F7;&#x4E0E;&#x503C;&#x3002;&#x8FD9;&#x91CC;&#xFF0C;<code>infix-2</code>&#x63A5;&#x53D7;&#x4E00;&#x4E2A;&#x5E8F;&#x5217;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x4F5C;&#x4E3A;&#x53C2;&#x6570;&#xFF0C;&#x5E76;&#x57FA;&#x4E8E;&#x4F4D;&#x7F6E;&#x89E3;&#x6784;&#xFF0C;&#x4E8E;&#x662F;&#x5728;&#x5B8F;&#x5185;&#x90E8;&#xFF0C;&#x7B2C;&#x4E00;&#x4E2A;&#x547D;&#x540D;&#x4E3A;<code>operand1</code>,&#x7B2C;&#x4E8C;&#x4E2A;&#x503C;&#x547D;&#x540D;&#x4E3A;<code>op</code>,&#x7B2C;&#x4E09;&#x4E2A;&#x503C;&#x547D;&#x540D;&#x4E3A;<code>operand2</code>&#x3002;</p>
+<blockquote>
+<p>You can also create multiple-arity macros, and in fact the fundamental Boolean operations <code>and</code> and <code>or</code> are defined as macros. Here&#x2019;s <code>and</code>&#x2019;s source code:</p>
+</blockquote>
+<p>&#x4E5F;&#x80FD;&#x521B;&#x5EFA;&#x6709;&#x591A;&#x79CD;&#x53C2;&#x6570;&#x4E2A;&#x6570;&#x7684;&#x5B8F;&#xFF0C;&#x5B9E;&#x9645;&#x4E0A;&#x57FA;&#x7840;&#x5E03;&#x5C14;&#x64CD;&#x4F5C;<code>and</code>&#x548C;<code>or</code>&#x90FD;&#x662F;&#x7528;&#x5B8F;&#x5B9A;&#x4E49;&#x7684;&#x3002;&#x8FD9;&#x662F;<code>and</code>&#x7684;&#x6E90;&#x7801;&#xFF1A;</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">(defmacro and</span><br><span class="line">  &quot;Evaluates exprs one at a time, from left to right. If a form</span><br><span class="line">  returns logical false (nil or false), and returns that value and</span><br><span class="line">  doesn&apos;t evaluate any of the other expressions, otherwise it returns</span><br><span class="line">  the value of the last expr. (and) returns true.&quot;</span><br><span class="line">  {:added &quot;1.0&quot;}</span><br><span class="line">  ([] true)</span><br><span class="line">  ([x] x)</span><br><span class="line">  ([x &amp; next]</span><br><span class="line">   `(let [and# ~x]</span><br><span class="line">      (if and# (and ~@next) and#))))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>There&#x2019;s a lot of stuff going on in this example, including the symbols <code>` </code> and <code>~@</code>, which you&#x2019;ll learn about soon. What&#x2019;s important to realize for now is that there are three macro bodies here: a 0-arity macro body that always returns <code>true</code>, a 1-arity macro body that returns the operand, and an n-arity macro body that recursively calls itself. That&#x2019;s right: macros can be recursive, and they also can use rest args (<code>&amp; next</code> in the n-arity macro body), just like functions.</p>
+</blockquote>
+<p>&#x8FD9;&#x4E2A;&#x4F8B;&#x5B50;&#x6709;&#x5F88;&#x591A;&#x4E1C;&#x897F;&#xFF0C;&#x5305;&#x62EC;&#x540E;&#x9762;&#x4F1A;&#x5B66;&#x4E60;&#x7684;&#x7B26;&#x53F7;<code>` </code>&#x548C;<code>~@</code>&#x3002;&#x73B0;&#x5728;&#x6700;&#x91CD;&#x8981;&#x7684;&#x662F;&#x662F;&#x8BA4;&#x8BC6;&#x5230;&#x8FD9;&#x91CC;&#x6709;&#x4E09;&#x4E2A;&#x5B8F;&#x4E3B;&#x4F53;&#xFF1A;&#x65E0;&#x53C2;&#x6570;&#xFF0C;&#x8FD4;&#x56DE;<code>true</code>&#x7684;&#xFF1B;&#x4E00;&#x4E2A;&#x53C2;&#x6570;&#xFF0C;&#x8FD4;&#x56DE;&#x8FD9;&#x4E2A;&#x53C2;&#x6570;&#xFF1B;n&#x4E2A;&#x53C2;&#x6570;&#x9012;&#xFF0C;&#x5F52;&#x8C03;&#x7528;&#x81EA;&#x8EAB;&#x3002;&#x50CF;&#x51FD;&#x6570;&#x4E00;&#x6837;&#xFF0C;&#x5B8F;&#x53EF;&#x4EE5;&#x9012;&#x5F52;&#x800C;&#x4E14;&#x4E5F;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x5269;&#x4F59;&#x53C2;&#x6570;(n&#x4E2A;&#x53C2;&#x6570;&#x5B8F;&#x4E3B;&#x4F53;&#x91CC;&#x7684;<code>&amp; next</code>)&#x3002;</p>
+<blockquote>
+<p>Now that you&#x2019;re comfortable with the anatomy of macros, it&#x2019;s time to strap yourself to your thinking mast Odysseus-style and learn to write macro bodies.</p>
+</blockquote>
+<p>&#x719F;&#x6089;&#x4E86;&#x5B8F;&#x7684;&#x89E3;&#x6784;&#x540E;&#xFF0C;&#x7EE7;&#x7EED;&#x5B66;&#x4E60;&#x5199;&#x5B8F;&#x3002;</p>
+<blockquote>
+<p>Building Lists for Evaluation</p>
+</blockquote>
+<h2 id="&#x5EFA;&#x7ACB;&#x6C42;&#x503C;&#x5217;&#x8868;"><a href="#&#x5EFA;&#x7ACB;&#x6C42;&#x503C;&#x5217;&#x8868;" class="headerlink" title="&#x5EFA;&#x7ACB;&#x6C42;&#x503C;&#x5217;&#x8868;"></a>&#x5EFA;&#x7ACB;&#x6C42;&#x503C;&#x5217;&#x8868;</h2><blockquote>
+<p>Macro writing is all about building a list for Clojure to evaluate, and it requires a kind of inversion to your normal way of thinking. For one, you&#x2019;ll often need to quote expressions to get unevaluated data structures in your final list (we&#x2019;ll get back to that in a moment). More generally, you&#x2019;ll need to be extra careful about the difference between a <em>symbol</em> and its <em>value</em>.</p>
+</blockquote>
+<p>&#x5199;&#x5B8F;&#x7684;&#x4E00;&#x5207;&#x5DE5;&#x4F5C;&#x5C31;&#x662F;&#x5EFA;&#x7ACB;&#x5EFA;&#x7ACB;&#x4E00;&#x4E2A;&#x7528;&#x4E8E;&#x6C42;&#x503C;&#x7684;list,&#x8FD9;&#x9700;&#x8981;&#x7528;&#x4E00;&#x79CD;&#x4E0E;&#x5E73;&#x5E38;&#x76F8;&#x53CD;&#x7684;&#x65B9;&#x5F0F;&#x601D;&#x8003;&#x3002;&#x6BD4;&#x5982;&#xFF0C;&#x6700;&#x7EC8;&#x7684;list&#x91CC;&#x7ECF;&#x5E38;&#x9700;&#x8981;&#x5F15;&#x7528;&#x8868;&#x8FBE;&#x5F0F;&#x4EE5;&#x5F97;&#x5230;&#x672A;&#x6C42;&#x503C;&#x7684;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x3002;&#x66F4;&#x666E;&#x904D;&#x7684;&#x662F;&#xFF0C;&#x4F60;&#x9700;&#x8981;&#x5BF9;<em>&#x7B26;&#x53F7;</em>&#x4E0E;&#x4ED6;&#x4EEC;&#x7684;<em>&#x503C;</em>&#x4E4B;&#x95F4;&#x7684;&#x5DEE;&#x522B;&#x7279;&#x522B;&#x5C0F;&#x5FC3;&#x3002;</p>
+<blockquote>
+<p>Distinguishing Symbols and Values</p>
+</blockquote>
+<h3 id="&#x533A;&#x5206;&#x7B26;&#x53F7;&#x4E0E;&#x503C;"><a href="#&#x533A;&#x5206;&#x7B26;&#x53F7;&#x4E0E;&#x503C;" class="headerlink" title="&#x533A;&#x5206;&#x7B26;&#x53F7;&#x4E0E;&#x503C;"></a>&#x533A;&#x5206;&#x7B26;&#x53F7;&#x4E0E;&#x503C;</h3><blockquote>
+<p>Say you want to create a macro that takes an expression and both prints and returns its value. (This differs from <code>println</code> in that <code>println</code> always returns <code>nil</code>.) You want your macro to return lists that look like this:</p>
+</blockquote>
+<p>&#x6BD4;&#x5982;&#x8BF4;&#x4F60;&#x5E0C;&#x671B;&#x4E00;&#x4E2A;&#x5B8F;&#x63A5;&#x53D7;&#x4E00;&#x4E2A;&#x8868;&#x8FBE;&#x5F0F;&#xFF0C;&#x6253;&#x5370;&#x5E76;&#x8FD4;&#x56DE;&#x5176;&#x503C;&#x3002;(&#x4E0E;<code>println</code>&#x7684;&#x4E0D;&#x540C;&#x4E4B;&#x5904;&#x662F;<code>println</code>&#x603B;&#x662F;&#x8FD4;&#x56DE;<code>nil</code>&#x3002;)&#x4F60;&#x60F3;&#x8BA9;&#x4F60;&#x7684;&#x5B8F;&#x8FD4;&#x56DE;&#x8FD9;&#x6837;&#x7684;list&#xFF1A;</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">let</span></span> [result expression]</span><br><span class="line">  (<span class="name">println</span> result)</span><br><span class="line">  result)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Your first version of the macro might look like this, using the <code>list</code> function to create the list that Clojure should evaluate:</p>
+</blockquote>
+<p>&#x4F60;&#x7684;&#x7B2C;&#x4E00;&#x7248;&#x7684;&#x5B8F;&#x53EF;&#x80FD;&#x662F;&#x8FD9;&#x6837;&#x7684;&#xFF0C;&#x7528;<code>list</code>&#x51FD;&#x6570;&#x521B;&#x5EFA;&#x6C42;&#x503C;&#x5217;&#x8868;&#xFF1A;</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">defmacro</span></span> my-print-whoopsie</span><br><span class="line"> [expression]</span><br><span class="line"> (<span class="name"><span class="builtin-name">list</span></span> let [result expression]</span><br><span class="line">       (<span class="name"><span class="builtin-name">list</span></span> println result)</span><br><span class="line">       result))</span><br><span class="line"></span><br><span class="line"><span class="comment">; =&gt; CompilerException java.lang.RuntimeException: Can&apos;t take value of a macro: #&apos;clojure.core/let</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>However, if you tried this, you&#x2019;d get the exception Can&#x2019;t take the value of a macro: #&#x2019;clojure.core/let. What&#x2019;s going on here?</p>
+</blockquote>
+<p>&#x4F46;&#x8BD5;&#x4E00;&#x4E0B;&#x4F60;&#x4F1A;&#x5F97;&#x5230;&#x5F02;&#x5E38;&#xFF1A;Can&#x2019;t take the value of a macro: #&#x2019;clojure.core/let&#x3002;&#x600E;&#x4E48;&#x56DE;&#x4E8B;&#xFF1F;</p>
+<blockquote>
+<p>The reason this happens is that your macro body tries to get the <em>value</em> that the <em>symbol</em> <code>let</code> refers to, whereas what you actually want to do is return the <code>let</code> symbol itself. There are other problems, too: you&#x2019;re trying to get the value of <code>result</code>, which is unbound, and you&#x2019;re trying to get the value of <code>println</code> instead of returning its symbol. Here&#x2019;s how you would write the macro to do what you want:</p>
+</blockquote>
+<p>&#x539F;&#x56E0;&#x662F;&#x5B8F;&#x4E3B;&#x4F53;&#x91CC;&#x5728;&#x5C1D;&#x8BD5;&#x83B7;&#x53D6;<em>&#x7B26;&#x53F7;</em><code>let</code>&#x5F15;&#x7528;&#x7684;<em>&#x503C;</em>&#xFF0C;&#x800C;&#x4F60;&#x60F3;&#x8981;&#x7684;&#x662F;&#x8FD4;&#x56DE;&#x7B26;&#x53F7;<code>let</code>&#x672C;&#x8EAB;&#x3002;&#x8FD8;&#x6709;&#x5176;&#x4ED6;&#x95EE;&#x9898;&#xFF1A;&#x5C1D;&#x8BD5;&#x83B7;&#x53D6;<code>result</code>&#x7684;&#x503C;&#xFF0C;&#x4F46;&#x5B83;&#x672A;&#x7ED1;&#x5B9A;&#xFF1B;&#x5C1D;&#x8BD5;&#x83B7;&#x53D6;<code>println</code>&#x7684;&#x503C;&#xFF0C;&#x800C;&#x4E0D;&#x662F;&#x8FD4;&#x56DE;&#x8FD9;&#x4E2A;&#x7B26;&#x53F7;&#x3002;&#x8FD9;&#x662F;&#x4F60;&#x60F3;&#x8981;&#x7684;&#x5B8F;&#xFF1A;</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">defmacro</span></span> my-print-whoopsie</span><br><span class="line"> [expression]</span><br><span class="line"> (<span class="name"><span class="builtin-name">list</span></span> &apos;let [&apos;result expression]</span><br><span class="line">       (<span class="name"><span class="builtin-name">list</span></span> &apos;println &apos;result)</span><br><span class="line">       &apos;result))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Here, you&#x2019;re quoting each symbol you want to use as a symbol by prefixing it with the single quote character, <code>&apos;</code>. This tells Clojure to <em>turn off</em> evaluation for whatever follows, in this case preventing Clojure from trying to resolve the symbols and instead just returning the symbols. The ability to use quoting to turn off evaluation is central to writing macros, so let&#x2019;s give the topic its own section.</p>
+</blockquote>
+<p>&#x8FD9;&#x91CC;&#x5F15;&#x7528;(quote)&#x4E86;&#x6BCF;&#x4E2A;&#x60F3;&#x7528;&#x4F5C;&#x7B26;&#x53F7;&#x7684;&#x7B26;&#x53F7;&#xFF0C;&#x5728;&#x5B83;&#x524D;&#x9762;&#x9644;&#x52A0;&#x4E86;&#x5355;&#x5F15;&#x53F7;&#x5B57;&#x7B26;&#xFF0C;<code>&apos;</code>&#x3002;&#x65E0;&#x8BBA;&#x5F15;&#x53F7;&#x540E;&#x9762;&#x662F;&#x4EC0;&#x4E48;&#xFF0C;Clojure&#x90FD;&#x4E0D;&#x4F1A;&#x5BF9;&#x5176;&#x6C42;&#x503C;&#xFF0C;&#x8FD9;&#x91CC;&#x963B;&#x6B62;&#x4E86;&#x7B26;&#x53F7;&#x6C42;&#x503C;&#xFF0C;&#x76F4;&#x63A5;&#x8FD4;&#x56DE;&#x7B26;&#x53F7;&#x3002;&#x5F15;&#x7528;&#x7684;&#x4E0D;&#x6C42;&#x503C;&#x529F;&#x80FD;&#x5BF9;&#x4E8E;&#x5199;&#x5B8F;&#x975E;&#x5E38;&#x91CD;&#x8981;&#xFF0C;&#x8BA9;&#x6211;&#x4EEC;&#x5355;&#x72EC;&#x8BA8;&#x8BBA;&#x4E00;&#x4E0B;&#x3002;</p>
+<blockquote>
+<p>Simple Quoting</p>
+</blockquote>
+<h3 id="&#x7B80;&#x5355;&#x5F15;&#x7528;"><a href="#&#x7B80;&#x5355;&#x5F15;&#x7528;" class="headerlink" title="&#x7B80;&#x5355;&#x5F15;&#x7528;"></a>&#x7B80;&#x5355;&#x5F15;&#x7528;</h3><blockquote>
+<p>You&#x2019;ll almost always use quoting within your macros to obtain an unevaluated symbol. Let&#x2019;s go through a brief refresher on quoting and then see how you might use it in a macro.</p>
+</blockquote>
+<p>&#x4E3A;&#x4E86;&#x83B7;&#x5F97;&#x672A;&#x6C42;&#x503C;&#x7684;&#x7B26;&#x53F7;&#xFF0C;&#x5B8F;&#x91CC;&#x51E0;&#x4E4E;&#x603B;&#x662F;&#x4F7F;&#x7528;&#x5F15;&#x7528;&#x3002;&#x7B80;&#x5355;&#x56DE;&#x987E;&#x4E00;&#x4E0B;&#x5F15;&#x7528;(quote)&#xFF0C;&#x7136;&#x540E;&#x770B;&#x770B;&#x5B8F;&#x91CC;&#x600E;&#x4E48;&#x4F7F;&#x7528;&#x5B83;&#x3002;</p>
+<blockquote>
+<p>First, here&#x2019;s a simple function call with no quoting:</p>
+</blockquote>
+<p>&#x9996;&#x5148;&#xFF0C;&#x8FD9;&#x662F;&#x4E2A;&#x6CA1;&#x6709;&#x5F15;&#x7528;&#x7684;&#x51FD;&#x6570;&#x8C03;&#x7528;&#xFF1A;</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">+</span></span> <span class="number">1</span> <span class="number">2</span>)</span><br><span class="line"><span class="comment">; =&gt; 3</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>If we add quote at the beginning, it returns an unevaluated data structure:</p>
+</blockquote>
+<p>&#x5982;&#x679C;&#x5728;&#x524D;&#x9762;&#x52A0;&#x4E0A;&#x5F15;&#x7528;&#xFF0C;&#x4F1A;&#x8FD4;&#x56DE;&#x672A;&#x6C42;&#x503C;&#x7684;&#x6570;&#x636E;&#x7ED3;&#x6784;&#xFF1A;</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">quote</span></span> (<span class="name"><span class="builtin-name">+</span></span> <span class="number">1</span> <span class="number">2</span>))</span><br><span class="line"><span class="comment">; =&gt; (+ 1 2)</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Here in the returned list, <code>+</code> is a symbol. If we evaluate this plus symbol, it yields the plus function:</p>
+</blockquote>
+<p>&#x8FD4;&#x56DE;&#x7684;<code>+</code>&#x662F;&#x7B26;&#x53F7;&#x3002;&#x5982;&#x679C;&#x5BF9;&#x5B83;&#x6C42;&#x503C;&#xFF0C;&#x662F;&#x52A0;&#x6CD5;&#x51FD;&#x6570;&#xFF1A;</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">+</span><br><span class="line">; =&gt; #&lt;core$_PLUS_ clojure.core$_PLUS_@47b36583&gt;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Whereas if we quote the plus symbol, it just yields the plus symbol:</p>
+</blockquote>
+<p>&#x5982;&#x679C;&#x5F15;&#x7528;&#x52A0;&#x7B26;&#x53F7;&#xFF0C;&#x53EA;&#x751F;&#x6210;&#x52A0;&#x7B26;&#x53F7;&#xFF1A;</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">quote</span></span> +)</span><br><span class="line"><span class="comment">; =&gt; +</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Evaluating an unbound symbol raises an exception:</p>
+</blockquote>
+<p>&#x5BF9;&#x672A;&#x7ED1;&#x5B9A;&#x7684;&#x7B26;&#x53F7;&#x6C42;&#x503C;&#x4F1A;&#x5F15;&#x8D77;&#x5F02;&#x5E38;&#xFF1A;</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sweating-to-the-oldies</span><br><span class="line">; =&gt; Unable to resolve symbol: sweating-to-the-oldies in this context</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>But quoting the symbol returns a symbol regardless of whether the symbol has a value associated with it:</p>
+</blockquote>
+<p>&#x4F46;&#x5F15;&#x7528;&#x7B26;&#x53F7;&#x8FD4;&#x56DE;&#x7B26;&#x53F7;&#xFF0C;&#x4E0D;&#x8BBA;&#x662F;&#x5426;&#x6709;&#x503C;&#x4E0E;&#x5B83;&#x5173;&#x8054;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">quote</span></span> sweating-to-the-oldies)</span><br><span class="line"><span class="comment">; =&gt; sweating-to-the-oldies</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>The single quote character is a reader macro for (quote x):</p>
+</blockquote>
+<p>&#x5355;&#x5F15;&#x53F7;&#x5B57;&#x7B26;&#x662F;(quote x)&#x7684;&#x8BFB;&#x5165;&#x7A0B;&#x5E8F;&#x5B8F;:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&apos;(+ 1 2)</span><br><span class="line">; =&gt; (+ 1 2)</span><br><span class="line"></span><br><span class="line">&apos;dr-jekyll-and-richard-simmons</span><br><span class="line">; =&gt; dr-jekyll-and-richard-simmons</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>You can see quoting at work in the when macro. This is when&#x2019;s actual source code:</p>
+</blockquote>
+<p>&#x8FD9;&#x662F;&#x5B8F;<code>when</code>&#x91CC;&#xFF0C;&#x5355;&#x5F15;&#x53F7;&#x7684;&#x4F7F;&#x7528;&#x3002;<code>when</code>&#x7684;&#x6E90;&#x7801;&#x5982;&#x4E0B;&#xFF1A;</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">defmacro</span></span> when</span><br><span class="line">  <span class="string">&quot;Evaluates test. If logical true, evaluates body in an implicit do.&quot;</span></span><br><span class="line">  {<span class="symbol">:added</span> <span class="string">&quot;1.0&quot;</span>}</span><br><span class="line">  [test &amp; body]</span><br><span class="line">  (<span class="name"><span class="builtin-name">list</span></span> &apos;if test (<span class="name"><span class="builtin-name">cons</span></span> &apos;do body)))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Notice that the macro definition quotes both <code>if</code> and <code>do</code>. That&#x2019;s because you want these symbols to be in the final list that <code>when</code> returns for evaluation. Here&#x2019;s an example of what that returned list might look like:</p>
+</blockquote>
+<p>&#x6CE8;&#x610F;&#x5B8F;&#x5B9A;&#x4E49;&#x5F15;&#x7528;&#x4E86;<code>if</code>&#x548C;<code>do</code>&#x3002;&#x56E0;&#x4E3A;&#x4F60;&#x5E0C;&#x671B;&#x8FD9;&#x4E9B;&#x7B26;&#x53F7;&#x51FA;&#x73B0;&#x5728;<code>when</code>&#x8FD4;&#x56DE;&#x7684;&#xFF0C;&#x7528;&#x4E8E;&#x6C42;&#x503C;&#x7684;&#x6700;&#x7EC8;list&#x91CC;&#x3002;&#x8FD4;&#x56DE;&#x7684;list&#x662F;&#x8FD9;&#x6837;&#x7684;&#xFF1A;</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(macroexpand &apos;(when (the-cows-come :home)</span><br><span class="line">                (call me :pappy)</span><br><span class="line">                (slap me :silly)))</span><br><span class="line">; =&gt; (if (the-cows-come :home)</span><br><span class="line">       (do (call me :pappy)</span><br><span class="line">           (slap me :silly)))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Here&#x2019;s another example of source code for a built-in macro, this time for <code>unless</code>:</p>
+</blockquote>
+<p>&#x8FD9;&#x662F;&#x53E6;&#x4E00;&#x4E2A;&#x5167;&#x5EFA;&#x5B8F;<code>unless</code>&#x7684;&#x6E90;&#x7801;&#xFF1A;</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">defmacro</span></span> unless</span><br><span class="line">  <span class="string">&quot;Inverted &apos;if&apos;&quot;</span></span><br><span class="line">  [test &amp; branches]</span><br><span class="line">  (<span class="name"><span class="builtin-name">conj</span></span> (<span class="name"><span class="builtin-name">reverse</span></span> branches) test &apos;if))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Again, you have to quote <code>if</code> because you want the unevaluated symbol to be placed in the resulting list, like this one:</p>
+</blockquote>
+<p><code>if</code>&#x8FD8;&#x662F;&#x5FC5;&#x987B;&#x88AB;&#x5F15;&#x7528;&#xFF0C;&#x56E0;&#x4E3A;&#x8FD4;&#x56DE;&#x7684;list&#x91CC;&#x8981;&#x7684;&#x662F;&#x672A;&#x88AB;&#x6C42;&#x503C;&#x7684;&#x7B26;&#x53F7;&#xFF1A;</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(macroexpand &apos;(unless (done-been slapped? me)</span><br><span class="line">                      (slap me :silly)</span><br><span class="line">                      (say &quot;I reckon that&apos;ll learn me&quot;)))</span><br><span class="line">; =&gt; (if (done-been slapped? me)</span><br><span class="line">       (say &quot;I reckon that&apos;ll learn me&quot;)</span><br><span class="line">       (slap me :silly))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>In many cases, you&#x2019;ll use simple quoting like this when writing macros, but most often you&#x2019;ll use the more powerful syntax quote.</p>
+</blockquote>
+<p>&#x5F88;&#x591A;&#x60C5;&#x51B5;&#x4E0B;&#xFF0C;&#x5199;&#x5B8F;&#x4F7F;&#x7528;&#x8FD9;&#x6837;&#x7684;&#x7B80;&#x5355;&#x5F15;&#x7528;&#xFF0C;&#x4F46;&#x66F4;&#x7ECF;&#x5E38;&#x7684;&#x662F;&#x4F7F;&#x7528;&#x66F4;&#x5F3A;&#x5927;&#x7684;&#x8BED;&#x6CD5;&#x5F15;&#x7528;&#x3002;</p>
+<blockquote>
+<p>Syntax Quoting</p>
+</blockquote>
+<h3 id="&#x8BED;&#x6CD5;&#x5F15;&#x7528;"><a href="#&#x8BED;&#x6CD5;&#x5F15;&#x7528;" class="headerlink" title="&#x8BED;&#x6CD5;&#x5F15;&#x7528;"></a>&#x8BED;&#x6CD5;&#x5F15;&#x7528;</h3><blockquote>
+<p>So far, you&#x2019;ve seen macros that build up lists by using the <code>list</code> function to create a list along with <code>&apos;</code> (quote), and functions that operate on lists like <code>first</code>, <code>second</code>, <code>last</code>, and so on. Indeed, you could write macros that way until the cows come home. Sometimes, though, it leads to tedious and verbose code.</p>
+</blockquote>
+<p>&#x5230;&#x6B64;&#x4E3A;&#x6B62;&#xFF0C;&#x4F60;&#x89C1;&#x5230;&#x7684;&#x5B8F;&#x662F;&#x8FD9;&#x6837;&#x5EFA;&#x7ACB;&#x7684;&#xFF1A;&#x4F7F;&#x7528;<code>list</code>&#x51FD;&#x6570;&#x52A0;&#x4E0A;<code>&#x2018;</code>(&#x5F15;&#x7528;)&#x548C;&#x64CD;&#x4F5C;list&#x7684;&#x51FD;&#x6570;&#xFF0C;&#x6BD4;&#x5982;<code>first</code>,<code>second</code>,<code>last</code>&#x7B49;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;list&#x3002;&#x4F46;&#x8FD9;&#x4E48;&#x5199;&#x5B8F;&#x65E2;&#x6162;&#x53C8;&#x7E41;&#x7410;&#x65E0;&#x804A;&#x3002;</p>
+<blockquote>
+<p>Syntax quoting returns unevaluated data structures, similar to normal quoting. However, there are two important differences. One difference is that syntax quoting will return the <em>fully qualified</em> symbols (that is, with the symbol&#x2019;s namespace included). Let&#x2019;s compare quoting and syntax quoting.</p>
+</blockquote>
+<p>&#x8BED;&#x6CD5;&#x5F15;&#x7528;&#x8FD4;&#x56DE;&#x672A;&#x6C42;&#x503C;&#x7684;&#x6570;&#x636E;&#x7ED3;&#x6784;&#xFF0C;&#x4E0E;&#x666E;&#x901A;&#x5F15;&#x7528;&#x7C7B;&#x4F3C;&#x3002;&#x4F46;&#x6709;&#x4E24;&#x4E2A;&#x91CD;&#x8981;&#x533A;&#x522B;&#x3002;&#x4E00;&#x4E2A;&#x533A;&#x522B;&#x662F;&#x8BED;&#x6CD5;&#x5F15;&#x7528;&#x4F1A;&#x8FD4;&#x56DE;<em>&#x5B8C;&#x5168;&#x89C4;&#x8303;</em>&#x7684;&#x7B26;&#x53F7;(&#x5373;&#x5305;&#x542B;&#x4E86;&#x7B26;&#x53F7;&#x7684;&#x547D;&#x540D;&#x7A7A;&#x95F4;)&#x3002;&#x6BD4;&#x8F83;&#x4E00;&#x4E0B;&#x4E8C;&#x8005;&#x3002;</p>
+<blockquote>
+<p>Quoting does not include a namespace if your code doesn&#x2019;t include a namespace:</p>
+</blockquote>
+<p>&#x5982;&#x679C;&#x4EE3;&#x7801;&#x91CC;&#x6CA1;&#x6709;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#xFF0C;&#x5F15;&#x7528;&#x4E0D;&#x5305;&#x542B;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#xFF1A;</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&apos;+</span><br><span class="line">; =&gt; +</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Write out the namespace, and it&#x2019;ll be returned by normal quote:</p>
+</blockquote>
+<p>&#x4EE3;&#x7801;&#x91CC;&#x6709;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#xFF0C;&#x666E;&#x901A;&#x5F15;&#x7528;&#x7ED3;&#x679C;&#x91CC;&#x624D;&#x6709;&#xFF1A;</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&apos;clojure.core/+</span><br><span class="line">; =&gt; clojure.core/+</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Syntax quoting will always include the symbol&#x2019;s full namespace:</p>
+</blockquote>
+<p>&#x8BED;&#x6CD5;&#x5F15;&#x7528;&#x603B;&#x662F;&#x8FD4;&#x56DE;&#x7B26;&#x53F7;&#x7684;&#x5B8C;&#x6574;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#xFF1A;</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">`+</span><br><span class="line">; =&gt; clojure.core/+</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Quoting a list recursively quotes all the elements:</p>
+</blockquote>
+<p>&#x5F15;&#x7528;&#x4E00;&#x4E2A;list&#x9012;&#x5F52;&#x5730;&#x5F15;&#x7528;&#x6240;&#x6709;&#x6210;&#x5458;&#xFF1A;</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&apos;(+ 1 2)</span><br><span class="line">; =&gt; (+ 1 2)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Syntax quoting a list recursively syntax quotes all the elements:</p>
+</blockquote>
+<p>&#x8BED;&#x6CD5;&#x5F15;&#x7528;&#x4E00;&#x4E2A;list&#x9012;&#x5F52;&#x5730;&#x8BED;&#x6CD5;&#x5F15;&#x7528;&#x6240;&#x6709;&#x6210;&#x5458;&#xFF1A;</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">`(+ 1 2)</span><br><span class="line">; =&gt; (clojure.core/+ 1 2)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>The reason syntax quotes include the namespace is to help you avoid name collisions, a topic covered in Chapter 6.</p>
+</blockquote>
+<p>&#x8BED;&#x6CD5;&#x5F15;&#x7528;&#x5305;&#x542B;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x7684;&#x539F;&#x56E0;&#x662F;&#x5E2E;&#x52A9;&#x4F60;&#x907F;&#x514D;&#x547D;&#x540D;&#x51B2;&#x7A81;&#xFF0C;&#x7B2C;6&#x7AE0;&#x8BB2;&#x8FC7;&#x3002;</p>
+<blockquote>
+<p>The other difference between quoting and syntax quoting is that the latter allows you to unquote forms using the tilde, <code>~</code>. It&#x2019;s kind of like kryptonite in that way: whenever Superman is around kryptonite, his powers disappear. Whenever a tilde appears within a syntax-quoted form, the syntax quote&#x2019;s power to return unevaluated, fully namespaced forms disappears. Here&#x2019;s an example:</p>
+</blockquote>
+<p>&#x8BED;&#x6CD5;&#x5F15;&#x7528;&#x4E0E;&#x5F15;&#x7528;&#x7684;&#x53E6;&#x4E00;&#x4E2A;&#x533A;&#x522B;&#x662F;&#x8BED;&#x6CD5;&#x5F15;&#x7528;&#x91CC;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x6CE2;&#x6D6A;&#x7B26;&#xFF0C;<code>~</code>&#x4E0D;&#x5F15;&#x7528;&#x6CE2;&#x6D6A;&#x7B26;&#x540E;&#x9762;&#x7684;&#x4E1C;&#x897F;&#x3002;&#x5C31;&#x50CF;&#x8D85;&#x4EBA;&#x6328;&#x7740;&#x6C2A;&#x661F;&#x77F3;&#x80FD;&#x529B;&#x5C31;&#x4F1A;&#x6D88;&#x5931;&#x4E00;&#x6837;&#x3002;&#x53EA;&#x8981;&#x6CE2;&#x6D6A;&#x7B26;&#x51FA;&#x73B0;&#x5728;&#x8BED;&#x6CD5;&#x5F15;&#x7528;&#x5185;&#xFF0C;&#x8BED;&#x6CD5;&#x5F15;&#x7528;&#x7684;&#x8FD4;&#x56DE;&#x672A;&#x5F15;&#x7528;&#x548C;&#x5B8C;&#x6574;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x80FD;&#x529B;&#x5C31;&#x4F1A;&#x6D88;&#x5931;&#x3002;&#x4F8B;&#x5B50;&#xFF1A;</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">`(+ 1 ~(inc 1))</span><br><span class="line">; =&gt; (clojure.core/+ 1 2)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Because it comes after the tilde, <code>(inc 1)</code> is evaluated instead of being quoted. Without the unquote, syntax quoting returns the unevaluated form with fully qualified symbols:</p>
+</blockquote>
+<p>&#x7531;&#x4E8E;<code>(inc 1)</code>&#x5728;&#x6CE2;&#x6D6A;&#x7B26;&#x540E;&#x9762;&#xFF0C;&#x6240;&#x4EE5;&#x88AB;&#x6C42;&#x503C;&#x800C;&#x4E0D;&#x662F;&#x88AB;&#x5F15;&#x7528;&#x4E86;&#x3002;&#x5982;&#x679C;&#x6CA1;&#x6709;&#x4E0D;&#x5F15;&#x7528;&#xFF0C;&#x8BED;&#x6CD5;&#x5F15;&#x7528;&#x8FD4;&#x56DE;&#x5B8C;&#x5168;&#x89C4;&#x8303;&#x7684;&#x672A;&#x6C42;&#x503C;&#x5F62;&#x5F0F;&#xFF1A;</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">`(+ 1 (inc 1))</span><br><span class="line">; =&gt; (clojure.core/+ 1 (clojure.core/inc 1))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>If you&#x2019;re familiar with string interpolation, you can think of syntax quoting/unquoting similarly. In both cases, you&#x2019;re creating a kind of template, placing a few variables within a larger, static structure. For example, in Ruby you can create the string <code>&quot;Churn your butter, Jebediah!&quot;</code> through concatenation:</p>
+</blockquote>
+<p>&#x5982;&#x679C;&#x4F60;&#x719F;&#x6089;&#x5B57;&#x7B26;&#x4E32;&#x6CE8;&#x5165;&#xFF0C;&#x8BED;&#x6CD5;&#x5F15;&#x7528;/&#x4E0D;&#x5F15;&#x7528;&#x4E0E;&#x5176;&#x7C7B;&#x4F3C;&#x3002;&#x4ED6;&#x4EEC;&#x90FD;&#x662F;&#x521B;&#x5EFA;&#x4E00;&#x79CD;&#x6A21;&#x7248;&#xFF0C;&#x5728;&#x66F4;&#x5927;&#x7684;&#xFF0C;&#x9759;&#x6001;&#x7ED3;&#x6784;&#x91CC;&#x653E;&#x5165;&#x53D8;&#x91CF;&#x3002;&#x6BD4;&#x5982;&#xFF0C;&#x7528;Ruby,&#x4F60;&#x53EF;&#x4EE5;&#x7528;&#x8FDE;&#x63A5;&#x521B;&#x5EFA;&#x5B57;&#x7B26;&#x4E32;<code>&quot;Churn your butter, Jebediah!&quot;</code>:</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">name = <span class="string">&quot;Jebediah&quot;</span></span><br><span class="line"><span class="string">&quot;Churn your butter, &quot;</span> + name + <span class="string">&quot;!&quot;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>or through interpolation:</p>
+</blockquote>
+<p>&#x6216;&#x4F7F;&#x7528;&#x5B57;&#x7B26;&#x4E32;&#x6CE8;&#x5165;&#xFF1A;</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;Churn your butter, <span class="subst">#{name}</span>!&quot;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>In the same way that string interpolation leads to clearer and more concise code, syntax quoting and unquoting allow you to create lists more clearly and concisely. Compare using the <code>list</code> function, shown first, with using syntax quoting:</p>
+</blockquote>
+<p>&#x5B57;&#x7B26;&#x4E32;&#x6CE8;&#x5165;&#x7684;&#x4EE3;&#x7801;&#x66F4;&#x6E05;&#x6670;&#xFF0C;&#x66F4;&#x7B80;&#x6D01;&#xFF0C;&#x8BED;&#x6CD5;&#x5F15;&#x7528;&#x548C;&#x4E0D;&#x5F15;&#x7528;&#x4E5F;&#x662F;&#x8FD9;&#x6837;&#x3002;&#x6BD4;&#x8F83;&#x4E00;&#x4E0B;&#x4F7F;&#x7528;<code>list</code>&#x51FD;&#x6570;&#x4E0E;&#x8BED;&#x6CD5;&#x5F15;&#x7528;&#xFF1A;</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(list &apos;+ 1 (inc 1))</span><br><span class="line">; =&gt; (+ 1 2)</span><br><span class="line"></span><br><span class="line">`(+ 1 ~(inc 1))</span><br><span class="line">; =&gt; (clojure.core/+ 1 2)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>As you can see, the syntax-quote version is more concise. Also, its visual form is closer to the final form of the list, making it easier to understand.</p>
+</blockquote>
+<p>&#x53EF;&#x4EE5;&#x770B;&#x5230;&#xFF0C;&#x8BED;&#x6CD5;&#x5F15;&#x7528;&#x7684;&#x7248;&#x672C;&#x66F4;&#x7B80;&#x6D01;&#x3002;&#x5E76;&#x4E14;&#x5176;&#x89C6;&#x89C9;&#x5F62;&#x72B6;&#x66F4;&#x63A5;&#x8FD1;&#x6700;&#x7EC8;&#x7ED3;&#x679C;&#xFF0C;&#x8FD9;&#x4F7F;&#x5B83;&#x66F4;&#x597D;&#x7406;&#x89E3;&#x3002;</p>
+<blockquote>
+<p>Using Syntax Quoting in a Macro</p>
+</blockquote>
+<h2 id="&#x5B8F;&#x91CC;&#x4F7F;&#x7528;&#x8BED;&#x6CD5;&#x5F15;&#x7528;"><a href="#&#x5B8F;&#x91CC;&#x4F7F;&#x7528;&#x8BED;&#x6CD5;&#x5F15;&#x7528;" class="headerlink" title="&#x5B8F;&#x91CC;&#x4F7F;&#x7528;&#x8BED;&#x6CD5;&#x5F15;&#x7528;"></a>&#x5B8F;&#x91CC;&#x4F7F;&#x7528;&#x8BED;&#x6CD5;&#x5F15;&#x7528;</h2><blockquote>
+<p>Now that you have a good handle on how syntax quoting works, take a look at the <code>code-critic</code> macro. You&#x2019;re going to write a more concise version using syntax quoting.</p>
+</blockquote>
+<p>&#x73B0;&#x5728;&#x4F60;&#x4E86;&#x89E3;&#x4E86;&#x8BED;&#x6CD5;&#x5F15;&#x7528;&#x5982;&#x4F55;&#x5DE5;&#x4F5C;&#xFF0C;&#x770B;&#x4E00;&#x4E0B;<code>code-critic</code>&#x5B8F;&#x3002;&#x4F60;&#x5C06;&#x8981;&#x7528;&#x8BED;&#x6CD5;&#x5F15;&#x7528;&#x5199;&#x4E00;&#x4E2A;&#x66F4;&#x7B80;&#x6D01;&#x7684;&#x7248;&#x672C;&#x3002;</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">defmacro</span></span> code-critic</span><br><span class="line">  <span class="string">&quot;Phrases are courtesy Hermes Conrad from Futurama&quot;</span></span><br><span class="line">  [bad good]</span><br><span class="line">  (<span class="name"><span class="builtin-name">list</span></span> &apos;do</span><br><span class="line">        (<span class="name"><span class="builtin-name">list</span></span> &apos;println</span><br><span class="line">              <span class="string">&quot;Great squid of Madrid, this is bad code:&quot;</span></span><br><span class="line">              (<span class="name"><span class="builtin-name">list</span></span> &apos;quote bad))</span><br><span class="line">        (<span class="name"><span class="builtin-name">list</span></span> &apos;println</span><br><span class="line">              <span class="string">&quot;Sweet gorilla of Manila, this is good code:&quot;</span></span><br><span class="line">              (<span class="name"><span class="builtin-name">list</span></span> &apos;quote good))))</span><br><span class="line"></span><br><span class="line">(<span class="name">code-critic</span> (<span class="number">1</span> + <span class="number">1</span>) (<span class="name"><span class="builtin-name">+</span></span> <span class="number">1</span> <span class="number">1</span>))</span><br><span class="line"><span class="comment">; =&gt; Great squid of Madrid, this is bad code: (1 + 1)</span></span><br><span class="line"><span class="comment">; =&gt; Sweet gorilla of Manila, this is good code: (+ 1 1)</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Just looking at all those tedious repetitions of <code>list</code> and single quotes makes me cringe. But if you rewrite <code>code-critic</code> using syntax quoting, you can make it sleek and concise:</p>
+</blockquote>
+<p>&#x770B;&#x770B;&#x90A3;&#x4E9B;&#x91CD;&#x590D;&#x70E6;&#x4EBA;&#x7684;<code>list</code>&#x548C;&#x5355;&#x5F15;&#x53F7;&#x3002;&#x5982;&#x679C;&#x7528;&#x8BED;&#x6CD5;&#x5F15;&#x7528;&#x91CD;&#x5199;<code>code-critic</code>,&#x4F1A;&#x66F4;&#x6574;&#x9F50;&#x7B80;&#x6D01;&#xFF1A;</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">defmacro</span></span> code-critic</span><br><span class="line">  <span class="string">&quot;Phrases are courtesy Hermes Conrad from Futurama&quot;</span></span><br><span class="line">  [bad good]</span><br><span class="line">  `(<span class="name"><span class="builtin-name">do</span></span> (<span class="name">println</span> <span class="string">&quot;Great squid of Madrid, this is bad code:&quot;</span></span><br><span class="line">                (<span class="name"><span class="builtin-name">quote</span></span> ~bad))</span><br><span class="line">       (<span class="name">println</span> <span class="string">&quot;Sweet gorilla of Manila, this is good code:&quot;</span></span><br><span class="line">                (<span class="name"><span class="builtin-name">quote</span></span> ~good))))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>In this case, you want to quote everything except for the symbols <code>good</code> and <code>bad</code>. In the original version, you have to quote each piece individ&#xAD;ually and explicitly place it in a list in an unwieldy fashion, just to prevent those two symbols from being quoted. With syntax quoting, you can just wrap the entire <code>do</code> expression in a quote and simply unquote the two symbols that you want to evaluate.</p>
+</blockquote>
+<p>&#x8FD9;&#x4E2A;&#x4F8B;&#x5B50;&#x91CC;&#xFF0C;&#x8981;&#x5F15;&#x7528;&#x9664;&#x4E86;&#x7B26;&#x53F7;<code>good</code>&#x548C;<code>bad</code>&#x7684;&#x6240;&#x6709;&#x4E1C;&#x897F;&#x3002;&#x524D;&#x9762;&#x7684;&#x7248;&#x672C;&#x91CC;&#xFF0C;&#x4E0D;&#x5F97;&#x4E0D;&#x5355;&#x72EC;&#x5F15;&#x7528;&#x6BCF;&#x4E2A;&#x7B26;&#x53F7;&#xFF0C;&#x5E76;&#x653E;&#x5728;list&#x91CC;&#x3002;&#x6709;&#x4E86;&#x8BED;&#x6CD5;&#x5F15;&#x7528;&#xFF0C;&#x53EA;&#x9700;&#x8981;&#x5427;&#x6574;&#x4E2A;<code>do</code>&#x8868;&#x8FBE;&#x5F0F;&#x7528;&#x8BED;&#x6CD5;&#x5F15;&#x7528;&#x5305;&#x8D77;&#x6765;&#xFF0C;&#x518D;&#x4E0D;&#x5F15;&#x7528;&#x90A3;&#x4E9B;&#x9700;&#x8981;&#x6C42;&#x503C;&#x7684;&#x7B26;&#x53F7;&#x5C31;&#x53EF;&#x4EE5;&#x4E86;&#x3002;</p>
+<blockquote>
+<p>And thus concludes the introduction to the mechanics of writing a macro! Sweet sacred boa of Western and Eastern Samoa, that was a lot!</p>
+</blockquote>
+<p>&#x5199;&#x5B8F;&#x7684;&#x673A;&#x5236;&#x5C31;&#x4ECB;&#x7ECD;&#x5230;&#x8FD9;&#x91CC;&#x4E86;&#xFF0C;&#x771F;&#x4E0D;&#x5C11;&#x554A;&#xFF01;</p>
+<blockquote>
+<p>To sum up, macros receive unevaluated, arbitrary data structures as arguments and return data structures that Clojure evaluates. When defining your macro, you can use argument destructuring just like you can with functions and <code>let</code> bindings. You can also write multiple-arity and recursive macros.</p>
+</blockquote>
+<p>&#x603B;&#x7ED3;&#x4E00;&#x4E0B;&#xFF0C;&#x5B8F;&#x63A5;&#x53D7;&#x4EFB;&#x610F;&#x7684;&#x4E0D;&#x6C42;&#x503C;&#x7684;&#x6570;&#x636E;&#x7ED3;&#x6784;&#xFF0C;&#x5E76;&#x8FD4;&#x56DE;Clojure&#x6C42;&#x503C;&#x7684;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x3002;&#x5B9A;&#x4E49;&#x5B8F;&#x65F6;&#x5019;&#xFF0C;&#x53EF;&#x4EE5;&#x7528;&#x53C2;&#x6570;&#x89E3;&#x6784;&#x548C;<code>let</code>&#x7ED1;&#x5B9A;&#xFF0C;&#x8DDF;&#x51FD;&#x6570;&#x4E00;&#x6837;&#x3002;&#x4E5F;&#x53EF;&#x4EE5;&#x5199;&#x591A;&#x5957;&#x53C2;&#x6570;&#x548C;&#x9012;&#x5F52;&#x5B8F;&#x3002;</p>
+<blockquote>
+<p>Most of the time, your macros will return lists. You can build up the <code>list</code> to be returned by using list functions or by using syntax quoting. Syntax quoting usually leads to code that&#x2019;s clearer and more concise because it lets you create a template of the data structure you want to return that&#x2019;s easier to parse visually. Whether you use syntax quoting or plain quoting, it&#x2019;s important to be clear about the distinction between a symbol and the value it evaluates to when building up your list. And if you want your macro to return multiple forms for Clojure to evaluate, make sure to wrap them in a <code>do</code>.</p>
+</blockquote>
+<p>&#x5927;&#x591A;&#x6570;&#x60C5;&#x51B5;&#x4E0B;&#xFF0C;&#x5B8F;&#x4F1A;&#x8FD4;&#x56DE;list&#x3002;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;list&#x51FD;&#x6570;&#x6216;&#x8BED;&#x6CD5;&#x5F15;&#x7528;&#x5EFA;&#x7ACB;&#x8FD9;&#x4E2A;list&#x3002;&#x7531;&#x4E8E;&#x8BED;&#x6CD5;&#x5F15;&#x7528;&#x5EFA;&#x7ACB;&#x7684;&#x662F;&#x8FD4;&#x56DE;&#x7684;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x7684;&#x6A21;&#x7248;&#xFF0C;&#x6240;&#x4EE5;&#x4EE3;&#x7801;&#x66F4;&#x6E05;&#x6670;&#xFF0C;&#x7B80;&#x6D01;&#xFF0C;&#x89C6;&#x89C9;&#x4E0A;&#x66F4;&#x5BB9;&#x6613;&#x8FA8;&#x8BA4;&#x3002;&#x4E0D;&#x7BA1;&#x4F7F;&#x7528;&#x5F15;&#x7528;&#x8FD8;&#x662F;&#x8BED;&#x6CD5;&#x5F15;&#x7528;&#xFF0C;&#x91CD;&#x8981;&#x7684;&#x662F;&#x5728;&#x5EFA;&#x7ACB;list&#x65F6;&#x5019;&#x4F60;&#x8981;&#x533A;&#x5206;&#x6E05;&#x695A;&#x7B26;&#x53F7;&#x548C;&#x503C;&#x3002;&#x8FD8;&#x6709;&#xFF0C;&#x5982;&#x679C;&#x5E0C;&#x671B;&#x5B8F;&#x8FD4;&#x56DE;&#x591A;&#x4E2A;&#x5F62;&#x5F0F;&#x7528;&#x4E8E;&#x6C42;&#x503C;&#xFF0C;&#x8981;&#x786E;&#x4FDD;&#x7528;<code>do</code>&#x628A;&#x4ED6;&#x4EEC;&#x5305;&#x8D77;&#x6765;&#x3002;</p>
+<blockquote>
+<p>Refactoring a Macro and Unquote Splicing</p>
+</blockquote>
+<h2 id="&#x91CD;&#x6784;&#x5B8F;&#x4E0E;&#x6253;&#x5F00;&#x4E0D;&#x5F15;&#x7528;"><a href="#&#x91CD;&#x6784;&#x5B8F;&#x4E0E;&#x6253;&#x5F00;&#x4E0D;&#x5F15;&#x7528;" class="headerlink" title="&#x91CD;&#x6784;&#x5B8F;&#x4E0E;&#x6253;&#x5F00;&#x4E0D;&#x5F15;&#x7528;"></a>&#x91CD;&#x6784;&#x5B8F;&#x4E0E;&#x6253;&#x5F00;&#x4E0D;&#x5F15;&#x7528;</h2><blockquote>
+<p>That <code>code-critic</code> macro in the preceding section could still use some improvement. Look at the duplication! The two <code>println</code> calls are nearly identical. Let&#x2019;s clean that up. First, let&#x2019;s create a function to generate those <code>println</code> lists. Functions are easier to think about and play with than macros, so it&#x2019;s often a good idea to move macro guts to helper functions:</p>
+</blockquote>
+<p>&#x4E0A;&#x4E00;&#x8282;&#x7684;<code>code-critic</code>&#x5B8F;&#x8FD8;&#x80FD;&#x4F18;&#x5316;&#x3002;&#x770B;&#x4E0B;&#x91CD;&#x590D;&#x90E8;&#x5206;&#x3002;&#x4E24;&#x4E2A;<code>println</code>&#x8C03;&#x7528;&#x51E0;&#x4E4E;&#x5B8C;&#x5168;&#x4E00;&#x6837;&#x3002;&#x5F00;&#x59CB;&#x6E05;&#x7406;&#x3002;&#x9996;&#x5148;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x51FD;&#x6570;&#xFF0C;&#x7528;&#x4E8E;&#x751F;&#x6210;&#x90A3;&#x4E9B;<code>println</code>list&#x3002;&#x51FD;&#x6570;&#x6BD4;&#x5B8F;&#x66F4;&#x5BB9;&#x6613;&#x601D;&#x8003;&#x548C;&#x4F7F;&#x7528;&#xFF0C;&#x6240;&#x4EE5;&#x7ECF;&#x5E38;&#x628A;&#x5B8F;&#x5185;&#x90E8;&#x90E8;&#x5206;&#x79FB;&#x5230;&#x8F85;&#x52A9;&#x51FD;&#x6570;&#x91CC;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">defn</span></span> criticize-code</span><br><span class="line">  [criticism code]</span><br><span class="line">  `(<span class="name">println</span> ~criticism (<span class="name"><span class="builtin-name">quote</span></span> ~code)))</span><br><span class="line"></span><br><span class="line">(<span class="name"><span class="builtin-name">defmacro</span></span> code-critic</span><br><span class="line">  [bad good]</span><br><span class="line">  `(<span class="name"><span class="builtin-name">do</span></span> ~(<span class="name">criticize-code</span> <span class="string">&quot;Cursed bacteria of Liberia, this is bad code:&quot;</span> bad)</span><br><span class="line">       ~(<span class="name">criticize-code</span> <span class="string">&quot;Sweet sacred boa of Western and Eastern Samoa, this is good code:&quot;</span> good)))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Notice how the <code>criticize-code</code> function returns a syntax-quoted list. This is how you build up the list that the macro will return.</p>
+</blockquote>
+<p>&#x6CE8;&#x610F;&#x51FD;&#x6570;<code>criticize-code</code>&#x662F;&#x5982;&#x4F55;&#x8FD4;&#x56DE;&#x4E00;&#x4E2A;&#x8BED;&#x6CD5;&#x5F15;&#x7528;list&#x7684;&#x3002;&#x8FD9;&#x5C31;&#x662F;&#x6784;&#x5EFA;&#x5B8F;&#x8FD4;&#x56DE;&#x7684;list&#x7684;&#x65B9;&#x6CD5;&#x3002;</p>
+<blockquote>
+<p>There&#x2019;s more room for improvement, though. The code still has multiple, nearly identical calls to a function. In a situation like this where you want to apply the same function to a collection of values, it makes sense to use a seq function like <code>map</code>:</p>
+</blockquote>
+<p>&#x7136;&#x800C;&#x8FD8;&#x6709;&#x63D0;&#x5347;&#x7A7A;&#x95F4;&#x3002;&#x8FD9;&#x4E2A;&#x4EE3;&#x7801;&#x4ECD;&#x7136;&#x6709;&#x591A;&#x6B21;&#x51E0;&#x4E4E;&#x540C;&#x6837;&#x7684;&#x51FD;&#x6570;&#x8C03;&#x7528;&#x3002;&#x8FD9;&#x79CD;&#x9700;&#x8981;&#x5BF9;&#x503C;&#x7684;&#x96C6;&#x5408;&#x8C03;&#x7528;&#x540C;&#x6837;&#x51FD;&#x6570;&#x7684;&#x60C5;&#x51B5;&#xFF0C;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;<code>map</code>&#x8FD9;&#x6837;&#x7684;&#x5E8F;&#x5217;&#x51FD;&#x6570;&#xFF1A;</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">defmacro</span></span> code-critic</span><br><span class="line">  [bad good]</span><br><span class="line">  `(<span class="name"><span class="builtin-name">do</span></span> ~(<span class="name"><span class="builtin-name">map</span></span> #(<span class="name"><span class="builtin-name">apply</span></span> criticize-code %)</span><br><span class="line">             [[<span class="string">&quot;Great squid of Madrid, this is bad code:&quot;</span> bad]</span><br><span class="line">              [<span class="string">&quot;Sweet gorilla of Manila, this is good code:&quot;</span> good]])))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>This is looking a little better. You&#x2019;re mapping over each criticism/code pair and applying the <code>criticize-code</code> function to the pair. Let&#x2019;s try to run the code:</p>
+</blockquote>
+<p>&#x8FD9;&#x770B;&#x8D77;&#x6765;&#x597D;&#x70B9;&#x4E86;&#x3002;&#x5BF9;&#x6BCF;&#x5BF9;criticism/code&#x8C03;&#x7528;<code>criticize-code</code>&#x51FD;&#x6570;&#x3002;&#x5C1D;&#x8BD5;&#x8FD0;&#x884C;&#x4E00;&#x4E0B;&#xFF1A;</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">code-critic</span> (<span class="number">1</span> + <span class="number">1</span>) (<span class="name"><span class="builtin-name">+</span></span> <span class="number">1</span> <span class="number">1</span>))</span><br><span class="line"><span class="comment">; =&gt; NullPointerException</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Oh no! That didn&#x2019;t work at all! What happened? The problem is that <code>map</code> returns a list, and in this case, it returned a list of <code>println</code> expressions. We just want the result of each <code>println</code> call, but instead, this code sticks both results in a list and then tries to evaluate that list.</p>
+</blockquote>
+<p>&#x51FA;&#x73B0;&#x5F02;&#x5E38;&#x4E86;&#xFF0C;&#x4EC0;&#x4E48;&#x60C5;&#x51B5;&#xFF1F;&#x95EE;&#x9898;&#x51FA;&#x5728;<code>map</code>&#x8FD4;&#x56DE;&#x4E00;&#x4E2A;list,&#x8FD9;&#x4E2A;&#x4F8B;&#x5B50;&#x91CC;&#x8FD4;&#x56DE;&#x7684;&#x662F;&#x4E00;&#x4E2A;<code>println</code>&#x8868;&#x8FBE;&#x5F0F;&#x7684;list&#x3002;&#x6211;&#x4EEC;&#x60F3;&#x8981;&#x7684;&#x53EA;&#x662F;&#x6BCF;&#x4E2A;<code>println</code>&#x8C03;&#x7528;&#x7684;&#x7ED3;&#x679C;&#xFF0C;&#x4F46;&#x8FD9;&#x6BB5;&#x4EE3;&#x7801;&#x628A;&#x8FD9;&#x4E9B;&#x7ED3;&#x679C;&#x653E;&#x5728;&#x4E86;&#x4E00;&#x4E2A;list&#x91CC;&#xFF0C;&#x7136;&#x540E;&#x5BF9;&#x8FD9;&#x4E2A;list&#x6C42;&#x503C;&#x3002;</p>
+<blockquote>
+<p>In other words, as it&#x2019;s evaluating this code, Clojure gets to something like this:</p>
+</blockquote>
+<p>&#x6362;&#x53E5;&#x8BDD;&#x8BF4;&#xFF0C;&#x6C42;&#x503C;&#x8FD9;&#x6BB5;&#x4EE3;&#x7801;&#x662F;&#xFF0C;Clojure&#x5F97;&#x5230;&#x7684;&#x662F;&#x8FD9;&#x4E2A;&#xFF1A;</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">do</span></span></span><br><span class="line"> ((<span class="name">clojure.core/println</span> <span class="string">&quot;criticism&quot;</span> &apos;(<span class="number">1</span> + <span class="number">1</span>))</span><br><span class="line">  (<span class="name">clojure.core/println</span> <span class="string">&quot;criticism&quot;</span> &apos;(<span class="name"><span class="builtin-name">+</span></span> <span class="number">1</span> <span class="number">1</span>))))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>then evaluates the first <code>println</code> call to give us this:</p>
+</blockquote>
+<p>&#x7136;&#x540E;&#x6C42;&#x503C;&#x7B2C;&#x4E00;&#x4E2A;<code>println</code>&#x8C03;&#x7528;&#xFF0C;&#x5F97;&#x5230;&#x8FD9;&#x4E2A;&#xFF1A;</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">do</span></span></span><br><span class="line"> (<span class="name">nil</span></span><br><span class="line">  (<span class="name">clojure.core/println</span> <span class="string">&quot;criticism&quot;</span> &apos;(<span class="name"><span class="builtin-name">+</span></span> <span class="number">1</span> <span class="number">1</span>))))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>and after evaluating the second <code>println</code> call, does this:</p>
+</blockquote>
+<p>&#x7136;&#x540E;&#x6C42;&#x503C;&#x7B2C;&#x4E8C;&#x4E2A;<code>println</code>&#x8C03;&#x7528;&#x5F97;&#x5230;&#x8FD9;&#x4E2A;&#xFF1A;</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">do</span></span></span><br><span class="line"> (<span class="name">nil</span> <span class="literal">nil</span>))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>This is the cause of the exception. <code>println</code> evaluates to <code>nil</code>, so we end up with something like <code>(nil nil)</code>. <code>nil</code> isn&#x2019;t callable, and we get a <code>NullPointerException</code>.</p>
+</blockquote>
+<p>&#x8FD9;&#x5C31;&#x662F;&#x5F02;&#x5E38;&#x7684;&#x539F;&#x56E0;&#xFF0C;<code>println</code>&#x6C42;&#x503C;&#x4E3A;<code>nil</code>,&#x6700;&#x540E;&#x5F97;&#x5230;&#x7684;&#x662F;<code>(nil nil)</code>&#x3002;<code>nil</code>&#x4E0D;&#x53EF;&#x8C03;&#x7528;&#xFF0C;&#x4E8E;&#x662F;&#x629B;&#x51FA;&#x5F02;&#x5E38;<code>NullPointerException</code>&#x3002;</p>
+<blockquote>
+<p>What an inconvenience! But as it happens, unquote splicing was invented precisely to handle this kind of situation. Unquote splicing is performed with <code>~@</code>. If you merely unquote a list, this is what you get:</p>
+</blockquote>
+<p>&#x592A;&#x4E0D;&#x65B9;&#x4FBF;&#x4E86;&#xFF01;&#x6253;&#x5F00;&#x4E0D;&#x5F15;&#x7528;&#x5C31;&#x662F;&#x4E13;&#x95E8;&#x53D1;&#x660E;&#x51FA;&#x6765;&#x5904;&#x7406;&#x8FD9;&#x79CD;&#x60C5;&#x51B5;&#x7684;&#x3002;&#x7528;<code>~@</code>&#x53EF;&#x4EE5;&#x6267;&#x884C;&#x6253;&#x5F00;&#x4E0D;&#x5F15;&#x7528;&#x3002;&#x5982;&#x679C;&#x53EA;&#x662F;&#x4E0D;&#x5F15;&#x7528;&#x4E00;&#x4E2A;list&#xFF0C;&#x4F1A;&#x5F97;&#x5230;&#x8FD9;&#x4E2A;&#xFF1A;</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">`(+ ~(list 1 2 3))</span><br><span class="line">; =&gt; (clojure.core/+ (1 2 3))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>However, if you use unquote splicing, this is what you get:</p>
+</blockquote>
+<p>&#x4F46;&#x5982;&#x679C;&#x4F7F;&#x7528;&#x6253;&#x5F00;&#x4E0D;&#x5F15;&#x7528;&#xFF0C;&#x4F1A;&#x5F97;&#x5230;&#x8FD9;&#x4E2A;&#xFF1A;</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">`(+ ~@(list 1 2 3))</span><br><span class="line">; =&gt; (clojure.core/+ 1 2 3)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Unquote splicing unwraps a seqable data structure, placing its contents directly within the enclosing syntax-quoted data structure. It&#x2019;s like the <code>~@</code> is a sledgehammer and whatever follows it is a pi&#xF1;ata, and the result is the most terrifying and awesome party you&#x2019;ve ever been to.</p>
+</blockquote>
+<p>&#x6253;&#x5F00;&#x4E0D;&#x5F15;&#x7528;&#x6253;&#x5F00;&#x4E00;&#x4E2A;&#x53EF;&#x5E8F;&#x5217;&#x5316;&#x7684;&#x6570;&#x636E;&#x7ED3;&#x6784;&#xFF0C;&#x628A;&#x5176;&#x5185;&#x5BB9;&#x76F4;&#x63A5;&#x653E;&#x5728;&#x5305;&#x542B;&#x4ED6;&#x7684;&#x8BED;&#x6CD5;&#x5F15;&#x7528;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x91CC;&#x3002;<code>~@</code>&#x5C31;&#x50CF;&#x4E2A;&#x9524;&#x5B50;&#xFF0C;&#x8DDF;&#x5728;&#x5B83;&#x540E;&#x9762;&#x7684;&#x4E1C;&#x897F;&#x5C31;&#x50CF;&#x4E2A;<a href="https://zh.wikipedia.org/wiki/%E7%9A%AE%E7%B4%8D%E5%A1%94" target="_blank" rel="external">&#x76AE;&#x7EB3;&#x5854;&#x76D2;&#x5B50;</a>&#xFF0C;&#x7ED3;&#x679C;&#x53EF;&#x60F3;&#x800C;&#x77E5;&#x3002;</p>
+<blockquote>
+<p>Anyway, if you use unquote splicing in your code critic, then everything will work great:</p>
+</blockquote>
+<p>&#x524D;&#x9762;&#x7684;&#x4EE3;&#x7801;&#x91CC;&#x4F7F;&#x7528;&#x4E86;&#x6253;&#x5F00;&#x4E0D;&#x5F15;&#x7528;,&#x5C31;&#x4E00;&#x5207;ok&#x4E86;&#xFF1A;</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">defmacro</span></span> code-critic</span><br><span class="line">  [good bad]</span><br><span class="line">  `(<span class="name"><span class="builtin-name">do</span></span> ~@(<span class="name"><span class="builtin-name">map</span></span> #(<span class="name"><span class="builtin-name">apply</span></span> criticize-code %)</span><br><span class="line">              [[<span class="string">&quot;Sweet lion of Zion, this is bad code:&quot;</span> bad]</span><br><span class="line">               [<span class="string">&quot;Great cow of Moscow, this is good code:&quot;</span> good]])))</span><br><span class="line"></span><br><span class="line">(<span class="name">code-critic</span> (<span class="number">1</span> + <span class="number">1</span>) (<span class="name"><span class="builtin-name">+</span></span> <span class="number">1</span> <span class="number">1</span>))</span><br><span class="line"><span class="comment">; =&gt; Sweet lion of Zion, this is bad code: (1 + 1)</span></span><br><span class="line"><span class="comment">; =&gt; Great cow of Moscow, this is good code: (+ 1 1)</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Woohoo! You&#x2019;ve successfully extracted repetitive code into a function and made your macro code cleaner. Sweet guinea pig of Winnipeg, that is good code!</p>
+</blockquote>
+<p>&#x54C7;&#xFF01;&#x4F60;&#x6210;&#x529F;&#x5730;&#x628A;&#x91CD;&#x590D;&#x4EE3;&#x7801;&#x63D0;&#x53D6;&#x51FA;&#x6765;&#x653E;&#x5165;&#x4E86;&#x4E00;&#x4E2A;&#x51FD;&#x6570;&#xFF0C;&#x5E76;&#x4F7F;&#x5B8F;&#x4EE3;&#x7801;&#x66F4;&#x52A0;&#x6E05;&#x6670;&#x3002;&#x5E72;&#x7684;&#x6F02;&#x4EAE;&#xFF01;</p>
+<blockquote>
+<p>Things to Watch Out For</p>
+</blockquote>
+<h2 id="&#x7559;&#x610F;&#x63D0;&#x9632;&#x7684;&#x4E1C;&#x897F;"><a href="#&#x7559;&#x610F;&#x63D0;&#x9632;&#x7684;&#x4E1C;&#x897F;" class="headerlink" title="&#x7559;&#x610F;&#x63D0;&#x9632;&#x7684;&#x4E1C;&#x897F;"></a>&#x7559;&#x610F;&#x63D0;&#x9632;&#x7684;&#x4E1C;&#x897F;</h2><blockquote>
+<p>Macros have a couple of sneaky gotchas that you should be aware of. In this section, you&#x2019;ll learn about some macro pitfalls and how to avoid them. I hope you haven&#x2019;t unstrapped yourself from your thinking mast.</p>
+</blockquote>
+<p>&#x8FD9;&#x7AE0;&#x4F1A;&#x8BB2;&#x8FF0;&#x51E0;&#x4E2A;&#x5B8F;&#x91CC;&#x9690;&#x853D;&#x9677;&#x9631;&#xFF0C;&#x9700;&#x8981;&#x7279;&#x522B;&#x6CE8;&#x610F;&#x3002;</p>
+<blockquote>
+<p>Variable Capture</p>
+</blockquote>
+<h3 id="&#x53D8;&#x91CF;&#x6355;&#x83B7;"><a href="#&#x53D8;&#x91CF;&#x6355;&#x83B7;" class="headerlink" title="&#x53D8;&#x91CF;&#x6355;&#x83B7;"></a>&#x53D8;&#x91CF;&#x6355;&#x83B7;</h3><blockquote>
+<p><em>Variable capture</em> occurs when a macro introduces a binding that, unknown to the macro&#x2019;s user, eclipses an existing binding. For example, in the following code, a macro mischievously introduces its own <code>let</code> binding, and that messes with the code:</p>
+</blockquote>
+<p>&#x5982;&#x679C;&#x5B8F;&#x5F15;&#x5165;&#x4E86;&#x5B8F;&#x7528;&#x6237;&#x4E0D;&#x77E5;&#x9053;&#x7684;&#x7ED1;&#x5B9A;&#xFF0C;&#x4F1A;&#x53D1;&#x751F;&#x53D8;&#x91CF;&#x6355;&#x83B7;&#xFF0C;&#x5B8F;&#x91CC;&#x7684;&#x7ED1;&#x5B9A;&#x4F18;&#x5148;&#x7EA7;&#x66F4;&#x9AD8;&#x800C;&#x5C4F;&#x853D;&#x6389;&#x5916;&#x9762;&#x7684;&#x7ED1;&#x5B9A;&#x3002;&#x6BD4;&#x5982;&#x4E0B;&#x9762;&#x7684;&#x5B8F;&#x5F15;&#x5165;&#x4E86;&#x81EA;&#x5DF1;&#x7684;<code>let</code>&#x7ED1;&#x5B9A;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">def</span></span> message <span class="string">&quot;Good job!&quot;</span>)</span><br><span class="line">(<span class="name"><span class="builtin-name">defmacro</span></span> with-mischief</span><br><span class="line">  [&amp; stuff-to-do]</span><br><span class="line">  (<span class="name"><span class="builtin-name">concat</span></span> (<span class="name"><span class="builtin-name">list</span></span> &apos;let [&apos;message <span class="string">&quot;Oh, big deal!&quot;</span>])</span><br><span class="line">          stuff-to-do))</span><br><span class="line"></span><br><span class="line">(<span class="name">with-mischief</span></span><br><span class="line">  (<span class="name">println</span> <span class="string">&quot;Here&apos;s how I feel about that thing you did: &quot;</span> message))</span><br><span class="line"><span class="comment">; =&gt; Here&apos;s how I feel about that thing you did: Oh, big deal!</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>The <code>println</code> call references the symbol <code>message</code>, which we think is bound to the string <code>&quot;Good job!&quot;</code>. However, the <code>with-mischief</code> macro has created a new binding for <code>message</code>.</p>
+</blockquote>
+<p><code>println</code>&#x8C03;&#x7528;&#x5F15;&#x7528;&#x4E86;&#x88AB;&#x8BA4;&#x4E3A;&#x662F;&#x5B57;&#x7B26;&#x4E32;<code>&quot;Good job!&quot;</code>&#x7684;&#x7B26;&#x53F7;<code>message</code>&#x3002;&#x4F46;<code>with-mischief</code>&#x5B8F;&#x4E3A;<code>message</code>&#x65B0;&#x5EFA;&#x4E86;&#x4E00;&#x4E2A;&#x7ED1;&#x5B9A;&#x3002;</p>
+<blockquote>
+<p>Notice that this macro didn&#x2019;t use syntax quoting. Doing so would result in an exception:</p>
+</blockquote>
+<p>&#x6CE8;&#x610F;&#x8FD9;&#x4E2A;&#x5B8F;&#x6CA1;&#x7528;&#x8BED;&#x6CD5;&#x5F15;&#x7528;&#x3002;&#x7528;&#x4E86;&#x4F1A;&#x5F15;&#x8D77;&#x5F02;&#x5E38;&#xFF1A;</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">def</span></span> message <span class="string">&quot;Good job!&quot;</span>)</span><br><span class="line">(<span class="name"><span class="builtin-name">defmacro</span></span> with-mischief</span><br><span class="line">  [&amp; stuff-to-do]</span><br><span class="line">  `(<span class="name"><span class="builtin-name">let</span></span> [message <span class="string">&quot;Oh, big deal!&quot;</span>]</span><br><span class="line">     ~@stuff-to-do))</span><br><span class="line"></span><br><span class="line">(<span class="name">with-mischief</span></span><br><span class="line">  (<span class="name">println</span> <span class="string">&quot;Here&apos;s how I feel about that thing you did: &quot;</span> message))</span><br><span class="line"><span class="comment">; Exception: Can&apos;t let qualified name: user/message</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>This exception is for your own good: syntax quoting is designed to prevent you from accidentally capturing variables within macros. If you want to introduce <code>let</code> bindings in your macro, you can use a <em>gensym</em>. The <code>gensym</code> function produces unique symbols on each successive call:</p>
+</blockquote>
+<p>&#x8FD9;&#x4E2A;&#x5F02;&#x5E38;&#x662F;&#x4E3A;&#x4E86;&#x4F60;&#x597D;&#xFF1A;&#x8BED;&#x6CD5;&#x5F15;&#x7528;&#x5C31;&#x662F;&#x8FD9;&#x4E48;&#x8BBE;&#x8BA1;&#x7684;&#xFF0C;&#x8BA9;&#x4F60;&#x4E0D;&#x4F1A;&#x610F;&#x5916;&#x6355;&#x83B7;&#x5B8F;&#x5185;&#x7684;&#x53D8;&#x91CF;&#x3002;&#x5982;&#x679C;&#x60F3;&#x7528;<code>let</code>&#x5728;&#x5B8F;&#x5185;&#x5F15;&#x5165;&#x7ED1;&#x5B9A;&#xFF0C;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;<em>&#x7B26;&#x53F7;&#x751F;&#x6210;</em>&#x3002;<code>gensym</code>&#x51FD;&#x6570;&#x6BCF;&#x6B21;&#x8C03;&#x7528;&#x4EA7;&#x751F;&#x4E00;&#x4E2A;&#x552F;&#x4E00;&#x7B26;&#x53F7;&#xFF1A;</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">gensym</span></span>)</span><br><span class="line"><span class="comment">; =&gt; G__655</span></span><br><span class="line"></span><br><span class="line">(<span class="name"><span class="builtin-name">gensym</span></span>)</span><br><span class="line"><span class="comment">; =&gt; G__658</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>You can also pass a symbol prefix:</p>
+</blockquote>
+<p>&#x4E5F;&#x53EF;&#x4EE5;&#x4F20;&#x5165;&#x7B26;&#x53F7;&#x524D;&#x7F00;&#xFF1A;</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">gensym</span></span> &apos;message)</span><br><span class="line"><span class="comment">; =&gt; message4760</span></span><br><span class="line"></span><br><span class="line">(<span class="name"><span class="builtin-name">gensym</span></span> &apos;message)</span><br><span class="line"><span class="comment">; =&gt; message4763</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Here&#x2019;s how you could rewrite <code>with-mischief</code> to be less mischievous:</p>
+</blockquote>
+<p>&#x8FD9;&#x662F;&#x91CD;&#x5199;&#x7684;<code>with-mischief</code>:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">defmacro</span></span> without-mischief</span><br><span class="line">  [&amp; stuff-to-do]</span><br><span class="line">  (<span class="name"><span class="builtin-name">let</span></span> [macro-message (<span class="name"><span class="builtin-name">gensym</span></span> &apos;message)]</span><br><span class="line">    `(<span class="name"><span class="builtin-name">let</span></span> [~macro-message <span class="string">&quot;Oh, big deal!&quot;</span>]</span><br><span class="line">       ~@stuff-to-do</span><br><span class="line">       (<span class="name">println</span> <span class="string">&quot;I still need to say: &quot;</span> ~macro-message))))</span><br><span class="line"></span><br><span class="line">(<span class="name">without-mischief</span></span><br><span class="line">  (<span class="name">println</span> <span class="string">&quot;Here&apos;s how I feel about that thing you did: &quot;</span> message))</span><br><span class="line"><span class="comment">; =&gt; Here&apos;s how I feel about that thing you did:  Good job!</span></span><br><span class="line"><span class="comment">; =&gt; I still need to say:  Oh, big deal!</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>This example avoids variable capture by using <code>gensym</code> to create a new, unique symbol that then gets bound to <code>macro-message</code>. Within the syntax-quoted <code>let</code> expression, <code>macro-message</code> is unquoted, resolving to the gensym&#x2019;d symbol. This gensym&#x2019;d symbol is distinct from any symbols within <code>stuff-to-do</code>, so you avoid variable capture. Because this is such a common pattern, you can use an auto-gensym. Auto-gensyms are more concise and convenient ways to use gensyms:</p>
+</blockquote>
+<p>&#x8FD9;&#x4E2A;&#x4F8B;&#x5B50;&#x4F7F;&#x7528;<code>gensym</code>&#x521B;&#x5EFA;&#x4E86;&#x4E00;&#x4E2A;&#x65B0;&#x7684;&#x552F;&#x4E00;&#x7B26;&#x53F7;&#xFF0C;&#x7136;&#x540E;&#x7ED1;&#x5B9A;&#x5230;<code>macro-message</code>,&#x8FD9;&#x5C31;&#x907F;&#x514D;&#x4E86;&#x53D8;&#x91CF;&#x6355;&#x83B7;&#x3002;&#x5728;&#x8BED;&#x6CD5;&#x5F15;&#x7528;&#x7684;<code>let</code>&#x8868;&#x8FBE;&#x5F0F;&#x5185;&#x90E8;&#xFF0C;<code>macro-message</code>&#x88AB;&#x4E0D;&#x5F15;&#x7528;&#xFF0C;&#x6C42;&#x503C;&#x4E3A;&#x90A3;&#x4E2A;&#x7B26;&#x53F7;&#x751F;&#x6210;&#x7684;&#x7B26;&#x53F7;&#x3002;&#x8FD9;&#x4E2A;&#x7B26;&#x53F7;&#x4E0E;<code>stuff-to-do</code>&#x91CC;&#x7684;&#x4EFB;&#x4F55;&#x7B26;&#x53F7;&#x4E0D;&#x540C;&#xFF0C;&#x6240;&#x4EE5;&#x907F;&#x514D;&#x4E86;&#x53D8;&#x91CF;&#x6355;&#x83B7;&#x3002;&#x7531;&#x4E8E;&#x8FD9;&#x662F;&#x4E2A;&#x975E;&#x5E38;&#x666E;&#x904D;&#x7684;&#x6A21;&#x5F0F;&#xFF0C;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x81EA;&#x52A8;&#x7B26;&#x53F7;&#x751F;&#x6210;&#x3002;&#x81EA;&#x52A8;&#x7B26;&#x53F7;&#x751F;&#x6210;&#x662F;&#x7B26;&#x53F7;&#x751F;&#x6210;&#x7684;&#x66F4;&#x7B80;&#x6D01;&#x65B9;&#x4FBF;&#x7684;&#x7528;&#x6CD5;&#xFF1A;</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">`(blarg# blarg#)</span><br><span class="line">(blarg__2869__auto__ blarg__2869__auto__)</span><br><span class="line"></span><br><span class="line">`(let [name# &quot;Larry Potter&quot;] name#)</span><br><span class="line">; =&gt; (clojure.core/let [name__2872__auto__ &quot;Larry Potter&quot;] name__2872__auto__)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>In this example, you create an auto-gensym by appending a hash mark (or <em>hashtag</em>, if you must insist) to a symbol within a syntax-quoted list. Clojure automatically ensures that each instance of x<code>#</code> resolves to the same symbol within the same syntax-quoted list, that each instance of y<code>#</code> resolves similarly, and so on.</p>
+</blockquote>
+<p>&#x8FD9;&#x4E2A;&#x4F8B;&#x5B50;&#x4E2D;&#x7684;&#x8BED;&#x6CD5;&#x5F15;&#x7528;&#x91CC;&#x6709;&#x7B26;&#x53F7;&#xFF0C;&#x901A;&#x8FC7;&#x5728;&#x8FD9;&#x4E2A;&#x7B26;&#x53F7;&#x540E;&#x9762;&#x589E;&#x52A0;&#x4E00;&#x4E2A;&#x4E95;&#x53F7;&#xFF0C;&#x521B;&#x5EFA;&#x4E86;&#x4E00;&#x4E2A;&#x81EA;&#x52A8;&#x7B26;&#x53F7;&#x751F;&#x6210;&#x3002;Clojure&#x81EA;&#x52A8;&#x786E;&#x4FDD;&#x5728;&#x540C;&#x4E00;&#x4E2A;&#x8BED;&#x6CD5;&#x5F15;&#x7528;list&#x91CC;&#xFF0C;&#x6BCF;&#x4E2A;x<code>#</code>&#x90FD;&#x89E3;&#x6790;&#x4E3A;&#x540C;&#x6837;&#x7684;&#x7B26;&#x53F7;&#x3002;&#x6BCF;&#x4E2A;y<code>#</code>&#x4E5F;&#x7C7B;&#x4F3C;&#xFF0C;&#x8BF8;&#x5982;&#x6B64;&#x7C7B;&#x3002;</p>
+<blockquote>
+<p><code>gensym</code> and auto-gensym are both used all the time when writing macros, and they allow you to avoid variable capture.</p>
+</blockquote>
+<p>&#x5199;&#x5B8F;&#x65F6;&#x7ECF;&#x5E38;&#x4F1A;&#x7528;&#x5230;<code>gensym</code>&#x548C;auto-gensym&#xFF0C;&#x4F7F;&#x4F60;&#x80FD;&#x907F;&#x514D;&#x53D8;&#x91CF;&#x6355;&#x83B7;&#x3002;</p>
+<blockquote>
+<p>Double Evaluation</p>
+</blockquote>
+<h3 id="&#x4E8C;&#x6B21;&#x6C42;&#x503C;"><a href="#&#x4E8C;&#x6B21;&#x6C42;&#x503C;" class="headerlink" title="&#x4E8C;&#x6B21;&#x6C42;&#x503C;"></a>&#x4E8C;&#x6B21;&#x6C42;&#x503C;</h3><blockquote>
+<p>Another gotcha to watch out for when writing macros is <em>double evaluation</em>, which occurs when a form passed to a macro as an argument gets evaluated more than once. Consider the following:</p>
+</blockquote>
+<p>&#x5199;&#x5B8F;&#x65F6;&#x53E6;&#x4E00;&#x4E2A;&#x9700;&#x8981;&#x5C0F;&#x5FC3;&#x7684;&#x5730;&#x65B9;&#x662F;&#xFF0C;&#x5F53;&#x4E00;&#x4E2A;&#x4F5C;&#x4E3A;&#x53C2;&#x6570;&#x4F20;&#x7ED9;&#x5B8F;&#x7684;&#x5F62;&#x5F0F;&#x88AB;&#x6C42;&#x503C;&#x4E0D;&#x6B62;&#x4E00;&#x6B21;&#xFF0C;&#x5C31;&#x53D1;&#x751F;&#x4E86;&#x4E8C;&#x6B21;&#x6C42;&#x503C;&#x3002;&#x4F8B;&#x5B50;&#xFF1A;</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">defmacro</span></span> report</span><br><span class="line">  [to-try]</span><br><span class="line">  `(<span class="name"><span class="builtin-name">if</span></span> ~to-try</span><br><span class="line">     (<span class="name">println</span> (<span class="name"><span class="builtin-name">quote</span></span> ~to-try) <span class="string">&quot;was successful:&quot;</span> ~to-try)</span><br><span class="line">     (<span class="name">println</span> (<span class="name"><span class="builtin-name">quote</span></span> ~to-try) <span class="string">&quot;was not successful:&quot;</span> ~to-try)))</span><br><span class="line"></span><br><span class="line"><span class="comment">;; Thread/sleep takes a number of milliseconds to sleep for</span></span><br><span class="line">(<span class="name">report</span> (<span class="name"><span class="builtin-name">do</span></span> (<span class="name">Thread/sleep</span> <span class="number">1000</span>) (<span class="name"><span class="builtin-name">+</span></span> <span class="number">1</span> <span class="number">1</span>)))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>This code is meant to test its argument for truthiness. If the argument is truthy, it&#x2019;s considered successful; if it&#x2019;s falsey, it&#x2019;s unsuccessful. The macro prints whether or not its argument was successful. In this case, you would actually sleep for two seconds because <code>(Thread/sleep 1000)</code> gets evaluated twice: once right after <code>if</code> and again when <code>println</code> gets called. This happens because the code <code>(do (Thread/sleep 1000) (+ 1 1))</code> is repeated throughout the macro expansion. It&#x2019;s as if you&#x2019;d written this:</p>
+</blockquote>
+<p>&#x8FD9;&#x6BB5;&#x4EE3;&#x7801;&#x60F3;&#x8981;&#x6D4B;&#x8BD5;&#x53C2;&#x6570;&#x7684;&#x771F;&#x4F2A;&#x3002;&#x5982;&#x679C;&#x53C2;&#x6570;&#x4E3A;&#x771F;&#xFF0C;&#x5219;&#x89C6;&#x4E3A;&#x6210;&#x529F;&#xFF0C;&#x5426;&#x5219;&#x89C6;&#x4E3A;&#x5931;&#x8D25;&#x3002;&#x5B8F;&#x6253;&#x5370;&#x51FA;&#x53C2;&#x6570;&#x662F;&#x5426;&#x6210;&#x529F;&#x3002;&#x8FD9;&#x4E2A;&#x4F8B;&#x5B50;&#x91CC;&#xFF0C;&#x5B9E;&#x9645;&#x4E0A;&#x4F11;&#x7720;&#x4E86;&#x4E24;&#x79D2;&#xFF0C;&#x56E0;&#x4E3A;<code>(Thread/sleep 1000)</code>&#x88AB;&#x6C42;&#x503C;&#x4E86;&#x4E24;&#x6B21;&#xFF1A;<code>if</code>&#x540E;&#x9762;&#x4E00;&#x6B21;&#xFF0C;<code>println</code>&#x8C03;&#x7528;&#x65F6;&#x5019;&#x4E00;&#x6B21;&#x3002;&#x5B8F;&#x5C55;&#x5F00;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x4EE3;&#x7801;<code>(do (Thread/sleep 1000) (+ 1 1))</code>&#x88AB;&#x91CD;&#x590D;&#x4E86;&#xFF0C;&#x5C31;&#x597D;&#x50CF;&#x8FD9;&#x4E48;&#x5199;&#x4E00;&#x6837;&#xFF1A;</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">if</span></span> (<span class="name"><span class="builtin-name">do</span></span> (<span class="name">Thread/sleep</span> <span class="number">1000</span>) (<span class="name"><span class="builtin-name">+</span></span> <span class="number">1</span> <span class="number">1</span>))</span><br><span class="line">  (<span class="name">println</span> &apos;(<span class="name"><span class="builtin-name">do</span></span> (<span class="name">Thread/sleep</span> <span class="number">1000</span>) (<span class="name"><span class="builtin-name">+</span></span> <span class="number">1</span> <span class="number">1</span>))</span><br><span class="line">           <span class="string">&quot;was successful:&quot;</span></span><br><span class="line">           (<span class="name"><span class="builtin-name">do</span></span> (<span class="name">Thread/sleep</span> <span class="number">1000</span>) (<span class="name"><span class="builtin-name">+</span></span> <span class="number">1</span> <span class="number">1</span>)))</span><br><span class="line"></span><br><span class="line">  (<span class="name">println</span> &apos;(<span class="name"><span class="builtin-name">do</span></span> (<span class="name">Thread/sleep</span> <span class="number">1000</span>) (<span class="name"><span class="builtin-name">+</span></span> <span class="number">1</span> <span class="number">1</span>))</span><br><span class="line">           <span class="string">&quot;was not successful:&quot;</span></span><br><span class="line">           (<span class="name"><span class="builtin-name">do</span></span> (<span class="name">Thread/sleep</span> <span class="number">1000</span>) (<span class="name"><span class="builtin-name">+</span></span> <span class="number">1</span> <span class="number">1</span>))))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>&#x201C;Big deal!&#x201D; your inner example critic says. Well, if your code did something like transfer money between bank accounts, this would be a very big deal. Here&#x2019;s how you could avoid this problem:</p>
+</blockquote>
+<p>&#x5982;&#x679C;&#x4EE3;&#x7801;&#x662F;&#x94F6;&#x884C;&#x8D26;&#x53F7;&#x95F4;&#x8F6C;&#x8D26;&#xFF0C;&#x8FD9;&#x53EF;&#x662F;&#x5927;&#x95EE;&#x9898;&#xFF01;&#x53EF;&#x4EE5;&#x8FD9;&#x4E48;&#x907F;&#x514D;&#xFF1A;</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">defmacro</span></span> report</span><br><span class="line">  [to-try]</span><br><span class="line">  `(<span class="name"><span class="builtin-name">let</span></span> [result# ~to-try]</span><br><span class="line">     (<span class="name"><span class="builtin-name">if</span></span> result#</span><br><span class="line">       (<span class="name">println</span> (<span class="name"><span class="builtin-name">quote</span></span> ~to-try) <span class="string">&quot;was successful:&quot;</span> result#)</span><br><span class="line">       (<span class="name">println</span> (<span class="name"><span class="builtin-name">quote</span></span> ~to-try) <span class="string">&quot;was not successful:&quot;</span> result#))))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>By placing <code>to-try</code> in a <code>let</code> expression, you only evaluate that code once and bind the result to an auto-gensym&#x2019;d symbol, <code>result#</code>, which you can now reference without reevaluating the <code>to-try</code> code.</p>
+</blockquote>
+<p>&#x901A;&#x8FC7;&#x628A;<code>to-try</code>&#x653E;&#x5728;<code>let</code>&#x8868;&#x8FBE;&#x5F0F;&#x91CC;&#xFF0C;&#x5BF9;&#x5176;&#x6C42;&#x503C;&#x4E00;&#x6B21;&#xFF0C;&#x5E76;&#x628A;&#x7ED3;&#x679C;&#x4E0E;&#x81EA;&#x52A8;&#x7B26;&#x53F7;&#x751F;&#x6210;&#x7684;&#x7B26;&#x53F7;<code>result#</code>&#x7ED1;&#x5B9A;&#x3002;&#x4E4B;&#x540E;&#x5C31;&#x53EF;&#x4EE5;&#x5F15;&#x7528;<code>result#</code>&#x800C;&#x4E0D;&#x4F1A;&#x5BF9;<code>to-try</code>&#x91CD;&#x590D;&#x6C42;&#x503C;&#x3002;</p>
+<blockquote>
+<p>Macros All the Way Down</p>
+</blockquote>
+<h3 id="&#x5B8F;&#x8D8A;&#x5199;&#x8D8A;&#x591A;"><a href="#&#x5B8F;&#x8D8A;&#x5199;&#x8D8A;&#x591A;" class="headerlink" title="&#x5B8F;&#x8D8A;&#x5199;&#x8D8A;&#x591A;"></a>&#x5B8F;&#x8D8A;&#x5199;&#x8D8A;&#x591A;</h3><blockquote>
+<p>One subtle pitfall of using macros is that you can end up having to write more and more of them to get anything done. This is a consequence of the fact that macro expansion happens before evaluation.</p>
+</blockquote>
+<p>&#x4E00;&#x4E2A;&#x9690;&#x853D;&#x7684;&#x5B8F;&#x9677;&#x9631;&#x662F;&#x4E3A;&#x4E86;&#x5B8C;&#x6210;&#x4E00;&#x4EF6;&#x4E8B;&#xFF0C;&#x8981;&#x5199;&#x7684;&#x5B8F;&#x53EF;&#x80FD;&#x8D8A;&#x6765;&#x8D8A;&#x591A;&#x3002;&#x8FD9;&#x662F;&#x5B8F;&#x5148;&#x5C55;&#x5F00;&#x518D;&#x6C42;&#x503C;&#x7684;&#x7ED3;&#x679C;&#x3002;</p>
+<blockquote>
+<p>For example, let&#x2019;s say you wanted to <code>doseq</code> using the <code>report</code> macro. Instead of multiple calls to report:</p>
+</blockquote>
+<p>&#x6BD4;&#x5982;&#x8BF4;&#x4F60;&#x60F3;&#x5728;<code>doseq</code>&#x91CC;&#x4F7F;&#x7528;<code>report</code>&#x5B8F;&#xFF0C;&#x800C;&#x4E0D;&#x662F;&#x591A;&#x6B21;&#x8C03;&#x7528;<code>report</code>:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">report</span> (<span class="name"><span class="builtin-name">=</span></span> <span class="number">1</span> <span class="number">1</span>))</span><br><span class="line"><span class="comment">; =&gt; (= 1 1) was successful: true</span></span><br><span class="line"></span><br><span class="line">(<span class="name">report</span> (<span class="name"><span class="builtin-name">=</span></span> <span class="number">1</span> <span class="number">2</span>))</span><br><span class="line"><span class="comment">; =&gt; (= 1 2) was not successful: false</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>let&#x2019;s iterate:</p>
+</blockquote>
+<p>&#x7528;<code>doseq</code>&#x8FED;&#x4EE3;&#x8C03;&#x7528;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">doseq</span></span> [code [&apos;(<span class="name"><span class="builtin-name">=</span></span> <span class="number">1</span> <span class="number">1</span>) &apos;(<span class="name"><span class="builtin-name">=</span></span> <span class="number">1</span> <span class="number">2</span>)]]</span><br><span class="line">  (<span class="name">report</span> code))</span><br><span class="line"><span class="comment">; =&gt; code was successful: (= 1 1)</span></span><br><span class="line"><span class="comment">; =&gt; code was successful: (= 1 2)</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>The report macro works fine when we pass it functions individually, but when we use <code>doseq</code> to iterate <code>report</code> over multiple functions, it&#x2019;s a worthless failure. Here&#x2019;s what a macro expansion for one of the <code>doseq</code> iterations would look like:</p>
+</blockquote>
+<p>report&#x5B8F;&#x5355;&#x72EC;&#x4F7F;&#x7528;&#x65F6;&#x6CA1;&#x6709;&#x95EE;&#x9898;&#xFF0C;&#x4F46;&#x7528;&#x5728;<code>doseq</code>&#x91CC;&#x8FED;&#x4EE3;&#x8C03;&#x7528;&#x65F6;&#x5019;&#x5931;&#x8D25;&#x4E86;&#x3002;&#x8FD9;&#x662F;<code>doseq</code>&#x4E2D;&#x67D0;&#x4E00;&#x6B21;&#x5B8F;&#x5C55;&#x5F00;&#x7684;&#x6837;&#x5B50;&#xFF1A;</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">if</span></span></span><br><span class="line"> code</span><br><span class="line"> (<span class="name">clojure.core/println</span> &apos;code <span class="string">&quot;was successful:&quot;</span> code)</span><br><span class="line"> (<span class="name">clojure.core/println</span> &apos;code <span class="string">&quot;was not successful:&quot;</span> code))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>As you can see, <code>report</code> receives the unevaluated symbol <code>code</code> in each iteration; however, we want it to receive whatever <code>code</code> is bound to at evaluation time. But <code>report</code>, operating at macro expansion time, just can&#x2019;t access those values. It&#x2019;s like it has T. rex arms, with runtime values forever out of its reach.</p>
+</blockquote>
+<p>&#x53EF;&#x4EE5;&#x770B;&#x89C1;&#xFF0C;&#x6BCF;&#x6B21;&#x8FED;&#x4EE3;&#x91CC;<code>report</code>&#x63A5;&#x53D7;&#x7684;&#x662F;&#x672A;&#x6C42;&#x503C;&#x7684;&#x7B26;&#x53F7;<code>code</code>;&#x4F46;&#x6211;&#x4EEC;&#x60F3;&#x8BA9;&#x4ED6;&#x63A5;&#x53D7;&#x7684;&#x662F;&#x6C42;&#x503C;&#x65F6;&#x5019;<code>code</code>&#x7ED1;&#x5B9A;&#x7684;&#x503C;&#x3002;&#x4F46;<code>report</code>&#x4F5C;&#x7528;&#x4E8E;&#x5B8F;&#x5C55;&#x5F00;&#x65F6;&#xFF0C;&#x65E0;&#x6CD5;&#x8BBF;&#x95EE;&#x5230;&#x8FD9;&#x4E9B;&#x503C;&#x3002;&#x5C31;&#x50CF;&#x66B4;&#x9F99;&#x7684;&#x80F3;&#x818A;&#xFF0C;&#x5BF9;&#x4E8E;&#x8FD0;&#x884C;&#x65F6;&#x5019;&#x7684;&#x503C;&#xFF0C;&#x6C38;&#x8FDC;&#x591F;&#x4E0D;&#x7740;&#x3002;</p>
+<p>&#x8BD1;&#x8005;&#x8865;&#x5145;&#xFF1A;&#x8FD9;&#x91CC;&#x6709;&#x70B9;&#x7ED5;&#xFF0C;&#x53EF;&#x4EE5;&#x76F4;&#x63A5;&#x7528;<code>macroexpand</code>&#x770B;&#x4E00;&#x4E0B;&#x5C55;&#x5F00;&#x7ED3;&#x679C;&#xFF0C;&#x628A;&#x4E0A;&#x9762;&#x7684;&#x4EE3;&#x7801;&#x4E0E;&#x4E0B;&#x9762;&#x5C55;&#x5F00;&#x7ED3;&#x679C;&#x7684;<code>(if)</code>&#x90E8;&#x5206;&#x4E00;&#x8D77;&#x770B;&#xFF0C;&#x66F4;&#x65B9;&#x4FBF;&#x7406;&#x89E3;&#x4E0B;&#x6BB5;&#x7684;&#x89E3;&#x91CA;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">macroexpand</span></span> &apos;(<span class="name">report</span> (<span class="name"><span class="builtin-name">=</span></span> <span class="number">1</span> <span class="number">1</span>)))</span><br><span class="line"><span class="comment">; =&gt;</span></span><br><span class="line">(<span class="name">let*</span></span><br><span class="line"> [result__5428__auto__ (<span class="name"><span class="builtin-name">=</span></span> <span class="number">1</span> <span class="number">1</span>)]</span><br><span class="line"> (<span class="name"><span class="builtin-name">if</span></span></span><br><span class="line">  result__5428__auto__</span><br><span class="line">  (<span class="name">clojure.core/println</span></span><br><span class="line">   (<span class="name"><span class="builtin-name">quote</span></span> (<span class="name"><span class="builtin-name">=</span></span> <span class="number">1</span> <span class="number">1</span>))</span><br><span class="line">   <span class="string">&quot;was successful:&quot;</span></span><br><span class="line">   result__5428__auto__)</span><br><span class="line">  (<span class="name">clojure.core/println</span></span><br><span class="line">   (<span class="name"><span class="builtin-name">quote</span></span> (<span class="name"><span class="builtin-name">=</span></span> <span class="number">1</span> <span class="number">1</span>))</span><br><span class="line">   <span class="string">&quot;was not successful:&quot;</span></span><br><span class="line">   result__5428__auto__)))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>To resolve this situation, we might write another macro, like this:</p>
+</blockquote>
+<p>&#x4E3A;&#x4E86;&#x89E3;&#x51B3;&#x8FD9;&#x4E2A;&#x95EE;&#x9898;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x80FD;&#x53C8;&#x5199;&#x4E86;&#x4E00;&#x4E2A;&#x8FD9;&#x6837;&#x7684;&#x5B8F;&#xFF1A;</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">defmacro</span></span> doseq-macro</span><br><span class="line">  [macroname &amp; args]</span><br><span class="line">  `(<span class="name"><span class="builtin-name">do</span></span></span><br><span class="line">     ~@(<span class="name"><span class="builtin-name">map</span></span> (<span class="name"><span class="builtin-name">fn</span></span> [arg] (<span class="name"><span class="builtin-name">list</span></span> macroname arg)) args)))</span><br><span class="line"></span><br><span class="line">(<span class="name">doseq-macro</span> report (<span class="name"><span class="builtin-name">=</span></span> <span class="number">1</span> <span class="number">1</span>) (<span class="name"><span class="builtin-name">=</span></span> <span class="number">1</span> <span class="number">2</span>))</span><br><span class="line"><span class="comment">; =&gt; (= 1 1) was successful: true</span></span><br><span class="line"><span class="comment">; =&gt; (= 1 2) was not successful: false</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>If you are ever in this situation, take some time to rethink your approach. It&#x2019;s easy to paint yourself into a corner, making it impossible to accomplish anything with run-of-the-mill function calls. You&#x2019;ll be stuck having to write more macros instead. Macros are extremely powerful and awesome, and you shouldn&#x2019;t be afraid to use them. They turn Clojure&#x2019;s facilities for working with data into facilities for creating new languages informed by your programming problems. For some programs, it&#x2019;s appropriate for your code to be like 90 percent macros. As awesome as they are, they also add new composition challenges. They only really compose with each other, so by using them, you might be missing out on the other kinds of composition (functional, object-oriented) available to you in Clojure.</p>
+</blockquote>
+<p>&#x5982;&#x679C;&#x4F60;&#x7ECF;&#x5386;&#x8FC7;&#x8FD9;&#x79CD;&#x60C5;&#x51B5;&#xFF0C;&#x82B1;&#x70B9;&#x65F6;&#x95F4;&#x91CD;&#x65B0;&#x601D;&#x8003;&#x4F60;&#x7684;&#x65B9;&#x6CD5;&#x3002;&#x4F60;&#x5F88;&#x5BB9;&#x6613;&#x9677;&#x5165;&#x7528;&#x666E;&#x901A;&#x51FD;&#x6570;&#x65E0;&#x6CD5;&#x5B8C;&#x6210;&#x4EFB;&#x52A1;&#x7684;&#x56F0;&#x5883;&#xFF0C;&#x4F46;&#x4F60;&#x5C06;&#x4F1A;&#x5361;&#x5728;&#x5199;&#x66F4;&#x591A;&#x7684;&#x5B8F;&#x4E0A;&#x3002;&#x5B8F;&#x5F88;&#x597D;&#x5F88;&#x5F3A;&#x5927;&#xFF0C;&#x4E0D;&#x8BE5;&#x5BB3;&#x6015;&#x4F7F;&#x7528;&#x5B83;&#x3002;&#x5B8F;&#x628A;Clojure&#x4ECE;&#x4E00;&#x4E2A;&#x6570;&#x636E;&#x5DE5;&#x5177;&#x53D8;&#x6210;&#x4E86;&#x4E00;&#x4E2A;&#x5EFA;&#x7ACB;&#x7528;&#x4E8E;&#x89E3;&#x51B3;&#x95EE;&#x9898;&#x7684;&#x65B0;&#x8BED;&#x8A00;&#x7684;&#x5DE5;&#x5177;&#x3002;&#x5BF9;&#x4E8E;&#x4E00;&#x4E9B;&#x7A0B;&#x5E8F;&#xFF0C;&#x4EE3;&#x7801;&#x91CC;&#x6709;&#x767E;&#x5206;&#x4E4B;90&#x7684;&#x5B8F;&#x662F;&#x5408;&#x9002;&#x7684;&#x3002;&#x5B8F;&#x867D;&#x7136;&#x5F88;&#x68D2;&#xFF0C;&#x4F46;&#x5E26;&#x6765;&#x4E86;&#x65B0;&#x7684;&#x7EC4;&#x5408;&#x6311;&#x6218;&#x3002;&#x4ED6;&#x4EEC;&#x53EA;&#x80FD;&#x4E92;&#x76F8;&#x7EC4;&#x5408;&#xFF0C;&#x6240;&#x4EE5;&#x7528;&#x4E86;&#x4ED6;&#x4EEC;&#xFF0C;&#x53EF;&#x80FD;&#x4F1A;&#x9519;&#x8FC7;Clojure&#x91CC;&#x5176;&#x4ED6;&#x53EF;&#x7528;&#x7EC4;&#x5408;(&#x51FD;&#x6570;&#x7684;&#xFF0C;&#x5BF9;&#x8C61;&#x7684;)&#x3002;</p>
+<blockquote>
+<p>We&#x2019;ve now covered all the mechanics of writing a macro. Pat yourself on the back! It&#x2019;s a pretty big deal!</p>
+</blockquote>
+<p>&#x6211;&#x4EEC;&#x5B66;&#x4E60;&#x4E86;&#x5199;&#x5B8F;&#x7684;&#x6240;&#x6709;&#x673A;&#x5236;&#xFF0C;&#x771F;&#x68D2;&#xFF01;</p>
+<blockquote>
+<p>To close out this chapter, it&#x2019;s finally time to put on your pretending cap and work on that online potion store I talked about at the very beginning of the chapter.</p>
+</blockquote>
+<p>&#x6700;&#x540E;&#xFF0C;&#x662F;&#x4E00;&#x4E2A;&#x9A8C;&#x8BC1;&#x8BA2;&#x5355;&#x4F8B;&#x5B50;&#x3002;</p>
+<blockquote>
+<p>Brews for the Brave and True</p>
+</blockquote>
+<h2 id="&#x915D;&#x917F;&#x52C7;&#x6562;&#x4E0E;&#x771F;&#x5B9E;"><a href="#&#x915D;&#x917F;&#x52C7;&#x6562;&#x4E0E;&#x771F;&#x5B9E;" class="headerlink" title="&#x915D;&#x917F;&#x52C7;&#x6562;&#x4E0E;&#x771F;&#x5B9E;"></a>&#x915D;&#x917F;&#x52C7;&#x6562;&#x4E0E;&#x771F;&#x5B9E;</h2><blockquote>
+<p>At the beginning of this chapter, I revealed a dream: to find some kind of drinkable that, once ingested, would temporarily give me the power and temperament of an &#x2019;80s fitness guru, freeing me from a prison of inhibition and self-awareness. I&#x2019;m sure that someone somewhere will someday invent such an elixir, so we might as well get to work on a system for selling this mythical potion. Let&#x2019;s call this hypothetical concoction the Brave and True Ale. The name just came to me for no reason whatsoever.</p>
+</blockquote>
+<p>&#x7565;&#x8FC7;&#x3002;</p>
+<blockquote>
+<p>Before the orders come pouring in (pun! high-five!), we&#x2019;ll need to have some validation in place. This section shows you a way to do this validation functionally and how to write the code that performs validations a bit more concisely using a macro you&#x2019;ll write called <code>if-valid</code>. This will help you understand a typical situation for writing your own macro. If you just want the macro definition, it&#x2019;s okay to skip ahead to &#x201C;if-valid&#x201D; on page 182.</p>
+</blockquote>
+<p>&#x8FD9;&#x8282;&#x5B66;&#x4E60;&#x5982;&#x4F55;&#x5199;&#x4E00;&#x4E2A;&#x8BA2;&#x5355;&#x9A8C;&#x8BC1;&#x5B8F;<code>if-valid</code>&#x3002;&#x4F7F;&#x4F60;&#x7406;&#x89E3;&#x4EC0;&#x4E48;&#x65F6;&#x5019;&#x9700;&#x8981;&#x81EA;&#x5DF1;&#x5199;&#x5B8F;&#x3002;&#x5982;&#x679C;&#x53EA;&#x60F3;&#x770B;&#x5B8F;&#x5B9A;&#x4E49;&#xFF0C;&#x53EF;&#x4EE5;&#x8DF3;&#x5230;&#x4E0B;&#x4E00;&#x8282;&#x201D;&#x201C;if-valid&#x201D;&#x3002;</p>
+<blockquote>
+<p>Validation Functions</p>
+</blockquote>
+<h3 id="&#x9A8C;&#x8BC1;&#x51FD;&#x6570;"><a href="#&#x9A8C;&#x8BC1;&#x51FD;&#x6570;" class="headerlink" title="&#x9A8C;&#x8BC1;&#x51FD;&#x6570;"></a>&#x9A8C;&#x8BC1;&#x51FD;&#x6570;</h3><blockquote>
+<p>To keep things simple, we&#x2019;ll just worry about validating the name and email for each order. For our store, I&#x2019;m thinking we&#x2019;ll want to have those order details represented like this:</p>
+</blockquote>
+<p>&#x4E3A;&#x4E86;&#x7B80;&#x5355;&#xFF0C;&#x53EA;&#x9A8C;&#x8BC1;&#x6BCF;&#x4E2A;&#x8BA2;&#x5355;&#x7684;&#x59D3;&#x540D;&#x548C;&#x90AE;&#x4EF6;&#x3002;&#x53EF;&#x80FD;&#x4F1A;&#x6709;&#x8FD9;&#x6837;&#x7684;&#x8BA2;&#x5355;&#xFF1A;</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">def</span></span> order-details</span><br><span class="line">  {<span class="symbol">:name</span> <span class="string">&quot;Mitchard Blimmons&quot;</span></span><br><span class="line">   <span class="symbol">:email</span> <span class="string">&quot;mitchard.blimmonsgmail.com&quot;</span>})</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>This particular map has an invalid email address (it&#x2019;s missing the <code>@</code> symbol), so this is exactly the kind of order that our validation code should catch! Ideally, we want to write code that produces something like this:</p>
+</blockquote>
+<p>&#x8FD9;&#x4E2A;map&#x91CC;&#x7684;&#x90AE;&#x4EF6;&#x5730;&#x5740;&#x4E0D;&#x5408;&#x6CD5;&#xFF0C;&#x7F3A;&#x5C11;<code>@</code>&#x7B26;&#x53F7;&#xFF0C;&#x9A8C;&#x8BC1;&#x7A0B;&#x5E8F;&#x5E94;&#x8BE5;&#x80FD;&#x53D1;&#x73B0;&#x3002;&#x9A8C;&#x8BC1;&#x7A0B;&#x5E8F;&#x5E94;&#x8BE5;&#x4EA7;&#x751F;&#x8FD9;&#x6837;&#x7684;&#x7ED3;&#x679C;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">validate</span> order-details order-details-validations)</span><br><span class="line"><span class="comment">; =&gt; {:email [&quot;Your email address doesn&apos;t look like an email address.&quot;]}</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>That is, we want to be able to call a function, <code>validate</code>, with the data that needs validation and a definition for how to validate it. The result should be a map where each key corresponds to an invalid field, and each value is a vector of one or more validation messages for that field. The following two functions do the job.</p>
+</blockquote>
+<p>&#x8C03;&#x7528;&#x7684;&#x51FD;&#x6570;&#x662F;<code>validate</code>,&#x53C2;&#x6570;&#x662F;&#x9700;&#x8981;&#x9A8C;&#x8BC1;&#x7684;&#x6570;&#x636E;&#x548C;&#x9A8C;&#x8BC1;&#x5B9A;&#x4E49;&#x3002;&#x7ED3;&#x679C;&#x5E94;&#x8BE5;&#x662F;&#x4E00;&#x4E2A;map,map&#x7684;&#x6BCF;&#x4E2A;key&#x5BF9;&#x5E94;&#x4E00;&#x4E2A;&#x4E0D;&#x5408;&#x6CD5;&#x9879;&#x76EE;&#xFF0C;&#x6BCF;&#x4E2A;&#x503C;&#x662F;&#x4E2A;&#x5305;&#x542B;&#x4E00;&#x4E2A;&#x6216;&#x591A;&#x4E2A;&#x5BF9;&#x5E94;&#x57DF;&#x7684;&#x9A8C;&#x8BC1;&#x4FE1;&#x606F;&#x7684;vector&#x3002;&#x4E24;&#x4E2A;&#x51FD;&#x6570;&#x5982;&#x4E0B;&#xFF1A;</p>
+<blockquote>
+<p>Let&#x2019;s look at <code>order-details-validations</code> first. Here&#x2019;s how you could represent validations:</p>
+</blockquote>
+<p>&#x5148;&#x770B;&#x770B;<code>order-details-validations</code>,&#x53EF;&#x4EE5;&#x8FD9;&#x4E48;&#x8868;&#x793A;&#x9A8C;&#x8BC1;&#xFF1A;</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">def</span></span> order-details-validations</span><br><span class="line">  {<span class="symbol">:name</span></span><br><span class="line">   [<span class="string">&quot;Please enter a name&quot;</span> not-empty]</span><br><span class="line"></span><br><span class="line">   <span class="symbol">:email</span></span><br><span class="line">   [<span class="string">&quot;Please enter an email address&quot;</span> not-empty</span><br><span class="line"></span><br><span class="line">    <span class="string">&quot;Your email address doesn&apos;t look like an email address&quot;</span></span><br><span class="line">    #(<span class="name"><span class="builtin-name">or</span></span> (<span class="name"><span class="builtin-name">empty?</span></span> %) (<span class="name">re-seq</span> #<span class="string">&quot;@&quot;</span> %))]})</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>This is a map where each key is associated with a vector of error message and validating function pairs. For example, <code>:name</code> has one validating function, <code>not-empty</code>; if that validation fails, you should get the <code>&quot;Please enter a name&quot;</code> error message.</p>
+</blockquote>
+<p>&#x8FD9;&#x662F;&#x4E2A;map&#xFF0C;&#x6BCF;&#x4E2A;key&#x4E0E;&#x4E00;&#x4E2A;vector&#x5173;&#x8054;&#xFF0C;vector&#x5305;&#x542B;&#x7684;&#x662F;&#x9519;&#x8BEF;&#x6D88;&#x606F;&#x4E0E;&#x9A8C;&#x8BC1;&#x51FD;&#x6570;&#x5BF9;&#x3002;&#x6BD4;&#x5982;<code>:name</code>&#x6709;&#x4E00;&#x4E2A;&#x9A8C;&#x8BC1;&#x51FD;&#x6570;<code>not-empty</code>,&#x5982;&#x679C;&#x9A8C;&#x8BC1;&#x5931;&#x8D25;&#xFF0C;&#x4F1A;&#x5F97;&#x5230;&#x9519;&#x8BEF;&#x6D88;&#x606F;<code>&quot;Please enter a name&quot;</code>&#x3002;</p>
+<blockquote>
+<p>Next, we need to write out the <code>validate</code> function. The validate function can be decomposed into two functions: one to apply validations to a single field and another to accumulate those error messages into a final map of error messages like <code>{:email [&quot;Your email address doesn&apos;t look like an email address.&quot;]}</code>. Here&#x2019;s a function called <code>error-messages-for</code> that applies validations to a single value:</p>
+</blockquote>
+<p>&#x63A5;&#x4E0B;&#x6765;&#x662F;<code>validate</code>&#x51FD;&#x6570;&#x3002;&#x8FD9;&#x4E2A;&#x51FD;&#x6570;&#x53EF;&#x4EE5;&#x5206;&#x89E3;&#x6210;&#x4E24;&#x4E2A;&#x51FD;&#x6570;&#xFF1A;&#x4E00;&#x4E2A;&#x9A8C;&#x8BC1;&#x5355;&#x4E2A;&#x57DF;&#xFF0C;&#x53E6;&#x4E00;&#x4E2A;&#x7D2F;&#x79EF;&#x9519;&#x8BEF;&#x6D88;&#x606F;&#x5230;&#x6700;&#x7EC8;&#x7684;&#x8FD9;&#x6837;&#x7684;map&#x91CC;&#xFF0C;<code>{:email [&quot;Your email address doesn&apos;t look like an email address.&quot;]}</code>&#x3002;&#x4E0B;&#x9762;&#x662F;&#x51FD;&#x6570;<code>error-messages-for</code>&#xFF0C;&#x9A8C;&#x8BC1;&#x5355;&#x72EC;&#x503C;&#xFF1A;</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">defn</span></span> error-messages-for</span><br><span class="line">  <span class="string">&quot;Return a seq of error messages&quot;</span></span><br><span class="line">  [to-validate message-validator-pairs]</span><br><span class="line">  (<span class="name"><span class="builtin-name">map</span></span> first (<span class="name"><span class="builtin-name">filter</span></span> #(<span class="name"><span class="builtin-name">not</span></span> ((<span class="name"><span class="builtin-name">second</span></span> %) to-validate))</span><br><span class="line">                     (<span class="name"><span class="builtin-name">partition</span></span> <span class="number">2</span> message-validator-pairs))))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>The first argument, <code>to-validate</code>, is the field you want to validate. The second argument, <code>message-validator-pairs</code>, should be a seq with an even number of elements. This seq gets grouped into pairs with <code>(partition 2 message-validator-pairs)</code>. The first element of the pair should be an error message, and the second element of the pair should be a function (just like the pairs are arranged in <code>order-details-validations</code>). The <code>error-messages-for</code> function works by filtering out all error message and validation pairs where the validation function returns <code>true</code> when applied to <code>to-validate</code>. It then uses <code>map first</code> to get the first element of each pair, the error message. Here it is in action:</p>
+</blockquote>
+<p>&#x7B2C;&#x4E00;&#x4E2A;&#x53C2;&#x6570;<code>to-validate</code>&#x662F;&#x8981;&#x9A8C;&#x8BC1;&#x7684;&#x57DF;&#x3002;&#x7B2C;&#x4E8C;&#x4E2A;&#x53C2;&#x6570;<code>message-validator-pairs</code>&#x5E94;&#x8BE5;&#x662F;&#x4E00;&#x4E2A;&#x6709;&#x5076;&#x6570;&#x4E2A;&#x6210;&#x5458;&#x7684;&#x5E8F;&#x5217;&#x3002;&#x7528;<code>(partition 2 message-validator-pairs)</code>&#x628A;&#x8FD9;&#x4E2A;&#x5E8F;&#x5217;&#x5206;&#x7EC4;&#x6210;&#x914D;&#x5BF9;&#x6210;&#x5458;&#xFF0C;&#x6BCF;&#x5BF9;&#x7B2C;&#x4E00;&#x4E2A;&#x6210;&#x5458;&#x662F;&#x9519;&#x8BEF;&#x4FE1;&#x606F;&#xFF0C;&#x7B2C;&#x4E8C;&#x4E2A;&#x662F;&#x51FD;&#x6570;(&#x5C31;&#x50CF;<code>order-details-validations</code>&#x4E00;&#x6837;)&#x3002;<code>error-messages-for</code>&#x8FC7;&#x6EE4;&#x51FA;&#x6240;&#x6709;&#x8C03;&#x7528;<code>to-validate</code>&#x8FD4;&#x56DE;<code>true</code>&#x7684;&#x9519;&#x8BEF;&#x4FE1;&#x606F;&#x3002;&#x5B9E;&#x9645;&#x8C03;&#x7528;&#xFF1A;</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">error-messages-for</span> <span class="string">&quot;&quot;</span> [<span class="string">&quot;Please enter a name&quot;</span> not-empty])</span><br><span class="line"><span class="comment">; =&gt; (&quot;Please enter a name&quot;)</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Now we need to accumulate these error messages in a map.</p>
+</blockquote>
+<p>&#x73B0;&#x5728;&#x9700;&#x8981;&#x628A;&#x8FD9;&#x4E9B;&#x9519;&#x8BEF;&#x6D88;&#x606F;&#x7D2F;&#x79EF;&#x8FDB;&#x4E00;&#x4E2A;map&#x91CC;&#x3002;</p>
+<blockquote>
+<p>Here&#x2019;s the complete <code>validate</code> function, as well as the output when we apply it to our <code>order-details</code> and <code>order-details-validations</code>:</p>
+</blockquote>
+<p>&#x8FD9;&#x662F;&#x5B8C;&#x6574;&#x7684;<code>validate</code>&#x51FD;&#x6570;&#xFF0C;&#x548C;&#x7528;&#x53C2;&#x6570;<code>order-details</code>,<code>order-details-validations</code>&#x8C03;&#x7528;&#x540E;&#x7684;&#x7ED3;&#x679C;&#xFF1A;</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">defn</span></span> validate</span><br><span class="line">  <span class="string">&quot;Returns a map with a vector of errors for each key&quot;</span></span><br><span class="line">  [to-validate validations]</span><br><span class="line">  (<span class="name"><span class="builtin-name">reduce</span></span> (<span class="name"><span class="builtin-name">fn</span></span> [errors validation]</span><br><span class="line">            (<span class="name"><span class="builtin-name">let</span></span> [[fieldname validation-check-groups] validation</span><br><span class="line">                  value (<span class="name"><span class="builtin-name">get</span></span> to-validate fieldname)</span><br><span class="line">                  error-messages (<span class="name">error-messages-for</span> value validation-check-groups)]</span><br><span class="line">              (<span class="name"><span class="builtin-name">if</span></span> (<span class="name"><span class="builtin-name">empty?</span></span> error-messages)</span><br><span class="line">                errors</span><br><span class="line">                (<span class="name"><span class="builtin-name">assoc</span></span> errors fieldname error-messages))))</span><br><span class="line">          {}</span><br><span class="line">          validations))</span><br><span class="line"></span><br><span class="line">(<span class="name">validate</span> order-details order-details-validations)</span><br><span class="line"><span class="comment">; =&gt; {:email (&quot;Your email address doesn&apos;t look like an email address&quot;)}</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Success! This works by reducing over <code>order-details-validations</code> and associating the error messages (if there are any) for each key of <code>order-details</code> into a final map of error messages.</p>
+</blockquote>
+<p>&#x6210;&#x529F;&#x4E86;&#xFF01;&#x65B9;&#x6CD5;&#x662F;&#x5BF9;<code>order-details-validations</code>&#x8FDB;&#x884C;reduce,&#x5982;&#x679C;&#x6709;&#x9519;&#x8BEF;&#xFF0C;&#x5C31;&#x628A;<code>order-details</code>&#x6BCF;&#x4E2A;key&#x5BF9;&#x5E94;&#x7684;&#x6240;&#x6709;&#x9519;&#x8BEF;&#x4FE1;&#x606F;&#x5173;&#x8054;&#x8FDB;&#x6700;&#x7EC8;map&#x91CC;&#x3002;</p>
+<blockquote>
+<p>if-valid</p>
+</blockquote>
+<h3 id="if-valid"><a href="#if-valid" class="headerlink" title="if-valid"></a>if-valid</h3><blockquote>
+<p>With our validation code in place, we can now validate records to our hearts&#x2019; content! Most often, validation will look something like this:</p>
+</blockquote>
+<p>&#x73B0;&#x5728;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x9A8C;&#x8BC1;&#x4E86;&#xFF01;&#x9A8C;&#x8BC1;&#x7A0B;&#x5E8F;&#x662F;&#x8FD9;&#x6837;&#x7684;&#xFF1A;</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">let</span></span> [errors (<span class="name">validate</span> order-details order-details-validations)]</span><br><span class="line">  (<span class="name"><span class="builtin-name">if</span></span> (<span class="name"><span class="builtin-name">empty?</span></span> errors)</span><br><span class="line">    (<span class="name">println</span> <span class="symbol">:success</span>)</span><br><span class="line">    (<span class="name">println</span> <span class="symbol">:failure</span> errors)))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>The pattern is to do the following:</p>
+<ol>
+<li>Validate a record and bind the result to <code>errors</code></li>
+<li>Check whether there were any errors</li>
+<li>If there were, do the success thing, here <code>(println :success)</code></li>
+<li>Otherwise, do the failure thing, here <code>(println :failure errors)</code></li>
+</ol>
+</blockquote>
+<p>&#x8FD9;&#x6BB5;&#x4EE3;&#x7801;&#x505A;&#x4E86;&#x4E0B;&#x5217;&#x4E8B;&#x60C5;&#xFF1A;</p>
+<ol>
+<li>&#x9A8C;&#x8BC1;&#x8BB0;&#x5F55;&#x5E76;&#x628A;&#x7ED3;&#x679C;&#x7ED1;&#x5B9A;&#x5230;<code>errors</code></li>
+<li>&#x68C0;&#x67E5;&#x662F;&#x5426;&#x5B58;&#x5728;&#x9519;&#x8BEF;</li>
+<li>&#x5982;&#x679C;&#x4E0D;&#x5B58;&#x5728;&#x9519;&#x8BEF;&#xFF0C;&#x8FD0;&#x884C;&#x6210;&#x529F;&#x90E8;&#x5206;,<code>(println :success)</code></li>
+<li>&#x5426;&#x5219;&#x8FD0;&#x884C;&#x5931;&#x8D25;&#x90E8;&#x5206;&#xFF0C;<code>(println :failure errors)</code></li>
+</ol>
+<blockquote>
+<p>I&#x2019;ve actually used this validation code in real production websites. At first, I found myself repeating minor variations of the code over and over, a sure sign that I needed to introduce an abstraction that would hide the repetitive parts: applying the <code>validate</code> function, binding the result to some symbol, and checking whether the result is empty. To create this abstraction, you might be tempted to write a function like this:</p>
+</blockquote>
+<p>&#x6211;&#x5728;&#x5B9E;&#x9645;&#x9879;&#x76EE;&#x91CC;&#x4F7F;&#x7528;&#x4E86;&#x8FD9;&#x4E2A;&#x9A8C;&#x8BC1;&#x4EE3;&#x7801;&#x3002;&#x6211;&#x53D1;&#x73B0;&#x4E00;&#x4E9B;&#x91CD;&#x590D;&#xFF1A;&#x8C03;&#x7528;<code>validate</code>&#x51FD;&#x6570;&#xFF0C;&#x7ED3;&#x679C;&#x7ED1;&#x5B9A;&#x5230;&#x4E00;&#x4E2A;&#x7B26;&#x53F7;&#xFF0C;&#x68C0;&#x67E5;&#x7ED3;&#x679C;&#x662F;&#x5426;&#x4E3A;&#x7A7A;&#x3002;&#x8FD9;&#x662F;&#x4E2A;&#x660E;&#x786E;&#x7684;&#x4FE1;&#x53F7;&#xFF0C;&#x9700;&#x8981;&#x5F15;&#x5165;&#x4E00;&#x4E2A;&#x62BD;&#x8C61;&#x9690;&#x85CF;&#x8FD9;&#x4E9B;&#x91CD;&#x590D;&#x90E8;&#x5206;&#x3002;&#x4E3A;&#x6B64;&#xFF0C;&#x4F60;&#x53EF;&#x80FD;&#x4F1A;&#x8FD9;&#x6837;&#x7684;&#x51FD;&#x6570;&#xFF1A;</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">defn</span></span> if-valid</span><br><span class="line">  [record validations success-code failure-code]</span><br><span class="line">  (<span class="name"><span class="builtin-name">let</span></span> [errors (<span class="name">validate</span> record validations)]</span><br><span class="line">    (<span class="name"><span class="builtin-name">if</span></span> (<span class="name"><span class="builtin-name">empty?</span></span> errors)</span><br><span class="line">      success-code</span><br><span class="line">      failure-code)))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>However, this wouldn&#x2019;t work, because <code>success-code</code> and <code>failure-code</code> would get evaluated each time. A macro would work because macros let you control evaluation. Here&#x2019;s how you&#x2019;d use the macro:</p>
+</blockquote>
+<p>&#x4F46;&#x8FD9;&#x6837;&#x4E0D;&#x884C;&#xFF0C;&#x56E0;&#x4E3A;&#x6BCF;&#x6B21;<code>success-code</code>&#x548C;<code>failure-code</code>&#x90FD;&#x4F1A;&#x88AB;&#x6C42;&#x503C;&#x3002;&#x4F46;&#x5B8F;&#x53EF;&#x884C;&#xFF0C;&#x56E0;&#x4E3A;&#x5B8F;&#x53EF;&#x4EE5;&#x63A7;&#x5236;&#x6C42;&#x503C;&#x3002;&#x4E0B;&#x9762;&#x662F;&#x5B8F;&#x8C03;&#x7528;&#xFF1A;</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">if-valid</span> order-details order-details-validations errors</span><br><span class="line"> (<span class="name">render</span> <span class="symbol">:success</span>)</span><br><span class="line"> (<span class="name">render</span> <span class="symbol">:failure</span> errors))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>This macro hides the repetitive details and helps you express your intention more succinctly. It&#x2019;s like asking someone to give you the bottle opener instead of saying, &#x201C;Please give me the manual device for removing the temporary sealant from a glass container of liquid.&#x201D; Here&#x2019;s the implementation:</p>
+</blockquote>
+<p>&#x8FD9;&#x4E2A;&#x5B8F;&#x9690;&#x85CF;&#x4E86;&#x91CD;&#x590D;&#x7684;&#x7EC6;&#x8282;&#xFF0C;&#x6709;&#x52A9;&#x4E8E;&#x66F4;&#x7B80;&#x6D01;&#x5730;&#x8868;&#x8FBE;&#x51FA;&#x610F;&#x56FE;&#x3002;&#x5C31;&#x50CF;&#x8BF4;&#xFF1A;&#x7ED9;&#x6211;&#x74F6;&#x8D77;&#x5B50;&#xFF0C;&#x800C;&#x4E0D;&#x662F;&#x8BF4;&#xFF1A;&#x7ED9;&#x6211;&#x7528;&#x4E8E;&#x53BB;&#x9664;&#x88C5;&#x6DB2;&#x4F53;&#x7684;&#x73BB;&#x7483;&#x5BB9;&#x5668;&#x7684;&#x4E34;&#x65F6;&#x5C01;&#x53E3;&#x6750;&#x6599;&#x7684;&#x624B;&#x52A8;&#x8BBE;&#x5907;&#x3002;&#x4E0B;&#x9762;&#x662F;&#x5B9E;&#x73B0;&#xFF1A;</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">defmacro</span></span> if-valid</span><br><span class="line">  <span class="string">&quot;Handle validation more concisely&quot;</span></span><br><span class="line">  [to-validate validations errors-name &amp; then-else]</span><br><span class="line">  `(<span class="name"><span class="builtin-name">let</span></span> [~errors-name (<span class="name">validate</span> ~to-validate ~validations)]</span><br><span class="line">     (<span class="name"><span class="builtin-name">if</span></span> (<span class="name"><span class="builtin-name">empty?</span></span> ~errors-name)</span><br><span class="line">       ~@then-else)))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>This macro takes four arguments: <code>to-validate</code>, <code>validations</code>, <code>errors-name</code>, and the rest argument <code>then-else</code>. Using <code>errors-name</code> like this is a new strategy. We want to have access to the errors returned by the <code>validate</code> function within the <code>then-else</code> statements. To do this, we tell the macro what symbol it should bind the result to. The following macro expansion shows how this works:</p>
+</blockquote>
+<p>&#x8FD9;&#x4E2A;&#x5B8F;&#x63A5;&#x53D7;&#x56DB;&#x4E2A;&#x53C2;&#x6570;&#xFF1A;<code>to-validate</code>,<code>validations</code>,<code>errors-name</code>,&#x548C;&#x5269;&#x4F59;&#x53C2;&#x6570;<code>then-else</code>&#x3002;&#x8FD9;&#x4E48;&#x7528;<code>errors-name</code>&#x662F;&#x4E2A;&#x65B0;&#x62DB;&#x3002;&#x56E0;&#x4E3A;&#x8981;&#x5728;<code>then-else</code>&#x91CC;&#x8BBF;&#x95EE;<code>validate</code>&#x51FD;&#x6570;&#x8FD4;&#x56DE;&#x7684;&#x9519;&#x8BEF;&#x7ED3;&#x679C;&#xFF0C;&#x6240;&#x4EE5;&#x628A;&#x8FD9;&#x4E2A;&#x7ED3;&#x679C;&#x5BF9;&#x5E94;&#x7684;&#x7B26;&#x53F7;&#x4F20;&#x7ED9;&#x5B8F;&#x3002;&#x770B;&#x770B;&#x4E0B;&#x9762;&#x7684;&#x5B8F;&#x5C55;&#x5F00;&#xFF1A;</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">macroexpand</span></span></span><br><span class="line"> &apos;(<span class="name">if-valid</span> order-details order-details-validations my-error-name</span><br><span class="line">            (<span class="name">println</span> <span class="symbol">:success</span>)</span><br><span class="line">            (<span class="name">println</span> <span class="symbol">:failure</span> my-error-name)))</span><br><span class="line">(<span class="name">let*</span></span><br><span class="line"> [my-error-name (<span class="name">user/validate</span> order-details order-details-validations)]</span><br><span class="line"> (<span class="name"><span class="builtin-name">if</span></span> (<span class="name">clojure.core/empty?</span> my-error-name)</span><br><span class="line">  (<span class="name">println</span> <span class="symbol">:success</span>)</span><br><span class="line">  (<span class="name">println</span> <span class="symbol">:failure</span> my-error-name)))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>The syntax quote abstracts the general form of the <code>let/validate/if</code> pattern you saw earlier. Then we use unquote splicing to unpack the <code>if</code> branches, which were packed into the <code>then-else</code> rest argument.</p>
+</blockquote>
+<p>&#x8BED;&#x6CD5;&#x5F15;&#x7528;&#x62BD;&#x8C61;&#x6389;&#x4E86;&#x524D;&#x9762;&#x7684;<code>let/validate/if</code>&#x6A21;&#x5F0F;&#x3002;&#x7136;&#x540E;&#x4F7F;&#x7528;&#x6253;&#x5F00;&#x4E0D;&#x5F15;&#x7528;&#x5C55;&#x5F00;&#x5305;&#x5728;<code>then-else</code>&#x751F;&#x80B2;&#x53C2;&#x6570;&#x91CC;&#x7684;<code>if</code>&#x5206;&#x652F;&#x3002;</p>
+<blockquote>
+<p>That&#x2019;s pretty simple! After all this talk about macros and going through their mechanics in such detail, I bet you were expecting something more complicated. Sorry, friend. If you&#x2019;re having a hard time coping with your disappointment, I know of a certain drink that will help.</p>
+</blockquote>
+<p>&#x975E;&#x5E38;&#x7B80;&#x5355;&#xFF01;&#x6211;&#x4EEC;&#x5DF2;&#x7ECF;&#x8BB2;&#x8FF0;&#x4E86;&#x5B8F;&#x548C;&#x6240;&#x6709;&#x5B8F;&#x7684;&#x673A;&#x5236;&#x3002;</p>
+<blockquote>
+<p>Summary</p>
+</blockquote>
+<h2 id="&#x603B;&#x7ED3;"><a href="#&#x603B;&#x7ED3;" class="headerlink" title="&#x603B;&#x7ED3;"></a>&#x603B;&#x7ED3;</h2><blockquote>
+<p>In this chapter, you learned how to write your own macros. Macros are defined very similarly to functions: they have arguments, a docstring, and a body. They can use argument destructuring and rest args, and they can be recursive. Your macros will almost always return lists. You&#x2019;ll sometimes use <code>list</code> and <code>seq</code> functions for simple macros, but most of the time you&#x2019;ll use the syntax quote, <code>` </code>, which lets you write macros using a safe template.</p>
+</blockquote>
+<p>&#x8FD9;&#x7AE0;&#x8BB2;&#x4E86;&#x5982;&#x4F55;&#x5199;&#x81EA;&#x5DF1;&#x7684;&#x5B8F;&#x3002;&#x5B8F;&#x5B9A;&#x4E49;&#x4E0E;&#x51FD;&#x6570;&#x7C7B;&#x4F3C;&#xFF1A;&#x6709;&#x53C2;&#x6570;&#xFF0C;&#x6587;&#x6863;&#x5B57;&#x7B26;&#x4E32;&#x548C;&#x4E3B;&#x4F53;&#x3002;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x53C2;&#x6570;&#x89E3;&#x6784;&#x548C;&#x5269;&#x4F59;&#x53C2;&#x6570;&#xFF0C;&#x53EF;&#x4EE5;&#x9012;&#x5F52;&#x3002;&#x5B8F;&#x51E0;&#x4E4E;&#x603B;&#x662F;&#x8FD4;&#x56DE;list&#x3002;&#x6709;&#x65F6;&#x5019;&#x4F1A;&#x7528;<code>list</code>&#x548C;<code>seq</code>&#x51FD;&#x6570;&#x5199;&#x7B80;&#x5355;&#x7684;&#x5B8F;&#xFF0C;&#x4F46;&#x5927;&#x591A;&#x6570;&#x60C5;&#x51B5;&#x4F7F;&#x7528;&#x8BED;&#x6CD5;&#x5F15;&#x7528;<code>` </code>,&#x5B83;&#x8BA9;&#x6211;&#x4EEC;&#x7528;&#x4E00;&#x4E2A;&#x5B89;&#x5168;&#x7684;&#x6A21;&#x7248;&#x5199;&#x5B8F;&#x3002;</p>
+<blockquote>
+<p>When you&#x2019;re writing macros, it&#x2019;s important to keep in mind the distinction between symbols and values: macros are expanded before code is evaluated and therefore don&#x2019;t have access to the results of evaluation. Double evaluation and variable capture are two other subtle traps for the unwary, but you can avoid them through the judicious use of <code>let</code> expressions and gensyms.</p>
+</blockquote>
+<p>&#x5199;&#x5B8F;&#x65F6;&#x5019;&#x5F88;&#x91CD;&#x8981;&#x7684;&#x662F;&#x65F6;&#x523B;&#x533A;&#x5206;&#x6E05;&#x695A;&#x7B26;&#x53F7;&#x548C;&#x503C;&#xFF1A;&#x5B8F;&#x6C42;&#x503C;&#x524D;&#x5148;&#x5C55;&#x5F00;&#xFF0C;&#x56E0;&#x6B64;&#x65E0;&#x6CD5;&#x8BBF;&#x95EE;&#x6C42;&#x503C;&#x7ED3;&#x679C;&#x3002;&#x4E8C;&#x6B21;&#x6C42;&#x503C;&#x548C;&#x53D8;&#x91CF;&#x6355;&#x83B7;&#x662F;&#x4E24;&#x4E2A;&#x9690;&#x853D;&#x7684;&#x9677;&#x9631;&#xFF0C;&#x4F46;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;&#x4F7F;&#x7528;<code>let</code>&#x8868;&#x8FBE;&#x5F0F;&#x548C;&#x7B26;&#x53F7;&#x751F;&#x6210;&#x907F;&#x514D;&#x3002;</p>
+<blockquote>
+<p>Macros are fun tools that allow you to code with fewer inhibitions. By letting you control evaluation, macros give you a degree of freedom and expression that other languages simply don&#x2019;t allow. Throughout your Clojure journey, you&#x2019;ll probably hear people cautioning you against their use, saying things like &#x201C;Macros are evil&#x201D; and &#x201C;You should never use macros.&#x201D; Don&#x2019;t listen to these prudes&#x2014;at least, not at first! Go out there and have a good time. That&#x2019;s the only way you&#x2019;ll learn the situations where it&#x2019;s appropriate to use macros. You&#x2019;ll come out the other side knowing how to use macros with skill and panache.</p>
+</blockquote>
+<p>&#x5B8F;&#x662F;&#x6709;&#x8DA3;&#x7684;&#x5DE5;&#x5177;&#xFF0C;&#x4F7F;&#x4F60;&#x5199;&#x4EE3;&#x7801;&#x53D7;&#x5230;&#x7684;&#x9650;&#x5236;&#x66F4;&#x5C11;&#x3002;&#x901A;&#x8FC7;&#x63A7;&#x5236;&#x6C42;&#x503C;&#xFF0C;&#x5B8F;&#x7ED9;&#x4F60;&#x63D0;&#x4F9B;&#x4E86;&#x4E00;&#x4E9B;&#x5176;&#x4ED6;&#x8BED;&#x8A00;&#x4E0D;&#x5141;&#x8BB8;&#x7684;&#x81EA;&#x7531;&#x548C;&#x8868;&#x8FBE;&#x529B;&#x3002;&#x5728;&#x4F60;&#x7684;Clojurea&#x65C5;&#x9014;&#x4E2D;&#xFF0C;&#x53EF;&#x80FD;&#x4F1A;&#x6709;&#x4EBA;&#x8B66;&#x544A;&#x4F60;&#xFF0C;&#x8BF4;&#x5B8F;&#x662F;&#x9B54;&#x9B3C;&#xFF0C;&#x6C38;&#x8FDC;&#x4E5F;&#x522B;&#x4F7F;&#x7528;&#x5B8F;&#x4E4B;&#x7C7B;&#x7684;&#x8BDD;&#x3002;&#x81F3;&#x5C11;&#x5F00;&#x59CB;&#x4E0D;&#x8981;&#x542C;&#x4ED6;&#x4EEC;&#x7684;&#x3002;&#x8BE5;&#x7528;&#x5C31;&#x7528;&#xFF0C;&#x4E50;&#x4EAB;&#x5176;&#x4E2D;&#x3002;&#x53EA;&#x6709;&#x8FD9;&#x6837;&#xFF0C;&#x624D;&#x80FD;&#x5B66;&#x4F1A;&#x5E94;&#x8BE5;&#x4F55;&#x65F6;&#x7528;&#x5B8F;&#xFF0C;&#x624D;&#x80FD;&#x5B66;&#x4F1A;&#x4F7F;&#x7528;&#x5B8F;&#x7684;&#x6280;&#x5DE7;&#x3002;</p>
+<blockquote>
+<p>Exercises</p>
+</blockquote>
+<h2 id="&#x7EC3;&#x4E60;"><a href="#&#x7EC3;&#x4E60;" class="headerlink" title="&#x7EC3;&#x4E60;"></a>&#x7EC3;&#x4E60;</h2><blockquote>
+<ol>
+<li><p>Write the macro <code>when-valid</code> so that it behaves similarly to <code>when</code>. Here is an example of calling it:</p>
+<pre><code>(when-valid order-details order-details-validations
+ (println &quot;It&apos;s a success!&quot;)
+ (render :success))
+</code></pre><p>When the data is valid, the println and render forms should be evaluated, and when-valid should return nil if the data is invalid.</p>
+</li>
+<li><p>You saw that <code>and</code> is implemented as a macro. Implement <code>or</code> as a macro.</p>
+</li>
+<li><p>In Chapter 5 you created a series of functions (<code>c-int</code>, <code>c-str</code>, <code>c-dex</code>) to read an RPG character&#x2019;s attributes. Write a macro that defines an arbitrary number of attribute-retrieving functions using one macro call. Here&#x2019;s how you would call it:</p>
+<pre><code>(defattrs c-int :intelligence
+          c-str :strength
+          c-dex :dexterity)
+</code></pre></li>
+</ol>
+</blockquote>
+<ol>
+<li>&#x5199;&#x4E00;&#x4E2A;<code>when-valid</code>&#x5B8F;&#xFF0C;&#x4F7F;&#x5176;&#x4E0E;<code>when</code>&#x7C7B;&#x4F3C;&#xFF0C;&#x8C03;&#x7528;&#x4F8B;&#x5B50;&#xFF1A;<br>&#x6570;&#x636E;&#x5408;&#x6CD5;&#x65F6;&#xFF0C;println&#x548C;render&#x5E94;&#x8BE5;&#x6267;&#x884C;&#xFF0C;&#x5426;&#x5219;&#x8FD4;&#x56DE;nil&#x3002;</li>
+<li>&#x6211;&#x4EEC;&#x770B;&#x5230;<code>and</code>&#x662F;&#x7528;&#x5B8F;&#x5B9E;&#x73B0;&#x7684;&#xFF0C;&#x7528;&#x5B8F;&#x5B9E;&#x73B0;<code>or</code>&#x3002;</li>
+<li>&#x7B2C;5&#x7AE0;&#x4F60;&#x5EFA;&#x7ACB;&#x4E86;&#x4E00;&#x4E9B;&#x51FD;&#x6570;(<code>c-int</code>,<code>c-str</code>,<code>c-dex</code>)&#x8BFB;&#x53D6;RPG&#x89D2;&#x8272;&#x7684;&#x5C5E;&#x6027;&#x3002;&#x5199;&#x4E00;&#x4E2A;&#x5B8F;&#xFF0C;&#x4F7F;&#x4F60;&#x7528;&#x4E00;&#x4E2A;&#x5B8F;&#x5C31;&#x80FD;&#x5B9A;&#x4E49;&#x4EFB;&#x610F;&#x4E2A;&#x5C5E;&#x6027;&#x83B7;&#x53D6;&#x51FD;&#x6570;&#x3002;&#x8C03;&#x7528;&#x65B9;&#x6CD5;&#x5982;&#x4E0B;&#xFF1A;</li>
+</ol>
+<hr>
+<p>&#x8BD1;&#x6587;&#x7ED3;&#x675F;&#x3002;</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Clojure/" rel="tag">#Clojure</a>
+          
+            <a href="/tags/Clojure-For-The-Branve-And-True/" rel="tag">#Clojure For The Branve And True</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/11/braveclojure-read-and-eval/" rel="next" title="【译】Clojure炼金术:读取，求值，宏">
+                <i class="fa fa-chevron-left"></i> 【译】Clojure炼金术:读取，求值，宏
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://s.gravatar.com/avatar/954a8b1f4c32dbb5a11399ae5e236a5f?s=80"
+               alt="胡军" />
+          <p class="site-author-name" itemprop="name">胡军</p>
+          <p class="site-description motion-element" itemprop="description">immutable values from past</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+          
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/morrxy" target="_blank">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#宏的必要性"><span class="nav-number">1.</span> <span class="nav-text">宏的必要性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#宏解构分析"><span class="nav-number">2.</span> <span class="nav-text">宏解构分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#建立求值列表"><span class="nav-number">3.</span> <span class="nav-text">建立求值列表</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#区分符号与值"><span class="nav-number">3.1.</span> <span class="nav-text">区分符号与值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#简单引用"><span class="nav-number">3.2.</span> <span class="nav-text">简单引用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#语法引用"><span class="nav-number">3.3.</span> <span class="nav-text">语法引用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#宏里使用语法引用"><span class="nav-number">4.</span> <span class="nav-text">宏里使用语法引用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重构宏与打开不引用"><span class="nav-number">5.</span> <span class="nav-text">重构宏与打开不引用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#留意提防的东西"><span class="nav-number">6.</span> <span class="nav-text">留意提防的东西</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#变量捕获"><span class="nav-number">6.1.</span> <span class="nav-text">变量捕获</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二次求值"><span class="nav-number">6.2.</span> <span class="nav-text">二次求值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#宏越写越多"><span class="nav-number">6.3.</span> <span class="nav-text">宏越写越多</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#酝酿勇敢与真实"><span class="nav-number">7.</span> <span class="nav-text">酝酿勇敢与真实</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#验证函数"><span class="nav-number">7.1.</span> <span class="nav-text">验证函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#if-valid"><span class="nav-number">7.2.</span> <span class="nav-text">if-valid</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">8.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#练习"><span class="nav-number">9.</span> <span class="nav-text">练习</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">胡军</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+
+  
+
+
+
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
+
+
+
+  
+  
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.scheme !== 'Pisces' && (CONFIG.sidebar.display === 'post' || CONFIG.sidebar.display === 'always')) {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'morrxy';
+      var disqus_identifier = '2016/05/20/braveclojure-writing-macros/';
+      var disqus_title = '【译】写宏';
+      var disqus_url = 'http://yoursite.com/2016/05/20/braveclojure-writing-macros/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+  
+  
+  
+
+  
+
+
+</body>
+</html>
