@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2016-06-03T10:10:54.000Z</updated>
+  <updated>2016-06-03T13:24:43.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -20,12 +20,12 @@
     <link href="http://yoursite.com/2016/06/03/express-demo/"/>
     <id>http://yoursite.com/2016/06/03/express-demo/</id>
     <published>2016-06-03T10:07:47.000Z</published>
-    <updated>2016-06-03T10:10:54.000Z</updated>
+    <updated>2016-06-03T13:24:43.000Z</updated>
     
     <content type="html">&lt;p&gt;&amp;#x672C;&amp;#x6587;&amp;#x6F14;&amp;#x793A;&amp;#x7528;Express&amp;#x642D;&amp;#x5EFA;Api&amp;#x7684;&amp;#x8FC7;&amp;#x7A0B;&amp;#x3002;&amp;#x5185;&amp;#x5BB9;&amp;#x6D89;&amp;#x53CA;&amp;#xFF1A;&amp;#x6A21;&amp;#x5757;&amp;#x5316;&amp;#x8DEF;&amp;#x7531;&amp;#xFF0C;&amp;#x4E2D;&amp;#x95F4;&amp;#x4EF6;&amp;#xFF0C;Promise,&amp;#x7528;bluebird&amp;#x8BBF;&amp;#x95EE;MySQL,&amp;#x7528;Express&amp;#x5B9E;&amp;#x73B0;&amp;#x975E;RESTful&amp;#x98CE;&amp;#x683C;&amp;#x548C;RESTful&amp;#x98CE;&amp;#x683C;api&amp;#x3002;&amp;#x5982;&amp;#x6709;&amp;#x9519;&amp;#x8BEF;&amp;#xFF0C;&amp;#x6B22;&amp;#x8FCE;&amp;#x6307;&amp;#x6B63;&amp;#x3002;&lt;/p&gt;
 &lt;p&gt;&amp;#x672C;&amp;#x6587;&amp;#x5305;&amp;#x542B;&amp;#x4E00;&amp;#x4E2A;demo&amp;#x9879;&amp;#x76EE;&amp;#x6E90;&amp;#x7801;&amp;#xFF0C;&amp;#x5730;&amp;#x5740;&amp;#xFF1A;&lt;a href=&quot;https://github.com/morrxy/express-demo&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;express-demo&lt;/a&gt;&amp;#x3002;&amp;#x8FD0;&amp;#x884C;&amp;#x9879;&amp;#x76EE;&amp;#x9700;&amp;#x8981;&amp;#x672C;&amp;#x5730;&amp;#x5B89;&amp;#x88C5;Node.js,MySQL,&amp;#x4E00;&amp;#x4E2A;&amp;#x4F60;&amp;#x4E60;&amp;#x60EF;&amp;#x7684;&amp;#x6570;&amp;#x636E;&amp;#x5E93;&amp;#x7BA1;&amp;#x7406;&amp;#x5DE5;&amp;#x5177;(&amp;#x6211;&amp;#x7528;&amp;#x7684;&amp;#x662F;Sequel Pro),postman&amp;#x3002;&lt;/p&gt;
 &lt;p&gt;&amp;#x53EF;&amp;#x7528;&amp;#x8FD9;&amp;#x4E2A;&amp;#x547D;&amp;#x4EE4;&amp;#x514B;&amp;#x9686;&amp;#x5230;&amp;#x672C;&amp;#x5730;&amp;#xFF1A;&lt;/p&gt;
-&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;git clone git@github.com:morrxy/express-demo.git&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;git clone https://github.com/morrxy/express-demo.git&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
 &lt;p&gt;demo&amp;#x4EE3;&amp;#x7801;&amp;#x91CC;&amp;#x5305;&amp;#x542B;&amp;#x4E86;&amp;#x6587;&amp;#x7AE0;&amp;#x91CC;&amp;#x7684;&amp;#x6B65;&amp;#x9AA4;:&lt;/p&gt;
 &lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;step1-npm-init&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;step2-hello&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;step3-module-route&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;step4-middleware&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;step5-db-access&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;step6-db-more&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;step7-restful-todos&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
 &lt;p&gt;&amp;#x67E5;&amp;#x770B;&amp;#x67D0;&amp;#x6B65;&amp;#x9AA4;&amp;#x7684;&amp;#x6E90;&amp;#x7801;&amp;#xFF1A;&lt;/p&gt;
@@ -1679,34 +1679,6 @@
   </entry>
   
   <entry>
-    <title>Porcess of Building Web App using Rails</title>
-    <link href="http://yoursite.com/2013/09/17/porcess-of-building-web-app-using-rails/"/>
-    <id>http://yoursite.com/2013/09/17/porcess-of-building-web-app-using-rails/</id>
-    <published>2013-09-16T16:00:00.000Z</published>
-    <updated>2016-02-27T09:48:13.000Z</updated>
-    
-    <content type="html">&lt;ol&gt;
-&lt;li&gt;build mock up&lt;/li&gt;
-&lt;li&gt;build domain model&lt;/li&gt;
-&lt;li&gt;build relation DB that support all business logic&lt;/li&gt;
-&lt;li&gt;build url points, control actions, template&lt;/li&gt;
-&lt;/ol&gt;
-</content>
-    
-    <summary type="html">
-    
-      &lt;ol&gt;
-&lt;li&gt;build mock up&lt;/li&gt;
-&lt;li&gt;build domain model&lt;/li&gt;
-&lt;li&gt;build relation DB that support all business logic&lt;/li&gt;
-&lt;li&gt;build url points, con
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
     <title>HTTP and MVC</title>
     <link href="http://yoursite.com/2013/09/17/http-and-mvc/"/>
     <id>http://yoursite.com/2013/09/17/http-and-mvc/</id>
@@ -1749,6 +1721,34 @@
 &lt;li&gt;Request&lt;ul&gt;
 &lt;li&gt;verb/method (GET or POST)&lt;/li&gt;
 &lt;li&gt;url
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Porcess of Building Web App using Rails</title>
+    <link href="http://yoursite.com/2013/09/17/porcess-of-building-web-app-using-rails/"/>
+    <id>http://yoursite.com/2013/09/17/porcess-of-building-web-app-using-rails/</id>
+    <published>2013-09-16T16:00:00.000Z</published>
+    <updated>2016-02-27T09:48:13.000Z</updated>
+    
+    <content type="html">&lt;ol&gt;
+&lt;li&gt;build mock up&lt;/li&gt;
+&lt;li&gt;build domain model&lt;/li&gt;
+&lt;li&gt;build relation DB that support all business logic&lt;/li&gt;
+&lt;li&gt;build url points, control actions, template&lt;/li&gt;
+&lt;/ol&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;ol&gt;
+&lt;li&gt;build mock up&lt;/li&gt;
+&lt;li&gt;build domain model&lt;/li&gt;
+&lt;li&gt;build relation DB that support all business logic&lt;/li&gt;
+&lt;li&gt;build url points, con
     
     </summary>
     
