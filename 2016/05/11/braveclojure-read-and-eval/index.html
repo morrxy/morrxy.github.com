@@ -61,7 +61,7 @@
 
 <meta name="description" content="&amp;#x672C;&amp;#x6587;&amp;#x662F;&amp;#x6211;&amp;#x5BF9;Clojure&amp;#x4E66;&amp;#x7C4D; CLOJURE FOR THE BRAVE AND TRUE&amp;#x7B2C;&amp;#x4E03;&amp;#x7AE0;Clojure Alchemy: Reading, Evaluation, and Macros &amp;#x505A;&amp;#x7684;&amp;#x7FFB;&amp;#x8BD1;&amp;">
 <meta property="og:type" content="article">
-<meta property="og:title" content="【译】Clojure炼金术:读取，求值，宏">
+<meta property="og:title" content="【译】第七章:Clojure炼金术:读取，求值，宏">
 <meta property="og:url" content="http://yoursite.com/2016/05/11/braveclojure-read-and-eval/index.html">
 <meta property="og:site_name" content="胡军的网络日志">
 <meta property="og:description" content="&amp;#x672C;&amp;#x6587;&amp;#x662F;&amp;#x6211;&amp;#x5BF9;Clojure&amp;#x4E66;&amp;#x7C4D; CLOJURE FOR THE BRAVE AND TRUE&amp;#x7B2C;&amp;#x4E03;&amp;#x7AE0;Clojure Alchemy: Reading, Evaluation, and Macros &amp;#x505A;&amp;#x7684;&amp;#x7FFB;&amp;#x8BD1;&amp;">
@@ -71,9 +71,9 @@
 <meta property="og:image" content="http://www.braveclojure.com/assets/images/cftbat/read-and-eval/data-to-eval.png">
 <meta property="og:image" content="http://www.braveclojure.com/assets/images/cftbat/read-and-eval/simple-eval.png">
 <meta property="og:image" content="http://www.braveclojure.com/assets/images/cftbat/read-and-eval/whole-shebang.png">
-<meta property="og:updated_time" content="2016-05-16T02:34:45.000Z">
+<meta property="og:updated_time" content="2016-07-22T14:01:00.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="【译】Clojure炼金术:读取，求值，宏">
+<meta name="twitter:title" content="【译】第七章:Clojure炼金术:读取，求值，宏">
 <meta name="twitter:description" content="&amp;#x672C;&amp;#x6587;&amp;#x662F;&amp;#x6211;&amp;#x5BF9;Clojure&amp;#x4E66;&amp;#x7C4D; CLOJURE FOR THE BRAVE AND TRUE&amp;#x7B2C;&amp;#x4E03;&amp;#x7AE0;Clojure Alchemy: Reading, Evaluation, and Macros &amp;#x505A;&amp;#x7684;&amp;#x7FFB;&amp;#x8BD1;&amp;">
 <meta name="twitter:image" content="http://www.braveclojure.com/assets/images/cftbat/read-and-eval/non-lisp-eval.png">
 
@@ -93,7 +93,7 @@
   };
 </script>
 
-  <title> 【译】Clojure炼金术:读取，求值，宏 | 胡军的网络日志 </title>
+  <title> 【译】第七章:Clojure炼金术:读取，求值，宏 | 胡军的网络日志 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -243,7 +243,7 @@
             
             
               
-                【译】Clojure炼金术:读取，求值，宏
+                【译】第七章:Clojure炼金术:读取，求值，宏
               
             
           </h1>
@@ -290,6 +290,7 @@
 
       
         <p>&#x672C;&#x6587;&#x662F;&#x6211;&#x5BF9;Clojure&#x4E66;&#x7C4D; <a href="http://www.braveclojure.com/clojure-for-the-brave-and-true/" target="_blank" rel="external">CLOJURE FOR THE BRAVE AND TRUE</a>&#x7B2C;&#x4E03;&#x7AE0;<a href="http://www.braveclojure.com/read-and-eval/" target="_blank" rel="external">Clojure Alchemy: Reading, Evaluation, and Macros</a> &#x505A;&#x7684;&#x7FFB;&#x8BD1;&#x3002;&#x7FFB;&#x8BD1;&#x5F62;&#x5F0F;&#xFF0C;&#x4E2D;&#x82F1;&#x5BF9;&#x7167;&#xFF0C;&#x82F1;&#x6587;&#x5F15;&#x7528;&#x8DDF;&#x7740;&#x4E2D;&#x6587;&#x7FFB;&#x8BD1;&#x3002;&#x5982;&#x6709;&#x9519;&#x8BEF;&#xFF0C;&#x5728;&#x6240;&#x96BE;&#x514D;&#xFF0C;&#x6B22;&#x8FCE;&#x6307;&#x6B63;&#x3002;</p>
+<p><a href="https://morrxy.github.io/tags/Clojure-For-The-Branve-And-True/" target="_blank" rel="external">&#x5176;&#x4ED6;&#x7AE0;&#x7684;&#x7FFB;&#x8BD1;&#x5728;&#x8FD9;&#x91CC;</a></p>
 <p>&#x5982;&#x679C;&#x4F60;&#x5BF9;Clojure&#x4E0D;&#x719F;&#x6089;&#xFF0C;&#x53EF;&#x4EE5;&#x5148;&#x770B;&#x4E00;&#x4E0B;&#x7B2C;3&#x7AE0;<a href="http://www.braveclojure.com/do-things/" target="_blank" rel="external">A Clojure Crash Course</a>;&#x5982;&#x679C;&#x5BF9;&#x67D0;&#x4E2A;&#x51FD;&#x6570;&#xFF0C;&#x5B8F;&#xFF0C;&#x7279;&#x6B8A;&#x5F62;&#x5F0F;&#x4E0D;&#x719F;&#x6089;&#xFF0C;&#x53EF;&#x4EE5;&#x67E5;&#x770B;<a href="http://clojuredocs.org/" target="_blank" rel="external">coojuredocs</a>&#x7684;&#x53C2;&#x8003;&#xFF0C;&#x6BCF;&#x4E2A;&#x6587;&#x6863;&#x90FD;&#x6709;&#x4F8B;&#x5B50;&#xFF0C;&#x975E;&#x5E38;&#x597D;&#x3002;</p>
 <p>&#x8BD1;&#x6587;&#x5F00;&#x59CB;&#x3002;</p>
 <hr>
@@ -807,8 +808,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/05/20/braveclojure-writing-macros/" rel="prev" title="【译】写宏">
-                【译】写宏 <i class="fa fa-chevron-right"></i>
+              <a href="/2016/05/20/braveclojure-writing-macros/" rel="prev" title="【译】第八章:写宏">
+                【译】第八章:写宏 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -884,7 +885,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">19</span>
+              <span class="site-state-item-count">20</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1213,7 +1214,7 @@
     <script type="text/javascript">
       var disqus_shortname = 'morrxy';
       var disqus_identifier = '2016/05/11/braveclojure-read-and-eval/';
-      var disqus_title = '【译】Clojure炼金术:读取，求值，宏';
+      var disqus_title = '【译】第七章:Clojure炼金术:读取，求值，宏';
       var disqus_url = 'http://yoursite.com/2016/05/11/braveclojure-read-and-eval/';
 
       function run_disqus_script(disqus_script){
