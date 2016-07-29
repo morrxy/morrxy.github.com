@@ -238,6 +238,140 @@
             
               
                 
+                <a class="post-title-link" href="/2013/10/20/rails-many-to-many-associations/" itemprop="url">
+                  Rails Many to Many Associations
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2013-10-20T00:00:00+08:00" content="2013-10-20">
+              2013-10-20
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2013/10/20/rails-many-to-many-associations/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2013/10/20/rails-many-to-many-associations/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          
+has_many through
+
+requires a join model
+name your join table anything
+ex: memberships
+
+
+
+Pros:
+
+more flexible, can add additional attributes(solumns) to join tableCons:
+additional join model required
+
+
+has_and_belongs_to_many
+
+no join model necesary
+assumes join table based on convention
+ex: groups_users
+
+
+
+Pors:
+
+easier, no join model
+
+Cons:
+
+not as flexible, can&#x2019;t add additional attributes(solumns) to join table
+
+
+
+
+          
+
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2013/10/20/rails-many-to-many-associations/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2013/09/27/deployment-options/" itemprop="url">
                   Deployment Options
                 </a>
@@ -922,154 +1056,6 @@ BasicObject
             
               
                 
-                <a class="post-title-link" href="/2013/09/12/rubys-composition/" itemprop="url">
-                  Ruby's composition
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2013-09-12T00:00:00+08:00" content="2013-09-12">
-              2013-09-12
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2013/09/12/rubys-composition/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2013/09/12/rubys-composition/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          module Swimmable
-  def swim
-    &quot;#{ name } is swimming!&quot;
-  end
-end
-
-module Fetchable
-  def fetch
-    &quot;#{ name } is fetching!&quot;
-  end
-end    
-
-class Animal
-  attr_accessor :name
-
-  def initialize(name)
-    @name = name
-  end
-
-  def speak
-    &quot;#{ name } is speaking!&quot;
-  end
-end
-
-class Mammal &lt; Animal
-  def warm_blooded?
-    true
-  end
-end
-
-class Dog &lt; Mammal
-  include Swimmable
-  include Fetchable
-
-  def speak
-    &quot;#{ name } is barking!&quot;
-  end
-end
-
-fido = Dog.new(&apos;fido&apos;)
-puts fido.swim
-produce
-fido is swimming!
-Dog
-Fetchable
-Swimmable
-Mammal
-
-          ...
-
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2013/09/12/rubys-composition/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
                 <a class="post-title-link" href="/2013/09/12/process-of-design-apps-class-and-module/" itemprop="url">
                   process of design app's class and module
                 </a>
@@ -1177,8 +1163,8 @@ Create objects out of those classes; these are your actors in your program.
             
               
                 
-                <a class="post-title-link" href="/2013/09/11/ruby-method-scope/" itemprop="url">
-                  Ruby method scope
+                <a class="post-title-link" href="/2013/09/12/rubys-composition/" itemprop="url">
+                  Ruby's composition
                 </a>
               
             
@@ -1191,8 +1177,8 @@ Create objects out of those classes; these are your actors in your program.
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2013-09-11T00:00:00+08:00" content="2013-09-11">
-              2013-09-11
+            <time itemprop="dateCreated" datetime="2013-09-12T00:00:00+08:00" content="2013-09-12">
+              2013-09-12
             </time>
           </span>
 
@@ -1202,8 +1188,8 @@ Create objects out of those classes; these are your actors in your program.
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2013/09/11/ruby-method-scope/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2013/09/11/ruby-method-scope/" itemprop="commentsCount"></span>
+                <a href="/2013/09/12/rubys-composition/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2013/09/12/rubys-composition/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -1227,33 +1213,58 @@ Create objects out of those classes; these are your actors in your program.
       
         
           
-          Ruby method scope convention
-Ruby method not have a strict pass by value or pass by reference.
-if you passing an argument, and the argument calls a method that mutates the caller which may or may not have a !, then it&#x2019;s going to change that object.
-
-This is very common source bug.
-examplepass by value(not mutate argument in method):a = [1, 2, 1]
-def my_method(a)
-  a.uniq
+          module Swimmable
+  def swim
+    &quot;#{ name } is swimming!&quot;
+  end
 end
-puts a
-will produce:
-1
-2
-1
-pass by reference(mutate argument in method):a = [1, 2, 1]
-def my_method(a)
-  a.uniq!
-end
-puts a
-will produce:
-1
-2
 
-          
+module Fetchable
+  def fetch
+    &quot;#{ name } is fetching!&quot;
+  end
+end    
+
+class Animal
+  attr_accessor :name
+
+  def initialize(name)
+    @name = name
+  end
+
+  def speak
+    &quot;#{ name } is speaking!&quot;
+  end
+end
+
+class Mammal &lt; Animal
+  def warm_blooded?
+    true
+  end
+end
+
+class Dog &lt; Mammal
+  include Swimmable
+  include Fetchable
+
+  def speak
+    &quot;#{ name } is barking!&quot;
+  end
+end
+
+fido = Dog.new(&apos;fido&apos;)
+puts fido.swim
+produce
+fido is swimming!
+Dog
+Fetchable
+Swimmable
+Mammal
+
+          ...
 
           <div class="post-more-link text-center">
-            <a class="btn" href="/2013/09/11/ruby-method-scope/#more" rel="contents">
+            <a class="btn" href="/2013/09/12/rubys-composition/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1435,8 +1446,8 @@ puts teddy.info
             
               
                 
-                <a class="post-title-link" href="/2013/09/10/use-vpn-for-git/" itemprop="url">
-                  use vpn for git
+                <a class="post-title-link" href="/2013/09/11/ruby-method-scope/" itemprop="url">
+                  Ruby method scope
                 </a>
               
             
@@ -1449,8 +1460,8 @@ puts teddy.info
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2013-09-10T00:00:00+08:00" content="2013-09-10">
-              2013-09-10
+            <time itemprop="dateCreated" datetime="2013-09-11T00:00:00+08:00" content="2013-09-11">
+              2013-09-11
             </time>
           </span>
 
@@ -1460,8 +1471,8 @@ puts teddy.info
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2013/09/10/use-vpn-for-git/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2013/09/10/use-vpn-for-git/" itemprop="commentsCount"></span>
+                <a href="/2013/09/11/ruby-method-scope/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2013/09/11/ruby-method-scope/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -1485,17 +1496,33 @@ puts teddy.info
       
         
           
-          In China, if you git command can&#x2019;t connect to github, get this tip:
-ssh: connect to host github.com port 22: Operation timed out
-fatal: Could not read from remote repository.
+          Ruby method scope convention
+Ruby method not have a strict pass by value or pass by reference.
+if you passing an argument, and the argument calls a method that mutates the caller which may or may not have a !, then it&#x2019;s going to change that object.
 
-Please make sure you have the correct access rights
-maybe(and very possible) beacuse of GFW, use VPN can solve this problem.
+This is very common source bug.
+examplepass by value(not mutate argument in method):a = [1, 2, 1]
+def my_method(a)
+  a.uniq
+end
+puts a
+will produce:
+1
+2
+1
+pass by reference(mutate argument in method):a = [1, 2, 1]
+def my_method(a)
+  a.uniq!
+end
+puts a
+will produce:
+1
+2
 
           
 
           <div class="post-more-link text-center">
-            <a class="btn" href="/2013/09/10/use-vpn-for-git/#more" rel="contents">
+            <a class="btn" href="/2013/09/11/ruby-method-scope/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1525,7 +1552,7 @@ maybe(and very possible) beacuse of GFW, use VPN can solve this problem.
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1566,7 +1593,7 @@ maybe(and very possible) beacuse of GFW, use VPN can solve this problem.
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">20</span>
+              <span class="site-state-item-count">21</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

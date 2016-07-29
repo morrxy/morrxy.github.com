@@ -1,0 +1,1429 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Clojure,Clojure For The Branve And True," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="胡军的网络日志" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.5.0" />
+
+
+
+
+
+
+<meta name="description" content="&amp;#x672C;&amp;#x6587;&amp;#x662F;&amp;#x6211;&amp;#x5BF9;Clojure&amp;#x4E66;&amp;#x7C4D; CLOJURE FOR THE BRAVE AND TRUE&amp;#x7B2C;&amp;#x516D;&amp;#x7AE0;Organizing Your Project: A Librarian&amp;#x2019;s Tale &amp;#x505A;&amp;#x7684;&amp;#x7FFB;&amp;#x8BD1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【译】第六章:组织项目:图书管理员传奇">
+<meta property="og:url" content="http://yoursite.com/2016/07/29/brave-clojure-organization/index.html">
+<meta property="og:site_name" content="胡军的网络日志">
+<meta property="og:description" content="&amp;#x672C;&amp;#x6587;&amp;#x662F;&amp;#x6211;&amp;#x5BF9;Clojure&amp;#x4E66;&amp;#x7C4D; CLOJURE FOR THE BRAVE AND TRUE&amp;#x7B2C;&amp;#x516D;&amp;#x7AE0;Organizing Your Project: A Librarian&amp;#x2019;s Tale &amp;#x505A;&amp;#x7684;&amp;#x7FFB;&amp;#x8BD1">
+<meta property="og:image" content="http://yoursite.com/2016/07/29/brave-clojure-organization/ns-map.png">
+<meta property="og:image" content="http://yoursite.com/2016/07/29/brave-clojure-organization/bee-power.png">
+<meta property="og:image" content="http://yoursite.com/2016/07/29/brave-clojure-organization/svg-before.png">
+<meta property="og:image" content="http://yoursite.com/2016/07/29/brave-clojure-organization/svg-after.png">
+<meta property="og:image" content="http://yoursite.com/2016/07/29/brave-clojure-organization/lambda.png">
+<meta property="og:image" content="http://yoursite.com/2016/07/29/brave-clojure-organization/cheese.png">
+<meta property="og:updated_time" content="2016-07-29T09:50:04.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【译】第六章:组织项目:图书管理员传奇">
+<meta name="twitter:description" content="&amp;#x672C;&amp;#x6587;&amp;#x662F;&amp;#x6211;&amp;#x5BF9;Clojure&amp;#x4E66;&amp;#x7C4D; CLOJURE FOR THE BRAVE AND TRUE&amp;#x7B2C;&amp;#x516D;&amp;#x7AE0;Organizing Your Project: A Librarian&amp;#x2019;s Tale &amp;#x505A;&amp;#x7684;&amp;#x7FFB;&amp;#x8BD1">
+<meta name="twitter:image" content="http://yoursite.com/2016/07/29/brave-clojure-organization/ns-map.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 【译】第六章:组织项目:图书管理员传奇 | 胡军的网络日志 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">胡军的网络日志</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'wmG9FieA3KCB8x2CXpVc','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                【译】第六章:组织项目:图书管理员传奇
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-07-29T17:50:04+08:00" content="2016-07-29">
+              2016-07-29
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/07/29/brave-clojure-organization/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/07/29/brave-clojure-organization/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>&#x672C;&#x6587;&#x662F;&#x6211;&#x5BF9;Clojure&#x4E66;&#x7C4D; <a href="http://www.braveclojure.com/clojure-for-the-brave-and-true/" target="_blank" rel="external">CLOJURE FOR THE BRAVE AND TRUE</a>&#x7B2C;&#x516D;&#x7AE0;<a href="http://www.braveclojure.com/organization/" target="_blank" rel="external">Organizing Your Project: A Librarian&#x2019;s Tale</a> &#x505A;&#x7684;&#x7FFB;&#x8BD1;&#x3002;&#x7FFB;&#x8BD1;&#x5F62;&#x5F0F;&#xFF0C;&#x4E2D;&#x82F1;&#x5BF9;&#x7167;&#xFF0C;&#x82F1;&#x6587;&#x5F15;&#x7528;&#x8DDF;&#x7740;&#x4E2D;&#x6587;&#x7FFB;&#x8BD1;&#x3002;&#x5982;&#x6709;&#x9519;&#x8BEF;&#xFF0C;&#x5728;&#x6240;&#x96BE;&#x514D;&#xFF0C;&#x6B22;&#x8FCE;&#x6307;&#x6B63;&#x3002;</p>
+<p><a href="https://morrxy.github.io/tags/Clojure-For-The-Branve-And-True/" target="_blank" rel="external">&#x5176;&#x4ED6;&#x7AE0;&#x7684;&#x7FFB;&#x8BD1;&#x5728;&#x8FD9;&#x91CC;</a></p>
+<p>&#x8BD1;&#x6587;&#x5F00;&#x59CB;&#x3002;</p>
+<hr>
+<blockquote>
+<p>Within each of us lives a librarian named Melvil, a fantastical creature who delights in the organizational arts. Day and night, Melvil yearns to bring order to your codebase. Fortunately, Clojure provides a suite of tools designed specifically to aid this homunculus in its constant struggle against the forces of chaos.</p>
+</blockquote>
+<p>Clojure&#x63D0;&#x4F9B;&#x4E86;&#x4E00;&#x7EC4;&#x4E13;&#x95E8;&#x8BBE;&#x8BA1;&#x7684;&#x5DE5;&#x5177;&#x7528;&#x4E8E;&#x4F7F;&#x4EE3;&#x7801;&#x6574;&#x9F50;&#x6709;&#x5E8F;&#x3002;</p>
+<blockquote>
+<p>These tools help you organize your code by grouping together related functions and data. They also prevent name collisions so you don&#x2019;t accidentally overwrite someone else&#x2019;s code or vice versa. Join me in a tale of suspense and mystery as you learn how to use these tools and solve the heist of a lifetime! By the end of the saga, you&#x2019;ll understand the following:</p>
+</blockquote>
+<p>&#x8FD9;&#x4E9B;&#x5DE5;&#x5177;&#x5E2E;&#x52A9;&#x4F60;&#x628A;&#x76F8;&#x5173;&#x51FD;&#x6570;&#x548C;&#x6570;&#x636E;&#x5206;&#x6210;&#x7EC4;&#x3002;&#x8FD8;&#x9632;&#x6B62;&#x53D1;&#x751F;&#x547D;&#x540D;&#x51B2;&#x7A81;&#xFF0C;&#x8BA9;&#x4F60;&#x7684;&#x4EE3;&#x7801;&#x4E0E;&#x522B;&#x4EBA;&#x7684;&#x4E0D;&#x4F1A;&#x4E92;&#x76F8;&#x8986;&#x76D6;&#x3002;&#x5B66;&#x4E60;&#x5B8C;&#x672C;&#x7AE0;&#xFF0C;&#x4F60;&#x4F1A;&#x4E86;&#x89E3;&#x8FD9;&#x4E9B;&#xFF1A;</p>
+<blockquote>
+<ul>
+<li>What <code>def</code> does</li>
+<li>What namespaces are and how to use them</li>
+<li>The relationship between namespaces and the filesystem</li>
+<li>How to use <code>refer</code>, <code>alias</code>, <code>require</code>, <code>use</code>, and <code>ns</code></li>
+<li>How to organize Clojure projects using the filesystem</li>
+</ul>
+</blockquote>
+<ul>
+<li><code>def</code>&#x5E72;&#x4E86;&#x4EC0;&#x4E48;</li>
+<li>&#x4EC0;&#x4E48;&#x662F;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#xFF0C;&#x5982;&#x4F55;&#x4F7F;&#x7528;&#x5B83;&#x4EEC;</li>
+<li>&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x4E0E;&#x6587;&#x4EF6;&#x7CFB;&#x7EDF;&#x7684;&#x5173;&#x7CFB;</li>
+<li>&#x5982;&#x4F55;&#x4F7F;&#x7528; <code>refer</code>, <code>alias</code>, <code>require</code>, <code>use</code>, &#x548C; <code>ns</code></li>
+<li>&#x5982;&#x4F55;&#x7528;&#x6587;&#x4EF6;&#x7CFB;&#x7EDF;&#x7EC4;&#x7EC7;Clojure&#x9879;&#x76EE;</li>
+</ul>
+<blockquote>
+<p>I&#x2019;ll start with a high-level overview of Clojure&#x2019;s organizational system, which works much like a library. Melvil quivers with excitement!</p>
+</blockquote>
+<p>&#x6211;&#x4EEC;&#x4ECE;&#x9AD8;&#x5C42;&#x6B21;&#x7684;Clojure&#x7EC4;&#x7EC7;&#x7CFB;&#x7EDF;&#x6982;&#x89C8;&#x5F00;&#x59CB;&#xFF0C;&#x8FD9;&#x4E2A;&#x7CFB;&#x7EDF;&#x5F88;&#x50CF;&#x56FE;&#x4E66;&#x9986;&#x3002;</p>
+<blockquote>
+<p>Your Project as a Library</p>
+</blockquote>
+<h2 id="&#x56FE;&#x4E66;&#x9986;&#x822C;&#x7684;&#x9879;&#x76EE;"><a href="#&#x56FE;&#x4E66;&#x9986;&#x822C;&#x7684;&#x9879;&#x76EE;" class="headerlink" title="&#x56FE;&#x4E66;&#x9986;&#x822C;&#x7684;&#x9879;&#x76EE;"></a>&#x56FE;&#x4E66;&#x9986;&#x822C;&#x7684;&#x9879;&#x76EE;</h2><blockquote>
+<p>Real-world libraries store collections of objects, such as books, magazines, and DVDs. They use addressing systems, so when you&#x2019;re given an object&#x2019;s address, you can navigate to the physical space and retrieve the object.</p>
+</blockquote>
+<p>&#x771F;&#x5B9E;&#x7684;&#x56FE;&#x4E66;&#x9986;&#x5B58;&#x50A8;&#x7269;&#x54C1;&#x96C6;&#x5408;&#xFF0C;&#x6BD4;&#x5982;&#x4E66;&#xFF0C;&#x6742;&#x5FD7;&#xFF0C;DVD&#x3002;&#x56FE;&#x4E66;&#x9986;&#x4F7F;&#x7528;&#x5730;&#x5740;&#x7CFB;&#x7EDF;&#xFF0C;&#x6709;&#x4E86;&#x7269;&#x54C1;&#x5730;&#x5740;&#xFF0C;&#x4F60;&#x5C31;&#x80FD;&#x627E;&#x5230;&#x7269;&#x54C1;&#x5B58;&#x653E;&#x4F4D;&#x7F6E;&#x5E76;&#x53D6;&#x5F97;&#x90A3;&#x4E2A;&#x7269;&#x54C1;&#x3002;</p>
+<blockquote>
+<p>Of course, no human being would be expected to know offhand what a book&#x2019;s or DVD&#x2019;s address is. That&#x2019;s why libraries record the association between an object&#x2019;s title and its address and provide tools for searching these records. In ye olden times before computers, libraries provided card catalogs, which were cabinets filled with paper cards containing each book&#x2019;s title, author, &#x201C;address&#x201D; (its Dewey decimal or Library of Congress number), and other info.</p>
+</blockquote>
+<p>&#x5F53;&#x7136;&#xFF0C;&#x6CA1;&#x4EBA;&#x80FD;&#x8F7B;&#x6613;&#x8BB0;&#x4F4F;&#x4E66;&#x6216;DVD&#x7684;&#x5730;&#x5740;&#xFF0C;&#x56E0;&#x6B64;&#x56FE;&#x4E66;&#x9986;&#x6709;&#x7269;&#x54C1;&#x6807;&#x9898;&#x548C;&#x5730;&#x5740;&#x7684;&#x5173;&#x8054;&#x8BB0;&#x5F55;&#xFF0C;&#x5E76;&#x4E14;&#x6709;&#x641C;&#x7D22;&#x8FD9;&#x4E9B;&#x8BB0;&#x5F55;&#x7684;&#x5DE5;&#x5177;&#x3002;&#x8BA1;&#x7B97;&#x673A;&#x51FA;&#x73B0;&#x4E4B;&#x524D;&#xFF0C;&#x56FE;&#x4E66;&#x9986;&#x91CC;&#x6709;&#x5206;&#x7C7B;&#x5361;&#x7247;&#xFF0C;&#x67DC;&#x5B50;&#x91CC;&#x653E;&#x6EE1;&#x4E86;&#x5361;&#x7247;&#xFF0C;&#x5361;&#x7247;&#x4E0A;&#x6709;&#x6BCF;&#x672C;&#x4E66;&#x7684;&#x4E66;&#x540D;&#xFF0C;&#x4F5C;&#x8005;&#xFF0C;&#x5730;&#x5740;(&#x675C;&#x5A01;&#x5C0F;&#x6570;&#x6216;&#x56FD;&#x4F1A;&#x56FE;&#x4E66;&#x9986;&#x53F7;&#x7801;)&#x548C;&#x5176;&#x4ED6;&#x4FE1;&#x606F;&#x3002;</p>
+<blockquote>
+<p>For example, to find The Da Vinci Code, you would riffle through the title catalog (cards ordered by title) until you found the correct card. On that card you would see the address 813.54 (if it&#x2019;s using the Dewey decimal system), navigate your library to find the shelf where The Da Vinci Code resides, and engage in the literary and/or hate-reading adventure of your lifetime.</p>
+</blockquote>
+<p>&#x4F8B;&#x5982;&#xFF0C;&#x8981;&#x627E;&#x8FBE;&#x82AC;&#x5947;&#x5BC6;&#x7801;&#xFF0C;&#x4F60;&#x4F1A;&#x5FEB;&#x901F;&#x6D4F;&#x89C8;&#x5206;&#x7C7B;&#x76EE;&#x5F55;(&#x5361;&#x7247;&#x6309;&#x6807;&#x9898;&#x6392;&#x5E8F;)&#x5E76;&#x627E;&#x5230;&#x5361;&#x7247;&#x3002;&#x5361;&#x7247;&#x4E0A;&#x7684;&#x5730;&#x5740;&#x662F;813.54(&#x5982;&#x679C;&#x4F7F;&#x7528;&#x7684;&#x662F;&#x675C;&#x5A01;&#x5C0F;&#x6570;)&#xFF0C;&#x6309;&#x8FD9;&#x4E2A;&#x5730;&#x5740;&#x627E;&#x5230;&#x5B58;&#x653E;&#x8FBE;&#x82AC;&#x5947;&#x5BC6;&#x7801;&#x7684;&#x4E66;&#x67B6;&#xFF0C;&#x53D6;&#x5F97;&#x76EE;&#x6807;&#x3002;</p>
+<blockquote>
+<p>It&#x2019;s useful to imagine a similar setup in Clojure. I think of Clojure as storing objects (like data structures and functions) in a vast set of numbered shelves. No human being could know offhand which shelf an object is stored in. Instead, we give Clojure an identifier that it uses to retrieve the object.</p>
+</blockquote>
+<p>Clojure&#x7684;&#x7EC4;&#x7EC7;&#x65B9;&#x5F0F;&#x4E0E;&#x6B64;&#x7C7B;&#x4F3C;&#x3002;Clojure&#x628A;&#x7269;&#x54C1;(&#x6BD4;&#x5982;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x548C;&#x51FD;&#x6570;)&#x4FDD;&#x5B58;&#x5728;&#x8BB8;&#x591A;&#x6709;&#x7F16;&#x53F7;&#x7684;&#x67B6;&#x5B50;&#x4E0A;&#x3002;&#x6CA1;&#x4EBA;&#x80FD;&#x8F7B;&#x6613;&#x77E5;&#x9053;&#x67D0;&#x4E2A;&#x7269;&#x54C1;&#x5B58;&#x653E;&#x5728;&#x54EA;&#x4E2A;&#x67B6;&#x5B50;&#x4E0A;&#x3002;&#x6211;&#x4EEC;&#x7ED9;&#x51FA;&#x90A3;&#x4E2A;&#x7269;&#x54C1;&#x7684;&#x6807;&#x8BC6;&#x7B26;&#xFF0C;Clojure&#x7528;&#x8FD9;&#x4E2A;&#x6807;&#x8BC6;&#x7B26;&#x53D6;&#x5F97;&#x8FD9;&#x4E2A;&#x7269;&#x54C1;&#x3002;</p>
+<blockquote>
+<p>For this to be successful, Clojure must maintain the associations between our identifiers and shelf addresses. It does this by using <em>namespaces</em>. Namespaces contain maps between human-friendly <em>symbols</em> and references to shelf addresses, known as vars, much like a card catalog.</p>
+</blockquote>
+<p>&#x4E3A;&#x5B8C;&#x6210;&#x8FD9;&#x4EF6;&#x4E8B;&#xFF0C;Clojure&#x7528;<em>&#x547D;&#x540D;&#x7A7A;&#x95F4;</em>&#x4FDD;&#x5B58;&#x6807;&#x8BC6;&#x7B26;&#x4E0E;&#x67B6;&#x5B50;&#x5730;&#x5740;&#x7684;&#x5173;&#x8054;&#x3002;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x91CC;&#x6709;&#x5F88;&#x591A;&#x6620;&#x5C04;&#xFF0C;&#x6BCF;&#x4E2A;&#x6620;&#x5C04;&#x5305;&#x542B;&#x4E86;&#x5BF9;&#x4EBA;&#x7C7B;&#x53CB;&#x597D;&#x7684;<em>&#x7B26;&#x53F7;</em>&#xFF0C;&#x548C;&#x79F0;&#x4E3A;&#x53D8;&#x91CF;&#x7684;&#x5BF9;&#x4E8E;&#x67B6;&#x5B50;&#x5730;&#x5740;&#x7684;&#x5F15;&#x7528;&#xFF0C;&#x5F88;&#x50CF;&#x5361;&#x7247;&#x5206;&#x7C7B;&#x3002;</p>
+<blockquote>
+<p>Technically, namespaces are objects of type <code>clojure.lang.Namespace</code>, and you can interact with them just like you can with Clojure data structures. For example, you can refer to the current namespace with <code>*ns*</code>, and you can get its name with <code>(ns-name *ns*)</code>:</p>
+</blockquote>
+<p>&#x4ECE;&#x6280;&#x672F;&#x4E0A;&#x8BF4;&#xFF0C;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x662F;&#x7C7B;&#x578B;&#x4E3A;<code>clojure.lang.Namespace</code>&#x7684;&#x5BF9;&#x8C61;&#xFF0C;&#x540C;&#x5176;&#x4ED6;Clojure&#x6570;&#x636E;&#x7ED3;&#x6784;&#x4E00;&#x6837;&#xFF0C;&#x4F60;&#x53EF;&#x4EE5;&#x4E0E;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x4EA4;&#x4E92;&#x3002;&#x6BD4;&#x5982;&#xFF0C;&#x4F60;&#x53EF;&#x4EE5;&#x7528;<code>*ns*</code>&#x5F15;&#x7528;&#x5F53;&#x524D;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#xFF0C;&#x53EF;&#x4EE5;&#x7528;<code>(ns-name *ns*)</code>&#x5F97;&#x5230;&#x5B83;&#x7684;&#x540D;&#x5B57;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">ns-name</span> *ns*)</span><br><span class="line"><span class="comment">; =&gt; user</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>When you start the REPL, for example, you&#x2019;re in the <code>user</code> namespace (as you can see here). The prompt shows the current namespace using something like <code>user=&gt;</code>.</p>
+</blockquote>
+<p>&#x4F8B;&#x5982;&#xFF0C;&#x542F;&#x52A8;REPL&#x65F6;&#x5019;&#xFF0C;&#x5904;&#x4E8E;<code>user</code>&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x3002;&#x63D0;&#x793A;&#x7B26;&#x663E;&#x793A;&#x5F53;&#x524D;&#x7684;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#xFF0C;&#x6BD4;&#x5982;<code>user=&gt;</code>&#x3002;</p>
+<blockquote>
+<p>The idea of a current namespace implies that you can have more than one, and indeed Clojure allows you to create as many namespaces as you want (although technically, there might be an upper limit to the number of names you can create). In Clojure programs, you are always in a namespace.</p>
+</blockquote>
+<p>Clojure&#x5141;&#x8BB8;&#x4F60;&#x968F;&#x610F;&#x521B;&#x5EFA;&#x591A;&#x4E2A;&#x547D;&#x540D;&#x7A7A;&#x95F4;(&#x6280;&#x672F;&#x4E0A;&#x6709;&#x4E0A;&#x9650;)&#x3002;Clojure&#x7A0B;&#x5E8F;&#x603B;&#x662F;&#x5904;&#x4E8E;&#x4E00;&#x4E2A;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x91CC;&#x3002;</p>
+<blockquote>
+<p>As for symbols, you&#x2019;ve been using them this entire time without even realizing it. For example, when you write <code>(map inc [1 2])</code>, both <code>map</code> and <code>inc</code> are symbols. Symbols are data types within Clojure, and I&#x2019;ll explain them thoroughly in the next chapter. For now, all you need to know is that when you give Clojure a symbol like <code>map</code>, it finds the corresponding var in the current namespace, gets a shelf address, and retrieves an object from that shelf for you&#x2014;in this case, the function that <code>map</code> refers to. If you want to just use the symbol itself, and not the thing it refers to, you have to quote it. Quoting any Clojure form tells Clojure not to evaluate it but to treat it as data. The next few examples show what happens when you quote a form.</p>
+</blockquote>
+<p>&#x8BF4;&#x5230;&#x7B26;&#x53F7;&#xFF0C;&#x5176;&#x5B9E;&#x4F60;&#x4E00;&#x76F4;&#x5728;&#x6CA1;&#x6709;&#x610F;&#x8BC6;&#x5230;&#x5B83;&#x4EEC;&#x7684;&#x60C5;&#x51B5;&#x4E0B;&#x4F7F;&#x7528;&#x5B83;&#x4EEC;&#x3002;&#x4F8B;&#x5982;&#xFF0C;&#x4EE3;&#x7801;<code>(map inc [1 2])</code>&#x91CC;&#x7684;<code>map</code>&#x548C;<code>inc</code>&#x90FD;&#x662F;&#x7B26;&#x53F7;&#x3002;&#x7B26;&#x53F7;&#x662F;Clojure&#x7684;&#x6570;&#x636E;&#x7C7B;&#x578B;&#xFF0C;&#x4E0B;&#x7AE0;&#x4F1A;&#x8BE6;&#x7EC6;&#x89E3;&#x91CA;(<a href="https://morrxy.github.io/2016/05/11/braveclojure-read-and-eval/#&#x7B26;&#x53F7;" target="_blank" rel="external">&#x70B9;&#x6B64;&#x67E5;&#x770B;</a>)&#x3002;&#x73B0;&#x5728;&#x8981;&#x77E5;&#x9053;&#x7684;&#x5C31;&#x662F;&#xFF1A;&#x5F53;&#x4F60;&#x4F7F;&#x7528;<code>map</code>&#x8FD9;&#x6837;&#x7684;&#x7B26;&#x53F7;&#x65F6;&#xFF0C;Clojure&#x4ECE;&#x5F53;&#x524D;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x627E;&#x5230;&#x5BF9;&#x5E94;&#x7684;&#x53D8;&#x91CF;&#xFF0C;&#x5F97;&#x5230;&#x4E00;&#x4E2A;&#x67B6;&#x5B50;&#x5730;&#x5740;&#xFF0C;&#x4ECE;&#x90A3;&#x4E2A;&#x67B6;&#x5B50;&#x53D6;&#x56DE;&#x4F60;&#x8981;&#x7684;&#x7269;&#x54C1;&#xFF0C;&#x5373;<code>map</code>&#x6307;&#x5411;&#x7684;&#x51FD;&#x6570;&#x3002;&#x5982;&#x679C;&#x60F3;&#x8981;&#x4F7F;&#x7528;&#x7B26;&#x53F7;&#x672C;&#x8EAB;&#xFF0C;&#x5FC5;&#x987B;&#x5F15;&#x7528;&#x7B26;&#x53F7;&#x3002;&#x4EFB;&#x4F55;&#x88AB;&#x5F15;&#x7528;&#x7684;&#x5F62;&#x5F0F;&#x88AB;Clojure&#x5F53;&#x4F5C;&#x6570;&#x636E;&#x800C;&#x4E0D;&#x5BF9;&#x5176;&#x6C42;&#x503C;&#x3002;&#x5982;&#x4E0B;&#x6240;&#x793A;&#xFF1A;</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#x278A; inc</span><br><span class="line">; =&gt; #&lt;core$inc clojure.core$inc@30132014&gt;</span><br><span class="line"></span><br><span class="line">&#x278B; &apos;inc</span><br><span class="line">; =&gt; inc</span><br><span class="line"></span><br><span class="line">&#x278C; (map inc [1 2])</span><br><span class="line">; =&gt; (2 3)</span><br><span class="line"></span><br><span class="line">&#x278D; &apos;(map inc [1 2])</span><br><span class="line">; =&gt; (map inc [1 2])</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>When you evaluate <code>inc</code> in the REPL at &#x278A;, it prints out the textual representation of the function that <code>inc</code> refers to. Next, you quote <code>inc</code> at &#x278B;, so the result is the symbol <code>inc</code>. Then, you evaluate a familiar <code>map</code> application at &#x278C; and get a familiar result. After that, you quote the entire list data structure at &#x278D;, resulting in an unevaluated list that includes the <code>map</code> symbol, the <code>inc</code> symbol, and a vector.</p>
+</blockquote>
+<p>&#x278A;&#x5904;:&#x5BF9;<code>inc</code>&#x6C42;&#x503C;&#xFF0C;&#x6253;&#x5370;&#x51FA;<code>inc</code>&#x6307;&#x5411;&#x7684;&#x51FD;&#x6570;&#x7684;&#x6587;&#x672C;&#x8868;&#x793A;&#x3002;&#x278B;&#x5904;:&#x5F15;&#x7528;<code>inc</code>&#xFF0C;&#x7ED3;&#x679C;&#x662F;&#x7B26;&#x53F7;<code>inc</code>&#x3002;&#x278C;&#x5904;:&#x5BF9;&#x4E00;&#x4E2A;<code>map</code>&#x8C03;&#x7528;&#x6C42;&#x503C;&#xFF0C;&#x5F97;&#x5230;&#x719F;&#x6089;&#x7684;&#x7ED3;&#x679C;&#x3002;&#x278D;&#x5904;&#xFF0C;&#x5F15;&#x7528;&#x6574;&#x4E2A;list&#x6570;&#x636E;&#x7ED3;&#x6784;&#xFF0C;&#x5F97;&#x5230;&#x672A;&#x6C42;&#x503C;&#x7684;list,&#x5305;&#x542B;&#x4E86;&#x7B26;&#x53F7;<code>map</code>,<code>inc</code>&#x548C;&#x4E00;&#x4E2A;vector&#x3002;</p>
+<blockquote>
+<p>Now that you know about Clojure&#x2019;s organization system, let&#x2019;s look at how to use it.</p>
+</blockquote>
+<p>&#x73B0;&#x5728;&#x4F60;&#x4E86;&#x89E3;&#x4E86;Clojure&#x7684;&#x7EC4;&#x7EC7;&#x7CFB;&#x7EDF;&#xFF0C;&#x6765;&#x770B;&#x770B;&#x5982;&#x4F55;&#x4F7F;&#x7528;&#x5B83;&#x3002;</p>
+<blockquote>
+<p>Storing Objects with def</p>
+</blockquote>
+<h2 id="&#x7528;def&#x4FDD;&#x5B58;&#x5BF9;&#x8C61;"><a href="#&#x7528;def&#x4FDD;&#x5B58;&#x5BF9;&#x8C61;" class="headerlink" title="&#x7528;def&#x4FDD;&#x5B58;&#x5BF9;&#x8C61;"></a>&#x7528;def&#x4FDD;&#x5B58;&#x5BF9;&#x8C61;</h2><blockquote>
+<p>The primary tool in Clojure for storing objects is <code>def</code>. Other tools like <code>defn</code> use <code>def</code> under the hood. Here&#x2019;s an example of def in action:</p>
+</blockquote>
+<p>Clojure&#x91CC;&#x7528;&#x4E8E;&#x5B58;&#x50A8;&#x5BF9;&#x8C61;&#x7684;&#x4E3B;&#x8981;&#x5DE5;&#x5177;&#x662F;<code>def</code>&#x3002;<code>defn</code>&#x7B49;&#x5176;&#x4ED6;&#x5DE5;&#x5177;&#x5185;&#x90E8;&#x4E5F;&#x4F7F;&#x7528;<code>def</code>&#x3002;&#x8FD9;&#x662F;&#x4E2A;def&#x7684;&#x5B9E;&#x9645;&#x4F7F;&#x7528;&#x4F8B;&#x5B50;:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(def great-books [&quot;East of Eden&quot; &quot;The Glass Bead Game&quot;])</span><br><span class="line">; =&gt; #&apos;user/great-books</span><br><span class="line"></span><br><span class="line">great-books</span><br><span class="line">; =&gt; [&quot;East of Eden&quot; &quot;The Glass Bead Game&quot;]</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>This code tells Clojure:</p>
+<ol>
+<li>Update the current namespace&#x2019;s map with the association between <code>great-books</code> and the var.</li>
+<li>Find a free storage shelf.</li>
+<li>Store <code>[&quot;East of Eden&quot; &quot;The Glass Bead Game&quot;]</code> on the shelf.</li>
+<li>Write the address of the shelf on the var.</li>
+<li>Return the var (in this case, <code>#&apos;user/great-books</code>).</li>
+</ol>
+</blockquote>
+<p>&#x8FD9;&#x6BB5;&#x4EE3;&#x7801;&#x544A;&#x8BC9;Clojure:</p>
+<ol>
+<li>&#x7528;<code>great-books</code>&#x4E0E;<code>def</code>&#x751F;&#x6210;&#x7684;&#x53D8;&#x91CF;&#x7684;&#x5173;&#x8054;&#x66F4;&#x65B0;&#x5F53;&#x524D;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x3002;</li>
+<li>&#x627E;&#x5230;&#x4E00;&#x4E2A;&#x672A;&#x4F7F;&#x7528;&#x7684;&#x5B58;&#x50A8;&#x67B6;&#x5B50;</li>
+<li>&#x628A;<code>[&quot;East of Eden&quot; &quot;The Glass Bead Game&quot;]</code>&#x5B58;&#x653E;&#x5728;&#x54EA;&#x4E2A;&#x67B6;&#x5B50;&#x4E0A;&#x3002;</li>
+<li>&#x5728;&#x53D8;&#x91CF;&#x4E0A;&#x5199;&#x4E0A;&#x8FD9;&#x4E2A;&#x67B6;&#x5B50;&#x7684;&#x5730;&#x5740;</li>
+<li>&#x8FD4;&#x56DE;&#x8FD9;&#x4E2A;&#x53D8;&#x91CF;(<code>#&apos;user/great-books</code>)&#x3002;</li>
+</ol>
+<blockquote>
+<p>This process is called <em>interning</em> a var. You can interact with a namespace&#x2019;s map of symbols-to-interned-vars using <code>ns-interns</code>. Here&#x2019;s how you&#x2019;d get a map of interned vars:</p>
+</blockquote>
+<p>&#x8FD9;&#x4E2A;&#x8FC7;&#x7A0B;&#x53EB;&#x53D8;&#x91CF;<em>&#x9A7B;&#x7559;</em>&#x3002;&#x53EF;&#x4EE5;&#x7528;<code>ns-interns</code>&#x67E5;&#x770B;&#x9A7B;&#x7559;&#x7684;&#x53D8;&#x91CF;&#xFF1A;</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">ns-interns</span> *ns*)</span><br><span class="line"><span class="comment">; =&gt; {great-books #&apos;user/great-books}</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>You can use the get function to <code>get</code> a specific var:</p>
+</blockquote>
+<p>&#x4E5F;&#x53EF;&#x4EE5;&#x7528;<code>get</code>&#x51FD;&#x6570;&#x5F97;&#x5230;&#x7279;&#x5B9A;&#x7684;&#x53D8;&#x91CF;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">get</span></span> (<span class="name">ns-interns</span> *ns*) &apos;great-books)</span><br><span class="line"><span class="comment">; =&gt; #&apos;user/great-books</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>By evaluating <code>(ns-map *ns*)</code>, you can also get the full map that the namespace uses for looking up a var when given a symbol. <code>(ns-map *ns*)</code> gives you a very large map that I won&#x2019;t print here, but try it out!</p>
+</blockquote>
+<p>&#x6C42;&#x503C;<code>(ns-map *ns*)</code>,&#x53EF;&#x4EE5;&#x5F97;&#x5230;&#x5B8C;&#x5168;&#x6620;&#x5C04;&#xFF0C;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x7528;&#x8FD9;&#x4E2A;&#x6620;&#x5C04;&#x67E5;&#x627E;&#x7B26;&#x53F7;&#x5BF9;&#x5E94;&#x7684;&#x53D8;&#x91CF;&#x3002;&#x6C42;&#x503C;&#x7ED3;&#x679C;&#x5F88;&#x957F;&#xFF0C;&#x6211;&#x5C31;&#x4E0D;&#x6253;&#x5370;&#x4E86;&#xFF0C;&#x4F46;&#x4F60;&#x8981;&#x8BD5;&#x8BD5;&#xFF01;</p>
+<p>[&#x8BD1;&#x8005;&#x589E;&#x52A0;]</p>
+<p><img src="/2016/07/29/brave-clojure-organization/ns-map.png" alt="ns-map"></p>
+<blockquote>
+<p><code>#&apos;user/great-books</code> is the <em>reader form</em> of a var. I&#x2019;ll explain more about reader forms in Chapter 7. For now, just know that you can use <code>#&apos;</code> to grab hold of the var corresponding to the symbol that follows; <code>#&apos;user/great-books</code> lets you use the var associated with the symbol <code>great-books</code> within the <code>user</code> namespace. We can <code>deref</code> vars to get the objects they point to:</p>
+</blockquote>
+<p><code>#&apos;user/great-books</code>&#x662F;&#x53D8;&#x91CF;&#x7684;<em>&#x8BFB;&#x5165;&#x7A0B;&#x5E8F;&#x5F62;&#x5F0F;</em>&#x3002;&#x7B2C;&#x4E03;&#x7AE0;&#x4F1A;&#x8BE6;&#x7EC6;&#x8BB2;&#x89E3;(<a href="https://morrxy.github.io/2016/05/11/braveclojure-read-and-eval/#&#x8BFB;&#x5165;&#x7A0B;&#x5E8F;&#x5B8F;" target="_blank" rel="external">&#x70B9;&#x6B64;&#x67E5;&#x770B;</a>)&#x3002;&#x73B0;&#x5728;&#x53EA;&#x8981;&#x77E5;&#x9053;&#xFF1A;&#x7528;<code>#&apos;</code>&#x53EF;&#x4EE5;&#x5F97;&#x5230;&#x5176;&#x540E;&#x7B26;&#x53F7;&#x5BF9;&#x5E94;&#x7684;&#x53D8;&#x91CF;&#x3002;<code>#&apos;user/great-books</code>&#x53EF;&#x4EE5;&#x5F97;&#x5230;<code>user</code>&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x4E0B;&#x7684;&#xFF0C;<code>great-books</code>&#x7B26;&#x53F7;&#x5173;&#x8054;&#x7684;&#x53D8;&#x91CF;&#x3002;&#x53EF;&#x4EE5;&#x7528;<code>deref</code>&#x5F97;&#x5230;&#x53D8;&#x91CF;&#x6307;&#x5411;&#x7684;&#x503C;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">deref</span></span> #&apos;user/great-books)</span><br><span class="line"><span class="comment">; =&gt; [&quot;East of Eden&quot; &quot;The Glass Bead Game&quot;]</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>This is like telling Clojure, &#x201C;Get the shelf number from the var, go to that shelf number, grab what&#x2019;s on it, and give it to me!&#x201D;</p>
+</blockquote>
+<p>&#x8FD9;&#x5C31;&#x50CF;&#x544A;&#x8BC9;Clojure&#xFF0C;&#x201D;&#x4ECE;&#x8FD9;&#x4E2A;&#x53D8;&#x91CF;&#x5F97;&#x5230;&#x67B6;&#x5B50;&#x7F16;&#x53F7;&#xFF0C;&#x53BB;&#x90A3;&#x4E2A;&#x67B6;&#x5B50;&#x90A3;&#x91CC;&#xFF0C;&#x628A;&#x653E;&#x5728;&#x5B83;&#x4E0A;&#x9762;&#x7684;&#x4E1C;&#x897F;&#x62FF;&#x7ED9;&#x6211;&#xFF01;&#x201D;</p>
+<blockquote>
+<p>But normally, you would just use the symbol:</p>
+</blockquote>
+<p>&#x4E00;&#x822C;&#x60C5;&#x51B5;&#x6211;&#xFF0C;&#x76F4;&#x63A5;&#x7528;&#x8FD9;&#x4E2A;&#x7B26;&#x53F7;&#x5C31;&#x53EF;&#x4EE5;:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">great-books</span><br><span class="line">; =&gt; [&quot;East of Eden&quot; &quot;The Glass Bead Game&quot;]</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>This is like telling Clojure, &#x201C;Retrieve the var associated with great-books and deref that bad Jackson.&#x201D;</p>
+</blockquote>
+<p>&#x8FD9;&#x5C31;&#x50CF;&#x544A;&#x8BC9;Clojure,&#x201C;&#x53D6;&#x5F97;&#x4E0E;great-books&#x5173;&#x8054;&#x7684;&#x53D8;&#x91CF;&#xFF0C;&#x5E76;&#x5BF9;&#x5B83;&#x53D6;&#x503C;&#x201D;&#x3002;</p>
+<blockquote>
+<p>So far so good, right? Well, brace yourself, because this idyllic paradise of organization is about to be turned upside down! Call <code>def</code> again with the same symbol:</p>
+</blockquote>
+<p>&#x5230;&#x73B0;&#x5728;&#x4E00;&#x5207;&#x90FD;&#x4E0D;&#x9519;&#x3002;&#x4F46;&#x79E9;&#x5E8F;&#x5C06;&#x88AB;&#x6253;&#x4E71;&#xFF01;&#x7528;&#x540C;&#x6837;&#x7684;&#x7B26;&#x53F7;&#x518D;&#x6B21;&#x8C03;&#x7528;<code>def</code>:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(def great-books [&quot;The Power of Bees&quot; &quot;Journey to Upstairs&quot;])</span><br><span class="line">great-books</span><br><span class="line">; =&gt; [&quot;The Power of Bees&quot; &quot;Journey to Upstairs&quot;]</span><br></pre></td></tr></table></figure>
+<p><img src="/2016/07/29/brave-clojure-organization/bee-power.png" alt="bee-power"></p>
+<blockquote>
+<p>The var has been updated with the address of the new vector. It&#x2019;s like you used white-out on the address on a card in the card catalog and then wrote a new address. The result is that you can no longer ask Clojure to find the first vector. This is referred to as a <em>name collision</em>. Chaos! Anarchy!</p>
+</blockquote>
+<p>&#x8FD9;&#x4E2A;&#x53D8;&#x91CF;&#x5DF2;&#x7ECF;&#x88AB;&#x66F4;&#x65B0;&#xFF0C;&#x7528;&#x65B0;&#x7684;vector&#x5730;&#x5740;&#x3002;&#x5C31;&#x50CF;&#x4F60;&#x628A;&#x5206;&#x7C7B;&#x5361;&#x7247;&#x4E0A;&#x7684;&#x5730;&#x5740;&#x6D82;&#x767D;&#xFF0C;&#x7136;&#x540E;&#x5199;&#x4E0A;&#x4E00;&#x4E2A;&#x65B0;&#x5730;&#x5740;&#x3002;&#x7ED3;&#x679C;&#x662F;&#x518D;&#x4E5F;&#x627E;&#x4E0D;&#x5230;&#x7B2C;&#x4E00;&#x4E2A;vector&#x3002;&#x8FD9;&#x88AB;&#x79F0;&#x4E3A;<em>&#x547D;&#x540D;&#x51B2;&#x7A81;</em>&#x3002;&#x5168;&#x4E71;&#x4E86;&#xFF01;</p>
+<blockquote>
+<p>You may have experienced this in other programming languages. JavaScript is notorious for it, and it happens in Ruby as well. It&#x2019;s a problem because you can unintentionally overwrite your own code, and you also have no guarantee that a third-party library won&#x2019;t overwrite your code. Melvil recoils in horror! Fortunately, Clojure allows you to create as many namespaces as you like so you can avoid these collisions.</p>
+</blockquote>
+<p>&#x4F60;&#x53EF;&#x80FD;&#x5728;&#x5176;&#x4ED6;&#x8BED;&#x8A00;&#x91CC;&#x7ECF;&#x5386;&#x8FC7;&#x547D;&#x540D;&#x51B2;&#x7A81;&#x3002;JavaScript&#x5BF9;&#x6B64;&#x81ED;&#x540D;&#x662D;&#x8457;&#xFF0C;Ruby&#x91CC;&#x4E5F;&#x4F1A;&#x53D1;&#x751F;&#x3002;&#x4F60;&#x53EF;&#x80FD;&#x65E0;&#x610F;&#x5730;&#x8986;&#x76D6;&#x81EA;&#x5DF1;&#x4EE3;&#x7801;&#xFF0C;&#x4E5F;&#x65E0;&#x6CD5;&#x4FDD;&#x8BC1;&#x7B2C;&#x4E09;&#x65B9;&#x5E93;&#x4E0D;&#x4F1A;&#x8986;&#x76D6;&#x4F60;&#x7684;&#x4EE3;&#x7801;&#xFF0C;&#x6240;&#x4EE5;&#x8FD9;&#x662F;&#x4E2A;&#x95EE;&#x9898;&#x3002;&#x4E3A;&#x907F;&#x514D;&#x8FD9;&#x4E2A;&#x95EE;&#x9898;&#xFF0C;Clojure&#x5141;&#x8BB8;&#x4F60;&#x521B;&#x5EFA;&#x4EFB;&#x610F;&#x4E2A;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x3002;</p>
+<blockquote>
+<p>Creating and Switching to Namespaces</p>
+</blockquote>
+<h2 id="&#x521B;&#x5EFA;&#x5E76;&#x5207;&#x6362;&#x547D;&#x540D;&#x7A7A;&#x95F4;"><a href="#&#x521B;&#x5EFA;&#x5E76;&#x5207;&#x6362;&#x547D;&#x540D;&#x7A7A;&#x95F4;" class="headerlink" title="&#x521B;&#x5EFA;&#x5E76;&#x5207;&#x6362;&#x547D;&#x540D;&#x7A7A;&#x95F4;"></a>&#x521B;&#x5EFA;&#x5E76;&#x5207;&#x6362;&#x547D;&#x540D;&#x7A7A;&#x95F4;</h2><blockquote>
+<p>Clojure has three tools for creating namespaces: the function <code>create-ns</code>, the function <code>in-ns</code>, and the macro <code>ns</code>. You&#x2019;ll mostly use the <code>ns</code> macro in your Clojure files, but I&#x2019;ll hold off on explaining it for a few pages because it combines many tools, and it&#x2019;s easier to understand after I discuss each of the other tools.</p>
+</blockquote>
+<p>Clojure&#x6709;&#x4E09;&#x4E2A;&#x5DE5;&#x5177;&#x7528;&#x4E8E;&#x521B;&#x5EFA;&#x547D;&#x540D;&#x7A7A;&#x95F4;:<code>create-ns</code>&#x51FD;&#x6570;&#xFF0C;<code>in-ns</code>&#x51FD;&#x6570;&#xFF0C;<code>ns</code>&#x5B8F;&#x3002;&#x4F60;&#x901A;&#x5E38;&#x4F7F;&#x7528;<code>ns</code>&#x5B8F;&#xFF0C;&#x4F46;&#x6211;&#x4F1A;&#x63A8;&#x8FDF;&#x89E3;&#x91CA;&#x5B83;&#xFF0C;&#x56E0;&#x4E3A;&#x5B83;&#x7ED3;&#x5408;&#x4E86;&#x5F88;&#x591A;&#x5DE5;&#x5177;&#x3002;&#x4E86;&#x89E3;&#x4E86;&#x5176;&#x4ED6;&#x5DE5;&#x5177;&#x540E;&#xFF0C;&#x66F4;&#x5BB9;&#x6613;&#x7406;&#x89E3;&#x5B83;&#x3002;</p>
+<blockquote>
+<p><code>create-ns</code> takes a symbol, creates a namespace with that name if it doesn&#x2019;t exist already, and returns the namespace:</p>
+</blockquote>
+<p><code>create-ns</code>&#x63A5;&#x53D7;&#x4E00;&#x4E2A;&#x7B26;&#x53F7;&#xFF0C;&#x5982;&#x679C;&#x8FD9;&#x4E2A;&#x540D;&#x5B57;&#x4E0D;&#x5B58;&#x5728;&#xFF0C;&#x5C31;&#x7528;&#x8FD9;&#x4E2A;&#x540D;&#x5B57;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#xFF0C;&#x5E76;&#x8FD4;&#x56DE;&#x8FD9;&#x4E2A;&#x547D;&#x540D;&#x7A7A;&#x95F4;:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">user=&gt; (create-ns &apos;cheese.taxonomy)</span><br><span class="line">; =&gt; #&lt;Namespace cheese.taxonomy&gt;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>You can use the returned namespace as an argument in a function call:</p>
+</blockquote>
+<p>&#x51FD;&#x6570;&#x8C03;&#x7528;&#x4E2D;&#x53EF;&#x4EE5;&#x628A;&#x8FD4;&#x56DE;&#x7684;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x4F5C;&#x4E3A;&#x53C2;&#x6570;&#xFF1A;</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">user=&gt; (ns-name (create-ns &apos;cheese.taxonomy))</span><br><span class="line">; =&gt; cheese-taxonomy</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>In practice, you&#x2019;ll probably never use <code>create-ns</code> in your code, because it&#x2019;s not very useful to create a namespace and not move into it. Using <code>in-ns</code> is more common because it creates the namespace if it doesn&#x2019;t exist and switches to it, as shown in Listing 6-1.</p>
+</blockquote>
+<p>&#x5B9E;&#x9645;&#x4E0A;&#xFF0C;&#x4F60;&#x7684;&#x4EE3;&#x7801;&#x91CC;&#x53EF;&#x80FD;&#x6C38;&#x8FDC;&#x90FD;&#x4E0D;&#x4F1A;&#x4F7F;&#x7528;<code>create-ns</code>,&#x56E0;&#x4E3A;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#xFF0C;&#x4F46;&#x4E0D;&#x8FDB;&#x5165;&#x5B83;&#xFF0C;&#x6CA1;&#x4EC0;&#x4E48;&#x7528;&#x3002;<code>in-ns</code>&#x7684;&#x4F7F;&#x7528;&#x66F4;&#x4E3A;&#x5E38;&#x89C1;&#xFF0C;&#x56E0;&#x4E3A;&#x5B83;&#x521B;&#x5EFA;&#x5E76;&#x5207;&#x6362;&#x5230;&#x4E00;&#x4E2A;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#xFF0C;&#x5982;&#x5217;&#x8868;6-1&#x6240;&#x793A;&#x3002;</p>
+<blockquote>
+<p><em>6-1. Using in-ns to create a namespace and switch to it</em></p>
+</blockquote>
+<p>6-1 &#x7528;in-ns&#x521B;&#x5EFA;&#x5E76;&#x5207;&#x6362;&#x5230;&#x4E00;&#x4E2A;&#x547D;&#x540D;&#x7A7A;&#x95F4;</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">user=&gt; (in-ns &apos;cheese.analysis)</span><br><span class="line">; =&gt; #&lt;Namespace cheese.analysis&gt;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Notice that your REPL prompt is now <code>cheese.analysis&gt;</code>, indicating that you are indeed in the new namespace you just created. Now when you use def, it will store the named object in the <code>cheese.analysis</code> namespace.</p>
+</blockquote>
+<p>&#x6CE8;&#x610F;&#x73B0;&#x5728;&#x7684;REPL&#x63D0;&#x793A;&#x7B26;&#x662F;<code>cheese.analysis&gt;</code>,&#x8BF4;&#x660E;&#x4F60;&#x73B0;&#x5728;&#x786E;&#x5B9E;&#x5728;&#x8FD9;&#x4E2A;&#x65B0;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x91CC;&#x3002;&#x73B0;&#x5728;&#x4F7F;&#x7528;def,&#x4F1A;&#x628A;&#x547D;&#x540D;&#x5BF9;&#x8C61;&#x5B58;&#x50A8;&#x5728;<code>cheese.analysis</code>&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x91CC;&#x3002;</p>
+<blockquote>
+<p>But what if you want to use functions and data from other name&#xAD;spaces? To do that, you can use a <em>fully qualified</em> symbol. The general form is namespace<code>/</code>name:</p>
+</blockquote>
+<p>&#x4F46;&#x5982;&#x679C;&#x4F60;&#x60F3;&#x4F7F;&#x7528;&#x5176;&#x4ED6;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x7684;&#x51FD;&#x6570;&#xFF0C;&#x8BE5;&#x600E;&#x4E48;&#x529E;&#x5462;&#xFF1F;&#x4F60;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;<em>&#x5B8C;&#x5168;&#x9650;&#x5B9A;</em>&#x7684;&#x7B26;&#x53F7;&#x3002;&#x901A;&#x7528;&#x5F62;&#x5F0F;&#x662F;namespace<code>/</code>name:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">cheese.analysis=&gt; (in-ns &apos;cheese.taxonomy)</span><br><span class="line">cheese.taxonomy=&gt; (def cheddars [&quot;mild&quot; &quot;medium&quot; &quot;strong&quot; &quot;sharp&quot; &quot;extra sharp&quot;])</span><br><span class="line">cheese.taxonomy=&gt; (in-ns &apos;cheese.analysis)</span><br><span class="line"></span><br><span class="line">cheese.analysis=&gt; cheddars</span><br><span class="line">; =&gt; Exception: Unable to resolve symbol: cheddars in this context</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>This creates a new namespace, <code>cheese.taxonomy</code>, defines <code>cheddars</code> in that namespace, and then switches back to the <code>cheese.analysis</code> namespace. You&#x2019;ll get an exception if you try to refer to the <code>cheese.taxonomy</code> namespace&#x2019;s <code>cheddars</code> from within <code>cheese.analysis</code>, but using the fully qualified symbol works:</p>
+</blockquote>
+<p>&#x8FD9;&#x521B;&#x5EFA;&#x4E86;&#x4E00;&#x4E2A;&#x65B0;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#xFF0C;<code>cheese.taxonomy</code>,&#x5728;&#x8FD9;&#x4E2A;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x91CC;&#x5B9A;&#x4E49;&#x4E86;<code>cheddars</code>,&#x7136;&#x540E;&#x5207;&#x6362;&#x56DE;<code>cheese.analysis</code>&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x3002;&#x5982;&#x679C;&#x4ECE;<code>cheese.analysis</code>&#x91CC;&#x5F15;&#x7528;<code>cheese.taxonomy</code>&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x7684;<code>cheddars</code>,&#x4F1A;&#x51FA;&#x73B0;&#x5F02;&#x5E38;&#x3002;&#x4F46;&#x4F7F;&#x7528;&#x5B8C;&#x5168;&#x9650;&#x5B9A;&#x7684;&#x7B26;&#x53F7;&#x6CA1;&#x95EE;&#x9898;:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cheese.analysis=&gt; cheese.taxonomy/cheddars</span><br><span class="line">; =&gt; [&quot;mild&quot; &quot;medium&quot; &quot;strong&quot; &quot;sharp&quot; &quot;extra sharp&quot;]</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Typing these fully qualified symbols can quickly become a nuisance. For instance, say I&#x2019;m an extremely impatient academic specializing in semiotics-au-fromage, or the study of symbols as they relate to cheese.</p>
+</blockquote>
+<p>&#x8F93;&#x5165;&#x5B8C;&#x5168;&#x9650;&#x5B9A;&#x7684;&#x7B26;&#x53F7;&#x5F88;&#x5FEB;&#x5C31;&#x53D8;&#x6210;&#x4E00;&#x4EF6;&#x9EBB;&#x70E6;&#x4E8B;&#x3002;</p>
+<blockquote>
+<p>Suddenly, the worst conceivable thing that could possibly happen happens! All across the world, sacred and historically important cheeses have gone missing. Wisconsin&#x2019;s Standard Cheddar: gone! The Great Cheese Jars of Tutankhamun: stolen! The Cheese of Turin: replaced with a hoax cheese! This threatens to throw the world into total chaos for some reason! Naturally, as a distinguished cheese researcher, I am honor-bound to solve this mystery. Meanwhile, I&#x2019;m being chased by the Illuminati, the Freemasons, and the Foot Clan!</p>
+<p>Because I&#x2019;m an academic, I attempt to solve this mystery the best way I know how&#x2014;by heading to the library and researching the shit out of it. My trusty assistant, Clojure, accompanies me. As we bustle from namespace to namespace, I shout at Clojure to hand me one thing after another.</p>
+<p>But Clojure is kind of dumb and has a hard time figuring out what I&#x2019;m referring to. From within the user namespace, I belt out, &#x201C;<code>join</code>! Give me <code>join</code>!&#x201D;&#x2014;specks of spittle flying from my mouth. &#x201C;<code>RuntimeException: Unable to resolve symbol: join</code>,&#x201D; Clojure whines in response. &#x201C;For the love of brie, just hand me <code>clojure.string/join</code>!&#x201D; I retort, and Clojure dutifully hands me the function I was looking for.</p>
+<p>My voice gets hoarse. I need some way to tell Clojure what objects to get me without having to use the fully qualified symbol every. damn. time.</p>
+<p>Luckily, Clojure provides the <code>refer</code> and <code>alias</code> tools that let me yell at it more succinctly.</p>
+</blockquote>
+<p>&#x5E78;&#x8FD0;&#x7684;&#x662F;&#xFF0C;Clojure&#x63D0;&#x4F9B;&#x4E86;<code>refer</code>&#x548C;<code>alias</code>,&#x80FD;&#x4F7F;&#x4EE3;&#x7801;&#x66F4;&#x7B80;&#x6D01;&#x3002;</p>
+<blockquote>
+<p>refer</p>
+</blockquote>
+<h3 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h3><blockquote>
+<p><code>refer</code> gives you fine-grained control over how you refer to objects in other namespaces. Fire up a new REPL session and try the following. Keep in mind that it&#x2019;s okay to play around with namespaces like this in the REPL, but you don&#x2019;t want your Clojure files to look like this; the proper way to structure your files is covered in <a href="#">&#x201C;Real Project Organization&#x201D; on page 133</a>.</p>
+</blockquote>
+<p><code>refer</code>&#x63D0;&#x4F9B;&#x4E86;&#x5982;&#x4F55;&#x5F15;&#x7528;&#x5176;&#x4ED6;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x7684;&#x5BF9;&#x8C61;&#x7684;&#x7EC6;&#x7C92;&#x5EA6;&#x63A7;&#x5236;&#x3002;&#x542F;&#x52A8;&#x4E00;&#x4E2A;&#x65B0;REPL,&#x5C1D;&#x8BD5;&#x4E0B;&#x9762;&#x7684;&#x4EE3;&#x7801;&#x3002;&#x8BB0;&#x4F4F;&#xFF0C;&#x5728;REPL&#x91CC;&#x8FD9;&#x4E48;&#x73A9;&#x6CA1;&#x95EE;&#x9898;&#xFF0C;&#x4F46;&#x522B;&#x5728;Clojure&#x6587;&#x4EF6;&#x91CC;&#x8FD9;&#x4E48;&#x5E72;&#x3002;&#x540E;&#x9762;&#x4F1A;&#x8BB2;&#x5230;&#x6587;&#x4EF6;&#x91CC;&#x600E;&#x4E48;&#x505A;&#x3002;</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">user=&gt; (in-ns &apos;cheese.taxonomy)</span><br><span class="line">cheese.taxonomy=&gt; (def cheddars [&quot;mild&quot; &quot;medium&quot; &quot;strong&quot; &quot;sharp&quot; &quot;extra sharp&quot;])</span><br><span class="line">cheese.taxonomy=&gt; (def bries [&quot;Wisconsin&quot; &quot;Somerset&quot; &quot;Brie de Meaux&quot; &quot;Brie de Melun&quot;])</span><br><span class="line">cheese.taxonomy=&gt; (in-ns &apos;cheese.analysis)</span><br><span class="line">cheese.analysis=&gt; (clojure.core/refer &apos;cheese.taxonomy)</span><br><span class="line">cheese.analysis=&gt; bries</span><br><span class="line">; =&gt; [&quot;Wisconsin&quot; &quot;Somerset&quot; &quot;Brie de Meaux&quot; &quot;Brie de Melun&quot;]</span><br><span class="line"></span><br><span class="line">cheese.analysis=&gt; cheddars</span><br><span class="line">; =&gt; [&quot;mild&quot; &quot;medium&quot; &quot;strong&quot; &quot;sharp&quot; &quot;extra sharp&quot;]</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>This code creates a <code>cheese.taxonomy</code> namespace and two vectors within it: <code>cheddars</code> and <code>bries</code>. Then it creates and moves to a new namespace called <code>cheese.analysis</code>. Calling <code>refer</code> with a namespace symbol lets you refer to the corresponding namespace&#x2019;s objects without having to use fully qualified symbols. It does this by updating the current namespace&#x2019;s symbol/object map. You can see the new entries like this:</p>
+</blockquote>
+<p>&#x8FD9;&#x6BB5;&#x4EE3;&#x7801;&#x521B;&#x5EFA;&#x4E86;&#x547D;&#x540D;&#x7A7A;&#x95F4;<code>cheese.taxonomy</code>&#xFF0C;&#x5E76;&#x5728;&#x5176;&#x4E2D;&#x521B;&#x5EFA;&#x4E86;&#x4E24;&#x4E2A;vector,<code>cheddars</code>&#x548C;<code>bries</code>&#x3002;&#x7136;&#x540E;&#x521B;&#x5EFA;&#x5E76;&#x5207;&#x6362;&#x5230;&#x53E6;&#x4E00;&#x4E2A;&#x547D;&#x540D;&#x7A7A;&#x95F4;<code>cheese.analysis</code>&#x3002;&#x8C03;&#x7528;<code>refer</code>&#x52A0;&#x4E0A;&#x4E00;&#x4E2A;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x7B26;&#x53F7;&#x4EE5;&#x540E;&#xFF0C;&#x4F60;&#x5C31;&#x53EF;&#x4EE5;&#x5F15;&#x7528;&#x90A3;&#x4E2A;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x7684;&#x5BF9;&#x8C61;&#xFF0C;&#x800C;&#x4E0D;&#x7528;&#x4F7F;&#x7528;&#x5B8C;&#x5168;&#x9650;&#x5B9A;&#x7684;&#x7B26;&#x53F7;&#x3002;&#x8FD9;&#x4E2A;&#x8C03;&#x7528;&#x66F4;&#x65B0;&#x4E86;&#x5F53;&#x524D;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x7684;&#x7B26;&#x53F7;/&#x5BF9;&#x8C61;&#x6620;&#x5C04;&#x3002;&#x4F60;&#x53EF;&#x4EE5;&#x8FD9;&#x6837;&#x770B;&#x5230;&#x65B0;&#x6761;&#x76EE;&#xFF1A;</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cheese.analysis=&gt; (clojure.core/get (clojure.core/ns-map clojure.core/*ns*) &apos;bries)</span><br><span class="line">; =&gt; #&apos;cheese.taxonomy/bries</span><br><span class="line"></span><br><span class="line">cheese.analysis=&gt; (clojure.core/get (clojure.core/ns-map clojure.core/*ns*) &apos;cheddars)</span><br><span class="line">; =&gt; #&apos;cheese.taxonomy/cheddars</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>It&#x2019;s as if Clojure</p>
+<ol>
+<li>Calls <code>ns-interns</code> on the <code>cheese.taxonomy</code> namespace</li>
+<li>Merges that with the <code>ns-map</code> of the current namespace</li>
+<li>Makes the result the new <code>ns-map</code> of the current namespace</li>
+</ol>
+</blockquote>
+<p>&#x5C31;&#x597D;&#x50CF;Clojure&#x505A;&#x4E86;&#x5982;&#x4E0B;&#x4E8B;&#x60C5;</p>
+<ol>
+<li>&#x5728;<code>cheese.taxonomy</code>&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x4E0A;&#x8C03;&#x7528;<code>ns-interns</code></li>
+<li>&#x628A;&#x4E0A;&#x9762;&#x7684;&#x7ED3;&#x679C;&#x4E0E;&#x5F53;&#x524D;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x7684;<code>ns-map</code>&#x5408;&#x5E76;</li>
+<li><code>(ns-map *ns*)</code> &#x7684;&#x7ED3;&#x679C;&#x53D8;&#x6210;&#x4E0A;&#x9762;&#x7684;&#x7ED3;&#x679C;</li>
+</ol>
+<blockquote>
+<p>When you call <code>refer</code>, you can also pass it the filters <code>:only</code>, <code>:exclude</code>, and <code>:rename</code>. As the names imply, <code>:only</code> and <code>:exclude</code> restrict which symbol/var mappings get merged into the current namespace&#x2019;s <code>ns-map</code>. <code>:rename</code> lets you use different symbols for the vars being merged in. Here&#x2019;s what would happen if we had modified the preceding example to use <code>:only</code>:</p>
+</blockquote>
+<p>&#x8C03;&#x7528;<code>refer</code>&#x65F6;&#x5019;&#xFF0C;&#x4E5F;&#x53EF;&#x4EE5;&#x589E;&#x52A0;&#x53C2;&#x6570;: <code>:only</code>,<code>:exclude</code>&#x548C;<code>:rename</code>&#x3002;<code>:only</code>&#x548C;<code>:exclude</code>&#x9650;&#x5236;&#x5408;&#x5E76;&#x7684;&#x5BF9;&#x8C61;&#x3002;<code>:rename</code>&#x8BA9;&#x4F60;&#x5BF9;&#x5408;&#x5E76;&#x7684;&#x5BF9;&#x8C61;&#x4F7F;&#x7528;&#x4E0D;&#x540C;&#x7684;&#x7B26;&#x53F7;&#x3002;&#x5982;&#x679C;&#x4E0A;&#x9762;&#x7684;&#x4F8B;&#x5B50;&#x4F7F;&#x7528;<code>:only</code>,&#x7ED3;&#x679C;&#x4F1A;&#x662F;&#x8FD9;&#x6837;:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cheese.analysis=&gt; (clojure.core/refer &apos;cheese.taxonomy :only [&apos;bries])</span><br><span class="line">cheese.analysis=&gt; bries</span><br><span class="line">; =&gt; [&quot;Wisconsin&quot; &quot;Somerset&quot; &quot;Brie de Meaux&quot; &quot;Brie de Melun&quot;]</span><br><span class="line">cheese.analysis=&gt; cheddars</span><br><span class="line">; =&gt; RuntimeException: Unable to resolve symbol: cheddars</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>And here&#x2019;s <code>:exclude</code> in action:</p>
+</blockquote>
+<p>&#x4E0B;&#x9762;&#x662F;<code>:exclude</code>&#x7684;&#x4F8B;&#x5B50;:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cheese.analysis=&gt; (clojure.core/refer &apos;cheese.taxonomy :exclude [&apos;bries])</span><br><span class="line">cheese.analysis=&gt; bries</span><br><span class="line">; =&gt; RuntimeException: Unable to resolve symbol: bries</span><br><span class="line">cheese.analysis=&gt; cheddars</span><br><span class="line">; =&gt; [&quot;mild&quot; &quot;medium&quot; &quot;strong&quot; &quot;sharp&quot; &quot;extra sharp&quot;]</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Lastly, a <code>:rename</code> example:</p>
+</blockquote>
+<p>&#x6700;&#x540E;&#x662F;<code>:rename</code>&#x7684;&#x4F8B;&#x5B50;:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cheese.analysis=&gt; (clojure.core/refer &apos;cheese.taxonomy :rename {&apos;bries &apos;yummy-bries})</span><br><span class="line">cheese.analysis=&gt; bries</span><br><span class="line">; =&gt; RuntimeException: Unable to resolve symbol: bries</span><br><span class="line">cheese.analysis=&gt; yummy-bries</span><br><span class="line">; =&gt; [&quot;Wisconsin&quot; &quot;Somerset&quot; &quot;Brie de Meaux&quot; &quot;Brie de Melun&quot;]</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Notice that in these last examples we have to use the fully qualified names of all the objects in <code>clojure.core</code>, like <code>clojure.core/ns-map</code> and <code>clojure.core/refer</code>. We didn&#x2019;t have to do that in the <code>user</code> namespace. That&#x2019;s because the REPL automatically refers <code>clojure.core</code> within the <code>user</code> namespace. You can make your life easier by evaluating <code>(clojure.core/refer-clojure)</code> when you create a new namespace; this will refer the clojure.core namespace, and I&#x2019;ll be using it from now on. Instead of seeing <code>clojure.core/refer</code> in the examples, you&#x2019;ll only see <code>refer</code>.</p>
+</blockquote>
+<p>&#x6CE8;&#x610F;&#x4E0A;&#x9762;&#x7684;&#x4F8B;&#x5B50;&#x4F7F;&#x7528;&#x4E86;<code>clojure.core</code>&#x91CC;&#x7684;&#x5B8C;&#x5168;&#x9650;&#x5B9A;&#x7684;&#x540D;&#x5B57;&#xFF0C;&#x6BD4;&#x5982;<code>clojure.core/ns-map</code>&#x548C;<code>clojure.core/refer</code>&#x3002;&#x5728;<code>user</code>&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x91CC;&#x4E0D;&#x9700;&#x8981;&#x8FD9;&#x4E48;&#x5E72;&#xFF0C;&#x56E0;&#x4E3A;<code>user</code>&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x81EA;&#x52A8;&#x5F15;&#x5165;&#x4E86;<code>clojure.core</code>&#x3002;&#x901A;&#x8FC7;&#x4F7F;&#x7528;<code>(clojure.core/refer-clojure)</code>&#x4E5F;&#x53EF;&#x4EE5;&#x8FBE;&#x5230;&#x540C;&#x6837;&#x7684;&#x6548;&#x679C;&#x3002;&#x4E0B;&#x9762;&#x5F97;&#x4EE3;&#x7801;&#x4F1A;&#x4F7F;&#x7528;&#x8FD9;&#x4E2A;&#x65B9;&#x6CD5;&#x3002;</p>
+<blockquote>
+<p>Another thing to notice is that you have complete freedom over how you organize your functions and data across namespaces. This lets you sensibly group related functions and data together in the same namespace.</p>
+</blockquote>
+<p>&#x53E6;&#x4E00;&#x4E2A;&#x9700;&#x8981;&#x6CE8;&#x610F;&#x7684;&#x662F;&#xFF0C;&#x5982;&#x4F55;&#x7EC4;&#x7EC7;&#x51FD;&#x6570;&#x548C;&#x6570;&#x636E;&#x5B8C;&#x5168;&#x7531;&#x4F60;&#x51B3;&#x5B9A;&#x3002;&#x8FD9;&#x8BA9;&#x4F60;&#x80FD;&#x591F;&#x5408;&#x7406;&#x5730;&#x7EC4;&#x7EC7;&#x76F8;&#x5173;&#x51FD;&#x6570;&#x548C;&#x6570;&#x636E;&#x3002;</p>
+<blockquote>
+<p>Sometimes you may want a function to be available only to other functions within the same namespace. Clojure allows you to define private functions using <code>defn-</code>:</p>
+</blockquote>
+<p>&#x6709;&#x65F6;&#x5019;&#x4F60;&#x60F3;&#x8BA9;&#x4E00;&#x4E2A;&#x51FD;&#x6570;&#x53EA;&#x5BF9;&#x76F8;&#x540C;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x4E0B;&#x7684;&#x51FD;&#x6570;&#x53EF;&#x89C1;&#x3002;&#x7528;<code>defn-</code>&#x53EF;&#x4EE5;&#x5B9A;&#x4E49;&#x79C1;&#x6709;&#x51FD;&#x6570;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">in-ns</span></span> &apos;cheese.analysis)</span><br><span class="line"><span class="comment">;; Notice the dash after &quot;defn&quot;</span></span><br><span class="line">(<span class="name"><span class="builtin-name">defn-</span></span> private-function</span><br><span class="line">  <span class="string">&quot;Just an example function that does nothing&quot;</span></span><br><span class="line">  [] <span class="string">&quot;sdf&quot;</span>)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>If you try to call this function from another namespace or refer it, Clojure will throw an exception. You can see this when you evaluate the code at &#x278A; and &#x278B;:</p>
+</blockquote>
+<p>&#x5982;&#x679C;&#x5C1D;&#x8BD5;&#x4ECE;&#x5176;&#x4ED6;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x8C03;&#x7528;&#x6216;&#x5F15;&#x7528;&#x8FD9;&#x4E2A;&#x51FD;&#x6570;&#xFF0C;&#x4F1A;&#x5F15;&#x8D77;&#x5F02;&#x5E38;&#x3002;&#x53EF;&#x4EE5;&#x4ECE;&#x4E0B;&#x9762;&#x4EE3;&#x7801;&#x7684;&#x278A;, &#x278B; &#x5904;&#x770B;&#x5230;:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cheese.analysis=&gt; (in-ns &apos;cheese.taxonomy)</span><br><span class="line">cheese.taxonomy=&gt; (clojure.core/refer-clojure)</span><br><span class="line">&#x278A; cheese.taxonomy=&gt; (cheese.analysis/private-function)</span><br><span class="line">&#x278B; cheese.taxonomy=&gt; (refer &apos;cheese.analysis :only [&apos;private-function])</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>As you can see, even if you explicitly <code>refer</code> the function, you can&#x2019;t use the function from another namespace, because you made it private. (If you want to be tricky, you can still access the private var using the arcane syntax <code>@#&apos;some/private-var</code>, but you&#x2019;ll rarely want to do that.)</p>
+</blockquote>
+<p>&#x5982;&#x4F60;&#x6240;&#x89C1;&#xFF0C;&#x5373;&#x4F7F;&#x660E;&#x786E;<code>refer</code>&#x8FD9;&#x4E2A;&#x51FD;&#x6570;&#xFF0C;&#x4E5F;&#x4E0D;&#x80FD;&#x5728;&#x53E6;&#x4E00;&#x4E2A;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x4F7F;&#x7528;&#x5B83;&#xFF0C;&#x56E0;&#x4E3A;&#x5B83;&#x662F;&#x79C1;&#x6709;&#x7684;&#x3002;(&#x5982;&#x679C;&#x800D;&#x82B1;&#x62DB;&#xFF0C;&#x8FD8;&#x662F;&#x53EF;&#x4EE5;&#x8BBF;&#x95EE;&#x79C1;&#x6709;&#x53D8;&#x91CF;&#xFF0C;&#x4F7F;&#x7528;&#x8FD9;&#x4E2A;&#x8BED;&#x6CD5;<code>@#&apos;some/private-var</code>,&#x4F46;&#x5F88;&#x5C11;&#x4F1A;&#x9700;&#x8981;&#x8FD9;&#x4E48;&#x505A;)&#x3002;</p>
+<blockquote>
+<p>alias</p>
+</blockquote>
+<h3 id="alias"><a href="#alias" class="headerlink" title="alias"></a>alias</h3><blockquote>
+<p>Compared to <code>refer</code>, <code>alias</code> is relatively simple. All it does is let you shorten a namespace name for using fully qualified symbols:</p>
+</blockquote>
+<p>&#x4E0E;<code>refer</code>&#x76F8;&#x6BD4;&#xFF0C;<code>alias</code>&#x66F4;&#x7B80;&#x5355;&#x3002;&#x5B83;&#x7684;&#x5168;&#x90E8;&#x5DE5;&#x4F5C;&#x5C31;&#x662F;&#x7F29;&#x77ED;&#x5B8C;&#x5168;&#x9650;&#x5236;&#x7684;&#x7B26;&#x53F7;&#x7684;&#x540D;&#x5B57;&#x3002;</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cheese.analysis=&gt; (clojure.core/alias &apos;taxonomy &apos;cheese.taxonomy)</span><br><span class="line">cheese.analysis=&gt; taxonomy/bries</span><br><span class="line">; =&gt; [&quot;Wisconsin&quot; &quot;Somerset&quot; &quot;Brie de Meaux&quot; &quot;Brie de Melun&quot;]</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>This code lets us use call symbols from the <code>cheese.taxonomy</code> namespace with the shorter alias <code>taxonomy</code>.</p>
+</blockquote>
+<p>&#x8FD9;&#x6BB5;&#x4EE3;&#x7801;&#x8BA9;&#x6211;&#x4EEC;&#x628A;<code>taxonomy</code>&#x5F53;&#x4F5C;<code>cheese.taxonomy</code>&#x7528;&#x3002;</p>
+<blockquote>
+<p><code>refer</code> and <code>alias</code> are your two basic tools for referring to objects outside your current namespace! They&#x2019;re great aids to REPL development.</p>
+</blockquote>
+<p><code>refer</code>&#x548C;<code>alias</code>&#x662F;&#x5F15;&#x7528;&#x5F53;&#x524D;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x5916;&#x7684;&#x5BF9;&#x8C61;&#x7684;&#x57FA;&#x672C;&#x5DE5;&#x5177;&#x3002;REPL&#x5F00;&#x53D1;&#x4E2D;&#x5F88;&#x597D;&#x7528;&#x3002;</p>
+<blockquote>
+<p>However, it&#x2019;s unlikely that you&#x2019;d create your entire program in the REPL. In the next section, I&#x2019;ll cover everything you need to know to organize a real project with source code living on the filesystem.</p>
+</blockquote>
+<p>&#x4F46;&#x4E0D;&#x592A;&#x53EF;&#x80FD;&#x6240;&#x6709;&#x7A0B;&#x5E8F;&#x90FD;&#x5728;REPL&#x91CC;&#x521B;&#x5EFA;&#x3002;&#x4E0B;&#x8282;&#x4F1A;&#x8BB2;&#x89E3;&#x5982;&#x4F55;&#x5728;&#x6587;&#x4EF6;&#x7CFB;&#x7EDF;&#x4E0A;&#x7EC4;&#x7EC7;&#x771F;&#x5B9E;&#x9879;&#x76EE;&#x3002;</p>
+<blockquote>
+<p>Real Project Organization</p>
+</blockquote>
+<h2 id="&#x771F;&#x5B9E;&#x9879;&#x76EE;&#x7EC4;&#x7EC7;"><a href="#&#x771F;&#x5B9E;&#x9879;&#x76EE;&#x7EC4;&#x7EC7;" class="headerlink" title="&#x771F;&#x5B9E;&#x9879;&#x76EE;&#x7EC4;&#x7EC7;"></a>&#x771F;&#x5B9E;&#x9879;&#x76EE;&#x7EC4;&#x7EC7;</h2><blockquote>
+<p>Now that I&#x2019;ve covered the building blocks of Clojure&#x2019;s organization system, I&#x2019;ll show you how to use them in real projects. I&#x2019;ll discuss the relationship between file paths and namespace names, explain how to load a file with <code>require</code> and <code>use</code>, and show how to use <code>ns</code> to set up a namespace.</p>
+</blockquote>
+<p>&#x73B0;&#x5728;&#x5DF2;&#x7ECF;&#x8BB2;&#x89E3;&#x4E86;Clojure&#x7EC4;&#x7EC7;&#x7CFB;&#x7EDF;&#x7684;&#x6784;&#x5EFA;&#x6A21;&#x5757;&#xFF0C;&#x6211;&#x4F1A;&#x4E3A;&#x4F60;&#x5C55;&#x793A;&#x5982;&#x4F55;&#x5728;&#x771F;&#x5B9E;&#x9879;&#x76EE;&#x91CC;&#x4F7F;&#x7528;&#x5B83;&#x4EEC;&#x3002;&#x6211;&#x4F1A;&#x89E3;&#x91CA;&#x6587;&#x4EF6;&#x8DEF;&#x5F84;&#x4E0E;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x7684;&#x5173;&#x7CFB;&#xFF0C;&#x5982;&#x4F55;&#x7528;<code>require</code>&#x548C;<code>use</code>&#x52A0;&#x8F7D;&#x6587;&#x4EF6;&#xFF0C;&#x5982;&#x4F55;&#x7528;<code>ns</code>&#x8BBE;&#x7F6E;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x3002;</p>
+<blockquote>
+<p>The Relationship Between File Paths and Namespace Names</p>
+</blockquote>
+<h3 id="&#x6587;&#x4EF6;&#x8DEF;&#x5F84;&#x4E0E;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x540D;&#x79F0;&#x7684;&#x5173;&#x7CFB;"><a href="#&#x6587;&#x4EF6;&#x8DEF;&#x5F84;&#x4E0E;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x540D;&#x79F0;&#x7684;&#x5173;&#x7CFB;" class="headerlink" title="&#x6587;&#x4EF6;&#x8DEF;&#x5F84;&#x4E0E;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x540D;&#x79F0;&#x7684;&#x5173;&#x7CFB;"></a>&#x6587;&#x4EF6;&#x8DEF;&#x5F84;&#x4E0E;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x540D;&#x79F0;&#x7684;&#x5173;&#x7CFB;</h3><blockquote>
+<p>To kill two birds with one stone (or feed two birds with one seed, depending on how much of a hippie you are), I&#x2019;ll cover more on namespaces while we work on catching the pesky international cheese thief by mapping the locations of his heists. Run the following:</p>
+</blockquote>
+<p>&#x8FD0;&#x884C;&#x4E0B;&#x9762;&#x7684;&#x547D;&#x4EE4;&#xFF0C;&#x5EFA;&#x7ACB;&#x4E00;&#x4E2A;&#x6293;&#x5976;&#x916A;&#x8D3C;&#x5E94;&#x7528;&#xFF0C;&#x4EE5;&#x4FBF;&#x4E0E;&#x8FDB;&#x4E00;&#x6B65;&#x8BB2;&#x89E3;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#xFF1A;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lein new app the-divine-cheese-code</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>This should create a directory structure that looks like this:</p>
+</blockquote>
+<p>&#x8FD9;&#x4F1A;&#x521B;&#x5EFA;&#x5982;&#x4E0B;&#x7684;&#x76EE;&#x5F55;&#x7ED3;&#x6784;:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">| .gitignore</span><br><span class="line">| doc</span><br><span class="line">| | intro.md</span><br><span class="line">| project.clj</span><br><span class="line">| README.md</span><br><span class="line">| resources</span><br><span class="line">| src</span><br><span class="line">| | the_divine_cheese_code</span><br><span class="line">| | | core.clj</span><br><span class="line">| test</span><br><span class="line">| | the_divine_cheese_code</span><br><span class="line">| | | core_test.clj</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Now, open <em>src/the_divine_cheese_code/core.clj</em>. You should see this on the first line:</p>
+</blockquote>
+<p>&#x6253;&#x5F00;<em>src/the_divine_cheese_code/core.clj</em>&#x3002;&#x4F60;&#x4F1A;&#x770B;&#x5230;&#x7B2C;&#x4E00;&#x884C;&#xFF1A;</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">ns</span></span> the-divine-cheese-code.core</span><br><span class="line">  (<span class="symbol">:gen-class</span>))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><code>ns</code> is the primary way to create and manage namespaces within Clojure. I&#x2019;ll explain it in full shortly. For now, though, just know that this line is very similar to the <code>in-ns</code> function we used in Listing 6-1. It creates a namespace if it doesn&#x2019;t exist and then switches to it. I also cover <code>(:gen-class)</code> in more detail in Chapter 12.</p>
+</blockquote>
+<p><code>ns</code>&#x662F;Clojure&#x521B;&#x5EFA;&#x548C;&#x7BA1;&#x7406;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x7684;&#x4E3B;&#x8981;&#x65B9;&#x6CD5;&#x3002;&#x4F46;&#x73B0;&#x5728;&#x53EA;&#x9700;&#x77E5;&#x9053;&#x5B83;&#x4E0E;<code>in-ns</code>&#x51FD;&#x6570;&#x7C7B;&#x4F3C;&#xFF0C;&#x521B;&#x5EFA;(&#x5982;&#x679C;&#x6CA1;&#x6709;)&#x5E76;&#x5207;&#x6362;&#x5230;&#x4E00;&#x4E2A;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x3002;&#x5728;12&#x7AE0;&#x4F1A;&#x5BF9;<code>(:gen-class)</code>&#x8BE6;&#x7EC6;&#x8BB2;&#x89E3;&#x3002;</p>
+<blockquote>
+<p>The name of the namespace is <code>the-divine-cheese-code.core</code>. In Clojure, there&#x2019;s a one-to-one mapping between a namespace name and the path of the file where the namespace is declared, according to the following conventions:</p>
+</blockquote>
+<p>&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x7684;&#x540D;&#x5B57;&#x662F;<code>the-divine-cheese-code.core</code>&#x3002;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x7684;&#x540D;&#x5B57;&#x4E0E;&#x6587;&#x4EF6;&#x7684;&#x8DEF;&#x5F84;&#xFF0C;&#x6309;&#x5982;&#x4E0B;&#x60EF;&#x4F8B;&#x4E00;&#x4E00;&#x5BF9;&#x5E94;&#x7684;&#xFF1A;</p>
+<blockquote>
+<ul>
+<li>When you create a directory with <code>lein</code> (as you did here), the source code&#x2019;s root is <em>src</em> by default.</li>
+<li>Dashes in namespace names correspond to underscores in the file&#xAD;system. So <code>the-divine-cheese-code</code> is mapped to <em>the_divine_cheese_code</em> on the filesystem.</li>
+<li>The component preceding a period (<code>.</code>) in a namespace name corresponds to a directory. For example, since <code>the-divine-cheese-code.core</code> is the namespace name, <em>the_divine_cheese_code</em> is a directory.</li>
+<li>The final component of a namespace corresponds to a file with the <em>.clj</em> extension; <code>core</code> is mapped to <em>core.clj</em>.</li>
+</ul>
+</blockquote>
+<ul>
+<li>&#x7528;<code>lein</code>&#x521B;&#x5EFA;&#x76EE;&#x5F55;&#x65F6;&#xFF0C;&#x6E90;&#x4EE3;&#x7801;&#x7684;&#x9ED8;&#x8BA4;&#x6839;&#x76EE;&#x5F55;&#x662F;<em>src</em>&#x3002;</li>
+<li>&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x540D;&#x79F0;&#x91CC;&#x7684;&#x7834;&#x6298;&#x53F7;&#x5BF9;&#x5E94;&#x6587;&#x4EF6;&#x7CFB;&#x7EDF;&#x7684;&#x4E0B;&#x5212;&#x7EBF;&#x3002;&#x6240;&#x4EE5;<code>the-divine-cheese-code</code>&#x4E0E;&#x6587;&#x4EF6;&#x7CFB;&#x7EDF;&#x7684;<em>the_divine_cheese_code</em>&#x5BF9;&#x5E94;&#x3002;</li>
+<li>&#x70B9;(<code>.</code>)&#x524D;&#x9762;&#x7684;&#x90E8;&#x5206;&#x5BF9;&#x5E94;&#x4E00;&#x4E2A;&#x76EE;&#x5F55;&#x3002;&#x4F8B;&#x5982;&#xFF0C;<code>the-divine-cheese-code.core</code>&#x662F;&#x4E2A;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x540D;&#x79F0;&#xFF0C;<em>the_divine_cheese_code</em> &#x662F;&#x4E2A;&#x76EE;&#x5F55;&#x3002;</li>
+<li>&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x6700;&#x540E;&#x4E00;&#x90E8;&#x5206;&#x5BF9;&#x5E94;&#x4E00;&#x4E2A;&#x6269;&#x5C55;&#x540D;&#x662F;<em>clj</em>&#x7684;&#x6587;&#x4EF6;&#xFF1B;<code>core</code>&#x4E0E;<em>core.clj</em>&#x5BF9;&#x5E94;&#x3002;</li>
+</ul>
+<blockquote>
+<p>Your project will have one more namespace, <code>the-divine-cheese-code.visualization.svg</code>. Go ahead and create the file for it now:</p>
+</blockquote>
+<p>&#x589E;&#x52A0;&#x4E00;&#x4E2A;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#xFF0C;<code>the-divine-cheese-code.visualization.svg</code>,&#x5EFA;&#x7ACB;&#x6587;&#x4EF6;:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir src/the_divine_cheese_code/visualization</span><br><span class="line">touch src/the_divine_cheese_code/visualization/svg.clj</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Notice that the filesystem path follows these conventions. With the relationship between namespaces and the filesystem down, let&#x2019;s look at <code>require</code> and <code>use</code>.</p>
+</blockquote>
+<p>&#x6CE8;&#x610F;&#x6587;&#x4EF6;&#x540D;&#x9075;&#x5FAA;&#x4E0A;&#x9762;&#x7684;&#x60EF;&#x4F8B;&#x3002;&#x77E5;&#x9053;&#x4E86;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x4E0E;&#x6587;&#x4EF6;&#x7CFB;&#x7EDF;&#x7684;&#x5173;&#x7CFB;&#xFF0C;&#x6211;&#x4EEC;&#x6765;&#x770B;&#x770B;<code>require</code>&#x548C;<code>use</code>&#x3002;</p>
+<blockquote>
+<p>Requiring and Using Namespaces</p>
+</blockquote>
+<h3 id="&#x8BF7;&#x6C42;&#x4E0E;&#x4F7F;&#x7528;&#x547D;&#x540D;&#x7A7A;&#x95F4;"><a href="#&#x8BF7;&#x6C42;&#x4E0E;&#x4F7F;&#x7528;&#x547D;&#x540D;&#x7A7A;&#x95F4;" class="headerlink" title="&#x8BF7;&#x6C42;&#x4E0E;&#x4F7F;&#x7528;&#x547D;&#x540D;&#x7A7A;&#x95F4;"></a>&#x8BF7;&#x6C42;&#x4E0E;&#x4F7F;&#x7528;&#x547D;&#x540D;&#x7A7A;&#x95F4;</h3><blockquote>
+<p>The code in the <code>the-divine-cheese-code.core</code> namespace will use the functions in the namespace <code>the-divine-cheese-code.visualization.svg</code> to create SVG markup. To use <code>svg</code>&#x2019;s functions, <code>core</code> will have to <code>require</code> it. But first, let&#x2019;s add some code to <em>svg.clj</em>. Make it look like this (you&#x2019;ll add more later):</p>
+</blockquote>
+<p>&#x547D;&#x540D;&#x7A7A;&#x95F4;<code>the-divine-cheese-code.core</code>&#x91CC;&#x7684;&#x4EE3;&#x7801;&#x8981;&#x4F7F;&#x7528;&#x547D;&#x540D;&#x7A7A;&#x95F4;<code>the-divine-cheese-code.visualization.svg</code>&#x91CC;&#x7684;&#x51FD;&#x6570;&#xFF0C;&#x7528;&#x4E8E;&#x521B;&#x5EFA;SVG&#x6807;&#x8BB0;&#x3002;&#x8981;&#x4F7F;&#x7528;<code>svg</code>&#x7684;&#x51FD;&#x6570;&#xFF0C;<code>core</code>&#x5FC5;&#x987B;<code>require</code>&#x5B83;&#x3002;&#x5148;&#x5F80;<em>svg.clj</em>&#x91CC;&#x589E;&#x52A0;&#x4E00;&#x4E9B;&#x4EE3;&#x7801;&#xFF1A;</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">ns</span></span> the-divine-cheese-code.visualization.svg)</span><br><span class="line"></span><br><span class="line">(<span class="name"><span class="builtin-name">defn</span></span> latlng-&gt;point</span><br><span class="line">  <span class="string">&quot;Convert lat/lng map to comma-separated string&quot;</span></span><br><span class="line">  [latlng]</span><br><span class="line">  (<span class="name"><span class="builtin-name">str</span></span> (<span class="symbol">:lat</span> latlng) <span class="string">&quot;,&quot;</span> (<span class="symbol">:lng</span> latlng)))</span><br><span class="line"></span><br><span class="line">(<span class="name"><span class="builtin-name">defn</span></span> points</span><br><span class="line">  [locations]</span><br><span class="line">  (<span class="name">clojure.string/join</span> <span class="string">&quot; &quot;</span> (<span class="name"><span class="builtin-name">map</span></span> latlng-&gt;point locations)))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>This defines two functions, <code>latlng-&gt;point</code> and <code>points</code>, which you&#x2019;ll use to convert a seq of latitude/longitude coordinates into a string of points. To use this code from the <em>core.clj</em> file, you have to <code>require</code> it. <code>require</code> takes a symbol designating a namespace and ensures that the namespace exists and is ready to be used; in this case, when you call <code>(require &apos;the-divine-cheese-code.visualization.svg)</code>, Clojure reads and evaluates the corresponding file. By evaluating the file, it creates the <code>the-divine-cheese-code.visualization.svg</code> namespace and defines the functions <code>latlng-&gt;point</code> and <code>points</code> within that namespace. Even though the file <em>svg.clj</em> is in your project&#x2019;s directory, Clojure doesn&#x2019;t automatically evaluate it when it runs your project; you have to explicitly tell Clojure that you want to use it.</p>
+</blockquote>
+<p>&#x8FD9;&#x6BB5;&#x4EE3;&#x7801;&#x5B9A;&#x4E49;&#x4E86;&#x4E24;&#x4E2A;&#x51FD;&#x6570;&#xFF0C;<code>latlng-&gt;point</code>&#x548C;<code>points</code>,&#x53EF;&#x4EE5;&#x628A;&#x7ECF;&#x5EA6;/&#x7EAC;&#x5EA6;&#x5750;&#x6807;&#x5E8F;&#x5217;&#x8F6C;&#x5316;&#x6210;&#x70B9;&#x7EC4;&#x6210;&#x7684;&#x5B57;&#x7B26;&#x4E32;&#x3002;&#x8981;&#x4ECE;<em>core.js</em>&#x6587;&#x4EF6;&#x91CC;&#x4F7F;&#x7528;&#x8FD9;&#x4E9B;&#x51FD;&#x6570;&#xFF0C;&#x5FC5;&#x987B;<code>require</code>&#x5B83;&#x3002;<code>require</code>&#x63A5;&#x53D7;&#x4E00;&#x4E2A;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x7B26;&#x53F7;&#x4F5C;&#x4E3A;&#x53C2;&#x6570;&#xFF0C;&#x786E;&#x4FDD;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x5B58;&#x5728;&#xFF0C;&#x5E76;&#x4F7F;&#x5B83;&#x5904;&#x4E8E;&#x53EF;&#x7528;&#x72B6;&#x6001;&#x3002;&#x8FD9;&#x4E2A;&#x4F8B;&#x5B50;&#x91CC;&#xFF0C;&#x5F53;&#x4F60;&#x8C03;&#x7528;<code>(require &apos;the-divine-cheese-code.visualization.svg)</code>&#x65F6;&#xFF0C;Clojure&#x8BFB;&#x53D6;&#x5E76;&#x6C42;&#x503C;&#x5BF9;&#x5E94;&#x7684;&#x6587;&#x4EF6;&#x3002;&#x901A;&#x8FC7;&#x6C42;&#x503C;&#x8FD9;&#x4E2A;&#x6587;&#x4EF6;&#xFF0C;&#x521B;&#x5EFA;&#x4E86;<code>the-divine-cheese-code.visualization.svg</code>&#x547D;&#x540D;&#x7A7A;&#x95F4;&#xFF0C;&#x5E76;&#x5728;&#x91CC;&#x9762;&#x5B9A;&#x4E49;&#x4E86;&#x51FD;&#x6570;<code>latlng-&gt;point</code>&#x548C;<code>points</code>&#x3002;&#x867D;&#x7136;&#x6587;&#x4EF6;<em>svg.clj</em>&#x5728;&#x9879;&#x76EE;&#x76EE;&#x5F55;&#x91CC;&#xFF0C;&#x8FD0;&#x884C;&#x9879;&#x76EE;&#x65F6;&#xFF0C;Clojure&#x4E5F;&#x4E0D;&#x4F1A;&#x81EA;&#x52A8;&#x5BF9;&#x5B83;&#x6C42;&#x503C;&#xFF0C;&#x4F60;&#x5FC5;&#x987B;&#x660E;&#x786E;&#x8BF4;&#x660E;&#x4F60;&#x8981;&#x4F7F;&#x7528;&#x5B83;&#x3002;</p>
+<blockquote>
+<p>After requiring the namespace, you can refer it so that you don&#x2019;t have to use fully qualified names to reference the functions. Go ahead and require <code>the-divine-cheese-code.visualization.svg</code> and add the <code>heists</code> seq to make <em>core.clj</em> match the listing:</p>
+</blockquote>
+<p>&#x8BF7;&#x6C42;&#x8FD9;&#x4E2A;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x540E;&#xFF0C;&#x53EF;&#x4EE5;&#x5F15;&#x7528;&#x5B83;&#xFF0C;&#x4EE5;&#x907F;&#x514D;&#x4F7F;&#x7528;&#x5B8C;&#x5168;&#x9650;&#x5B9A;&#x7684;&#x51FD;&#x6570;&#x540D;&#x3002;&#x5728;<em>core.clj</em>&#x91CC;&#x8BF7;&#x6C42;<code>the-divine-cheese-code.visualization.svg</code>&#xFF0C;&#x5E76;&#x6DFB;&#x52A0;<code>heists</code>&#x5E8F;&#x5217;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">ns</span></span> the-divine-cheese-code.core)</span><br><span class="line"><span class="comment">;; Ensure that the SVG code is evaluated</span></span><br><span class="line">(<span class="name">require</span> &apos;the-divine-cheese-code.visualization.svg)</span><br><span class="line"><span class="comment">;; Refer the namespace so that you don&apos;t have to use the</span></span><br><span class="line"><span class="comment">;; fully qualified name to reference svg functions</span></span><br><span class="line">(<span class="name"><span class="builtin-name">refer</span></span> &apos;the-divine-cheese-code.visualization.svg)</span><br><span class="line"></span><br><span class="line">(<span class="name"><span class="builtin-name">def</span></span> heists [{<span class="symbol">:location</span> <span class="string">&quot;Cologne, Germany&quot;</span></span><br><span class="line">              <span class="symbol">:cheese-name</span> <span class="string">&quot;Archbishop Hildebold&apos;s Cheese Pretzel&quot;</span></span><br><span class="line">              <span class="symbol">:lat</span> <span class="number">50.95</span></span><br><span class="line">              <span class="symbol">:lng</span> <span class="number">6.97</span>}</span><br><span class="line">             {<span class="symbol">:location</span> <span class="string">&quot;Zurich, Switzerland&quot;</span></span><br><span class="line">              <span class="symbol">:cheese-name</span> <span class="string">&quot;The Standard Emmental&quot;</span></span><br><span class="line">              <span class="symbol">:lat</span> <span class="number">47.37</span></span><br><span class="line">              <span class="symbol">:lng</span> <span class="number">8.55</span>}</span><br><span class="line">             {<span class="symbol">:location</span> <span class="string">&quot;Marseille, France&quot;</span></span><br><span class="line">              <span class="symbol">:cheese-name</span> <span class="string">&quot;Le Fromage de Cosquer&quot;</span></span><br><span class="line">              <span class="symbol">:lat</span> <span class="number">43.30</span></span><br><span class="line">              <span class="symbol">:lng</span> <span class="number">5.37</span>}</span><br><span class="line">             {<span class="symbol">:location</span> <span class="string">&quot;Zurich, Switzerland&quot;</span></span><br><span class="line">              <span class="symbol">:cheese-name</span> <span class="string">&quot;The Lesser Emmental&quot;</span></span><br><span class="line">              <span class="symbol">:lat</span> <span class="number">47.37</span></span><br><span class="line">              <span class="symbol">:lng</span> <span class="number">8.55</span>}</span><br><span class="line">             {<span class="symbol">:location</span> <span class="string">&quot;Vatican City&quot;</span></span><br><span class="line">              <span class="symbol">:cheese-name</span> <span class="string">&quot;The Cheese of Turin&quot;</span></span><br><span class="line">              <span class="symbol">:lat</span> <span class="number">41.90</span></span><br><span class="line">              <span class="symbol">:lng</span> <span class="number">12.45</span>}])</span><br><span class="line"></span><br><span class="line">(<span class="name"><span class="builtin-name">defn</span></span> -main</span><br><span class="line">  [&amp; args]</span><br><span class="line">  (<span class="name">println</span> (<span class="name">points</span> heists)))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Now you have a seq of heist locations to work with and you can use functions from the <code>visualization.svg</code> namespace. The <code>main</code> function simply applies the <code>points</code> function to <code>heists</code>. If you run the project with <code>lein run</code>, you should see this:</p>
+</blockquote>
+<p>&#x73B0;&#x5728;&#x6709;&#x4E86;&#x4E00;&#x4E2A;&#x5077;&#x76D7;&#x5730;&#x70B9;&#x5E8F;&#x5217;&#xFF0C;&#x5E76;&#x4E14;<code>visualization.svg</code>&#x91CC;&#x7684;&#x51FD;&#x6570;&#x662F;&#x53EF;&#x7528;&#x7684;&#x3002;<code>main</code>&#x51FD;&#x6570;&#x5BF9;<code>heists</code>&#x5E94;&#x7528;&#x4E86;<code>points</code>&#x51FD;&#x6570;&#x3002;&#x8FD0;&#x884C;<code>lein run</code>,&#x4F1A;&#x770B;&#x5230;:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">50.95,6.97 47.37,8.55 43.3,5.37 47.37,8.55 41.9,12.45</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Hooray! You&#x2019;re one step closer to catching that purloiner of the fermented curd! Using <code>require</code> successfully loaded <code>the-divine-cheese-code.visualization.svg</code> for use.</p>
+</blockquote>
+<p><code>require</code>&#x6210;&#x529F;&#x52A0;&#x8F7D;&#x4E86;<code>the-divine-cheese-code.visualization.svg</code>&#x3002;</p>
+<blockquote>
+<p>The details of <code>require</code> are actually a bit complicated, but for practical purposes you can think of <code>require</code> as telling Clojure the following:</p>
+</blockquote>
+<p><code>require</code>&#x7684;&#x7EC6;&#x8282;&#x6709;&#x70B9;&#x590D;&#x6742;&#xFF0C;&#x4F60;&#x53EF;&#x4EE5;&#x8BA4;&#x4E3A;&#x5B9E;&#x9645;&#x4E0A;&#x5B83;&#x8BA9;Clojure&#x505A;&#x4E86;&#x4E0B;&#x5217;&#x4E8B;&#x60C5;:</p>
+<blockquote>
+<ol>
+<li>Do nothing if you&#x2019;ve already called <code>require</code> with this symbol (<code>the-divine-cheese-code.visualization.svg</code>).</li>
+<li>Otherwise, find the file that corresponds to this symbol using the rules described in &#x201C;The Relationship Between File Paths and Namespace Names&#x201D; on page 133. In this case, Clojure finds <code>src/the_divine_cheese_code/visualization/svg.clj</code>.</li>
+<li>Read and evaluate the contents of that file. Clojure expects the file to declare a namespace corresponding to its path (which ours does).</li>
+</ol>
+</blockquote>
+<ol>
+<li>&#x5982;&#x679C;&#x5DF2;&#x7ECF;<code>require</code>&#x8FC7;<code>the-divine-cheese-code.visualization.svg</code>,&#x4EC0;&#x4E48;&#x90FD;&#x4E0D;&#x5E72;&#x3002;</li>
+<li>&#x5426;&#x5219;&#xFF0C;&#x7528;&#x4E0A;&#x9762;&#x63CF;&#x8FF0;&#x7684;&#x89C4;&#x5219;&#x627E;&#x5230;&#x7B26;&#x53F7;&#x5BF9;&#x5E94;&#x7684;&#x6587;&#x4EF6;&#xFF0C;<code>src/the_divine_cheese_code/visualization/svg.clj</code></li>
+<li>&#x8BFB;&#x5165;&#x5E76;&#x6C42;&#x503C;&#x90A3;&#x4E2A;&#x6587;&#x4EF6;&#x5185;&#x5BB9;&#x3002;</li>
+</ol>
+<blockquote>
+<p><code>require</code> also lets you alias a namespace when you require it, using <code>:as</code> or <code>alias</code>. This:</p>
+</blockquote>
+<p>&#x4F7F;&#x7528;<code>require</code>&#x65F6;&#xFF0C;&#x4E5F;&#x53EF;&#x4EE5;&#x7528;<code>:as</code>&#x6216;<code>alias</code>&#x7ED9;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x8D77;&#x4E2A;&#x522B;&#x540D;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">require</span> &apos;[the-divine-cheese-code.visualization.svg <span class="symbol">:as</span> svg])</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>is equivalent to this:</p>
+</blockquote>
+<p>&#x4E0E;&#x4E0B;&#x9762;&#x7684;&#x4EE3;&#x7801;&#x7B49;&#x6548;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">require</span> &apos;the-divine-cheese-code.visualization.svg)</span><br><span class="line">(<span class="name"><span class="builtin-name">alias</span></span> &apos;svg &apos;the-divine-cheese-code.visualization.svg)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>You can now use the aliased namespace:</p>
+</blockquote>
+<p>&#x73B0;&#x5728;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x8FD9;&#x4E2A;&#x522B;&#x540D;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">svg/points</span> heists)</span><br><span class="line"><span class="comment">; =&gt; &quot;50.95,6.97 47.37,8.55 43.3,5.37 47.37,8.55 41.9,12.45&quot;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Clojure provides another shortcut. Instead of calling <code>require</code> and <code>refer</code> separately, the function <code>use</code> does both. It&#x2019;s frowned upon to use <code>use</code> in production code, but it&#x2019;s handy when you&#x2019;re experimenting in the REPL and you want to quickly get your hands on some functions. For example, this:</p>
+</blockquote>
+<p>&#x8FD8;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;<code>use</code>&#x51FD;&#x6570;&#xFF0C;&#x6548;&#x679C;&#x4E0E;&#x5148;&#x7528;<code>require</code>,&#x518D;&#x7528;<code>refer</code>&#x4E00;&#x6837;&#x3002;&#x751F;&#x4EA7;&#x73AF;&#x5883;&#x4E0B;&#x4E0D;&#x8D5E;&#x6210;&#x7528;<code>use</code>,&#x4F46;REPL&#x91CC;&#x7528;&#x5B83;&#x5F88;&#x65B9;&#x4FBF;&#xFF1A;</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">require</span> &apos;the-divine-cheese-code.visualization.svg)</span><br><span class="line">(<span class="name"><span class="builtin-name">refer</span></span> &apos;the-divine-cheese-code.visualization.svg)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>is equivalent to this:</p>
+</blockquote>
+<p>&#x4E0E;&#x4E0B;&#x9762;&#x4EE3;&#x7801;&#x7B49;&#x6548;&#xFF1A;</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">use</span></span> &apos;the-divine-cheese-code.visualization.svg)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>You can alias a namespace with <code>use</code> just like you can with <code>require</code>. This:</p>
+</blockquote>
+<p>&#x540C;<code>require</code>&#x4E00;&#x6837;&#xFF0C;<code>use</code>&#x4E5F;&#x53EF;&#x4EE5;&#x52A0;&#x4E0A;&#x522B;&#x540D;&#x3002;</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">require</span> &apos;the-divine-cheese-code.visualization.svg)</span><br><span class="line">(<span class="name"><span class="builtin-name">refer</span></span> &apos;the-divine-cheese-code.visualization.svg)</span><br><span class="line">(<span class="name"><span class="builtin-name">alias</span></span> &apos;svg &apos;the-divine-cheese-code.visualization.svg)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>is equivalent to the code in Listing 6-2, which also shows aliased namespaces being used in function calls.</p>
+</blockquote>
+<p>&#x4E0E;&#x4E0B;&#x9762;&#x4EE3;&#x7801;&#x7B49;&#x6548;&#xFF0C;&#x4E0B;&#x9762;&#x4EE3;&#x7801;&#x4E5F;&#x6F14;&#x793A;&#x4E86;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x7684;&#x522B;&#x540D;&#x88AB;&#x7528;&#x4E8E;&#x51FD;&#x6570;&#x8C03;&#x7528;&#x4E2D;&#x3002;</p>
+<p><em>6-2. Sometimes it&#x2019;s handy to both use and alias a namespace.</em></p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">use</span></span> &apos;[the-divine-cheese-code.visualization.svg <span class="symbol">:as</span> svg])</span><br><span class="line">(<span class="name"><span class="builtin-name">=</span></span> svg/points points)</span><br><span class="line"><span class="comment">; =&gt; true</span></span><br><span class="line"></span><br><span class="line">(<span class="name"><span class="builtin-name">=</span></span> svg/latlng-&gt;point latlng-&gt;point)</span><br><span class="line"><span class="comment">; =&gt; true</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>It may seem redundant to alias a namespace with <code>use</code> here because <code>use</code> already refers the namespace (which lets you simply call <code>points</code> instead of <code>svg/points</code>). In certain situations, though, it&#x2019;s handy because <code>use</code> takes the same options as <code>refer</code> (<code>:only</code>, <code>:exclude</code>, <code>:as</code>, and <code>:rename</code>). You might want to alias a namespace with <code>use</code> when you&#x2019;ve skipped referring a symbol. You could use this:</p>
+</blockquote>
+<p>&#x4F7F;&#x7528;<code>use</code>&#x540E;&#xFF0C;&#x518D;&#x52A0;&#x4E0A;&#x522B;&#x540D;&#x770B;&#x8D77;&#x6765;&#x6709;&#x70B9;&#x591A;&#x4F59;&#x3002;&#x4F46;&#x56E0;&#x4E3A;<code>use</code>&#x540C;<code>refer</code>&#x4E00;&#x6837;&#xFF0C;&#x4E5F;&#x80FD;&#x63A5;&#x53D7;<code>:only</code>,<code>:exclude</code>,<code>:as</code>&#x548C;<code>:rename</code>&#xFF0C;&#x6240;&#x4EE5;&#x6709;&#x4E9B;&#x60C5;&#x51B5;&#x4E0B;&#x7528;&#x8D77;&#x6765;&#x5F88;&#x65B9;&#x4FBF;&#x3002;&#x6BD4;&#x5982;&#xFF1A;&#x4F60;&#x53EF;&#x80FD;&#x53EA;&#x5F15;&#x7528;&#x4E86;&#x90E8;&#x5206;&#x7B26;&#x53F7;&#xFF0C;&#x4E0D;&#x4F7F;&#x7528;<code>use</code>&#x53EF;&#x4EE5;&#x8FD9;&#x4E48;&#x5199;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">require</span> &apos;the-divine-cheese-code.visualization.svg)</span><br><span class="line">(<span class="name"><span class="builtin-name">refer</span></span> &apos;the-divine-cheese-code.visualization.svg <span class="symbol">:only</span> [&apos;points])</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Or you could use the <code>use</code> form in Listing 6-3 (which also includes examples of how you can call functions).</p>
+</blockquote>
+<p>6-3 &#x4F7F;&#x7528;<code>use</code>,&#x53EF;&#x4EE5;&#x8FD9;&#x4E48;&#x5199;,&#x8FD9;&#x91CC;&#x4E5F;&#x6F14;&#x793A;&#x4E86;&#x51FD;&#x6570;&#x8C03;&#x7528;:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">(use &apos;[the-divine-cheese-code.visualization.svg :as svg :only [points]])</span><br><span class="line">(= svg/points points)</span><br><span class="line">; =&gt; true</span><br><span class="line"></span><br><span class="line">;; We can use the alias to reach latlng-&gt;point</span><br><span class="line">svg/latlng-&gt;point</span><br><span class="line">; This doesn&apos;t throw an exception</span><br><span class="line"></span><br><span class="line">;; But we can&apos;t use the bare name</span><br><span class="line">latlng-&gt;point</span><br><span class="line">; This does throw an exception!</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>If you try Listing 6-3 in a REPL and <code>latlng-&gt;point</code> doesn&#x2019;t throw an exception, it&#x2019;s because you referred <code>latlng-&gt;point</code> in Listing 6-2. You&#x2019;ll need to restart your REPL session for the code to behave as shown in Listing 6-3.</p>
+</blockquote>
+<p>&#x5982;&#x679C;&#x5728;REPL&#x91CC;&#x5C1D;&#x8BD5;6-3&#xFF0C;<code>latlng-&gt;point</code>&#x4E0D;&#x4F1A;&#x629B;&#x51FA;&#x5F02;&#x5E38;&#xFF0C;&#x56E0;&#x4E3A;6-2&#x91CC;&#x5DF2;&#x7ECF;&#x5F15;&#x7528;&#x8FC7;&#x4E86;&#x3002;&#x5982;&#x679C;&#x60F3;&#x540C;&#x4E0A;&#x8FF0;&#x4EE3;&#x7801;&#x4E00;&#x6837;&#xFF0C;&#x4F60;&#x9700;&#x8981;&#x91CD;&#x542F;REPL&#x3002;</p>
+<blockquote>
+<p>The takeaway here is that <code>require</code> and <code>use</code> load files and optionally <code>alias</code> or <code>refer</code> their namespaces. As you write Clojure programs and read code written by others, you might encounter even more ways of writing <code>require</code> and <code>use</code>, at which point it&#x2019;ll make sense to read Clojure&#x2019;s API docs (<a href="http://clojure.org/reference/libs" target="_blank" rel="external">http://clojure.org/reference/libs</a>) to understand what&#x2019;s going on. However, what you&#x2019;ve learned so far about <code>require</code> and <code>use</code> should cover 95.3 percent of your needs.</p>
+</blockquote>
+<p>&#x4F60;&#x9700;&#x8981;&#x77E5;&#x9053;&#x7684;&#x662F;&#xFF0C;<code>require</code>&#x548C;<code>use</code>&#x52A0;&#x8F7D;&#x6587;&#x4EF6;&#xFF0C;&#x5E76;&#x4E14;&#x53EF;&#x9009;&#x62E9;&#x5730;&#x5BF9;&#x547D;&#x540D;&#x7A7A;&#x95F4;<code>alias</code>&#x6216;<code>refer</code>&#x3002;&#x5982;&#x679C;&#x9700;&#x8981;&#x4E86;&#x89E3;&#x66F4;&#x591A;&#xFF0C;&#x53EF;&#x4EE5;&#x67E5;&#x770B;&#x6587;&#x6863;( <a href="http://clojure.org/reference/libs" target="_blank" rel="external">http://clojure.org/reference/libs</a> )&#x3002;&#x4F46;<code>require</code>&#x548C;<code>use</code>&#x80FD;&#x6EE1;&#x8DB3;&#x5927;&#x90E8;&#x5206;&#x9700;&#x8981;&#x3002;</p>
+<blockquote>
+<p>The ns Macro</p>
+</blockquote>
+<h3 id="ns&#x5B8F;"><a href="#ns&#x5B8F;" class="headerlink" title="ns&#x5B8F;"></a>ns&#x5B8F;</h3><blockquote>
+<p>Now it&#x2019;s time to look at the <code>ns</code> macro. The tools covered so far&#x2014;<code>in-ns</code>, <code>refer</code>, <code>alias</code>, <code>require</code>, and <code>use</code>&#x2014;are most often used when you&#x2019;re playing in the REPL. In your source code files, you&#x2019;ll typically use the <code>ns</code> macro because it allows you to use the tools described so far succinctly and provides other useful functionality. In this section, you&#x2019;ll learn about how one <code>ns</code> call can incorporate <code>require</code>, <code>use</code>, <code>in-ns</code>, <code>alias</code>, and <code>refer</code>.</p>
+</blockquote>
+<p>&#x662F;&#x65F6;&#x5019;&#x770B;<code>ns</code>&#x5B8F;&#x4E86;&#x3002;&#x5230;&#x73B0;&#x5728;&#x8BB2;&#x89E3;&#x7684;&#x5DE5;&#x5177;-<code>in-ns</code>,<code>refer</code>,<code>alias</code>,<code>require</code>&#x548C;<code>use</code>-&#x5927;&#x591A;&#x6570;&#x90FD;&#x7528;&#x4E8E;REPL&#x3002;&#x5728;&#x6E90;&#x7801;&#x6587;&#x4EF6;&#x91CC;&#xFF0C;&#x4E3B;&#x8981;&#x4F7F;&#x7528;<code>ns</code>&#x5B8F;&#xFF0C;&#x56E0;&#x4E3A;&#x5B83;&#x80FD;&#x8BA9;&#x4F60;&#x66F4;&#x7B80;&#x6D01;&#x5730;&#x4F7F;&#x7528;&#x8FD9;&#x4E9B;&#x5DE5;&#x5177;&#xFF0C;&#x8FD8;&#x63D0;&#x4F9B;&#x4E86;&#x5176;&#x4ED6;&#x529F;&#x80FD;&#x3002;&#x8FD9;&#x8282;&#x91CC;&#x4F60;&#x5B66;&#x4E60;&#x5982;&#x4F55;&#x7528;&#x4E00;&#x4E2A;<code>ns</code>&#x8C03;&#x7528;&#xFF0C;&#x5305;&#x542B;<code>require</code>,<code>use</code>,<code>in-ns</code>,<code>alias</code>&#x548C;<code>refer</code>&#x3002;</p>
+<blockquote>
+<p>One useful task <code>ns</code> does is refer the <code>clojure.core</code> namespace by default. That&#x2019;s why you can call <code>println</code> from within <code>the-divine-cheese-code.core</code> without using the fully qualified name, <code>clojure.core/println</code>.</p>
+</blockquote>
+<p><code>ns</code>&#x5B8F;&#x7684;&#x4E00;&#x4E2A;&#x597D;&#x5904;&#x662F;&#x9ED8;&#x8BA4;&#x5F15;&#x7528;&#x4E86;<code>clojure.core</code>&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x3002;&#x8FD9;&#x5C31;&#x662F;&#x4E3A;&#x4EC0;&#x4E48;&#x5728;<code>the-divine-cheese-code.core</code>&#x91CC;&#x53EF;&#x4EE5;&#x76F4;&#x63A5;&#x8C03;&#x7528;<code>println</code>,&#x800C;&#x4E0D;&#x9700;&#x8981;&#x4F7F;&#x7528;&#x5B8C;&#x5168;&#x9650;&#x5B9A;&#x7684;&#x540D;&#x5B57;<code>clojure.core/println</code>&#x3002;</p>
+<blockquote>
+<p>You can control what gets referred from <code>clojure-core</code> with <code>:refer-clojure</code>, which takes the same options as <code>refer</code>:</p>
+</blockquote>
+<p>&#x7528;<code>:refer-clojure</code>&#x53EF;&#x4EE5;&#x9650;&#x5236;&#x5F15;&#x5165;&#x54EA;&#x4E9B;<code>clojure-core</code>&#x7684;&#x4E1C;&#x897F;,&#x53C2;&#x6570;&#x4E0E;<code>refer</code>&#x4E00;&#x6837;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">ns</span></span> the-divine-cheese-code.core</span><br><span class="line">  (<span class="symbol">:refer-clojure</span> <span class="symbol">:exclude</span> [println]))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>If you called this at the beginning of <em>divine_cheese_code.core.clj</em>, it would break your code, forcing you to use <code>clojure.core/println</code> within the <code>-main</code> function.</p>
+</blockquote>
+<p>&#x5982;&#x679C;&#x5728;<em>divine_cheese_code.core.clj</em>&#x5F00;&#x59CB;&#x8C03;&#x7528;&#x4E0A;&#x9762;&#x7684;&#x4EE3;&#x7801;&#xFF0C;&#x4F1A;&#x4F7F;&#x4F60;&#x7684;&#x4EE3;&#x7801;&#x62A5;&#x9519;&#xFF0C;&#x5982;&#x679C;&#x8FD9;&#x4E48;&#x8C03;&#x7528;&#xFF0C;<code>-main</code>&#x51FD;&#x6570;&#x91CC;&#x5FC5;&#x987B;&#x4F7F;&#x7528;<code>clojure.core/println</code>&#x3002;</p>
+<blockquote>
+<p>Within <code>ns</code>, the form <code>(:refer-clojure)</code> is called a <em>reference</em>. This might look weird to you. Is this reference a function call? A macro? What is it? You&#x2019;ll learn more about the underlying machinery in Chapter 7. For now, you just need to understand how each reference maps to function calls. For example, the preceding code is equivalent to this:</p>
+</blockquote>
+<p>&#x5728;<code>ns</code>&#x91CC;&#xFF0C;&#x5F62;&#x5F0F;<code>(:refer-clojure)</code>&#x88AB;&#x53EB;&#x505A;<em>&#x5F15;&#x7528;</em>&#x3002;&#x770B;&#x8D77;&#x6765;&#x6709;&#x70B9;&#x602A;&#xFF0C;&#x4F46;&#x53EA;&#x8981;&#x77E5;&#x9053;&#x6BCF;&#x4E2A;&#x5F15;&#x7528;&#x4E0E;&#x51FD;&#x6570;&#x8C03;&#x7528;&#x5BF9;&#x5E94;&#x5C31;&#x53EF;&#x4EE5;&#x4E86;&#xFF0C;&#x524D;&#x9762;&#x7684;&#x4EE3;&#x7801;&#x4E0E;&#x4E0B;&#x9762;&#x5F97;&#x7B49;&#x4EF7;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">in-ns</span></span> &apos;the-divine-cheese-code.core)</span><br><span class="line">(<span class="name"><span class="builtin-name">refer</span></span> &apos;clojure.core <span class="symbol">:exclude</span> [&apos;println])</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>There are six possible kinds of references within <code>ns</code>:</p>
+</blockquote>
+<p><code>ns</code>&#x91CC;&#x6709;6&#x79CD;&#x5F15;&#x7528;:</p>
+<ul>
+<li><code>(:refer-clojure)</code></li>
+<li><code>(:require)</code></li>
+<li><code>(:use)</code></li>
+<li><code>(:import)</code></li>
+<li><code>(:load)</code></li>
+<li><code>(:gen-class)</code></li>
+</ul>
+<blockquote>
+<p><code>(:import)</code> and <code>(:gen-class)</code> are covered in Chapter 12. I won&#x2019;t cover <code>(:load)</code> because it is seldom used.</p>
+</blockquote>
+<p><code>(:import)</code>&#x548C;<code>(:gen-class)</code>&#x5728;12&#x7AE0;&#x8BB2;&#x89E3;&#x3002;<code>(:load)</code>&#x4E0D;&#x8BB2;&#x89E3;&#xFF0C;&#x56E0;&#x4E3A;&#x7528;&#x7684;&#x5F88;&#x5C11;&#x3002;</p>
+<blockquote>
+<p><code>(:require)</code> works a lot like the <code>require</code> function. For example, this:</p>
+</blockquote>
+<p><code>(:require)</code> &#x7684;&#x4F5C;&#x7528;&#x4E0E;<code>require</code>&#x51FD;&#x6570;&#x5F88;&#x50CF;,&#x4F8B;&#x5982;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">ns</span></span> the-divine-cheese-code.core</span><br><span class="line">  (<span class="symbol">:require</span> the-divine-cheese-code.visualization.svg))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>is equivalent to this:</p>
+</blockquote>
+<p>&#x4E0E;&#x4E0B;&#x9762;&#x4EE3;&#x7801;&#x7B49;&#x6548;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">in-ns</span></span> &apos;the-divine-cheese-code.core)</span><br><span class="line">(<span class="name">require</span> &apos;the-divine-cheese-code.visualization.svg)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Notice that in the <code>ns</code> form (unlike the <code>in-ns</code> function call), you don&#x2019;t have to quote your symbol with <code>&apos;</code>. You never have to quote symbols within <code>ns</code>.</p>
+</blockquote>
+<p>&#x6CE8;&#x610F;&#xFF0C;<code>ns</code>&#x91CC;&#x4E0D;&#x7528;&#x50CF;<code>in-ns</code>&#x90A3;&#x6837;&#xFF0C;&#x5FC5;&#x987B;&#x7528;<code>&apos;</code>&#x5F15;&#x7528;&#x7B26;&#x53F7;&#x3002;&#x6C38;&#x8FDC;&#x4E0D;&#x9700;&#x8981;&#x3002;</p>
+<blockquote>
+<p>You can also <code>alias</code> a library that you <code>require</code> within <code>ns</code>, just like when you call the function. This:</p>
+</blockquote>
+<p><code>ns</code>&#x91CC;&#x7684;<code>require</code>&#x4E5F;&#x53EF;&#x4EE5;&#x52A0;&#x4E0A;&#x522B;&#x540D;&#xFF0C;&#x8DDF;<code>require</code>&#x51FD;&#x6570;&#x4E00;&#x6837;,&#x8FD9;&#x6BB5;&#x4EE3;&#x7801;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">ns</span></span> the-divine-cheese-code.core</span><br><span class="line">  (<span class="symbol">:require</span> [the-divine-cheese-code.visualization.svg <span class="symbol">:as</span> svg]))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>is equivalent to this:</p>
+</blockquote>
+<p>&#x4E0E;&#x4E0B;&#x9762;&#x7684;&#x4EE3;&#x7801;&#x7B49;&#x6548;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">in-ns</span></span> &apos;the-divine-cheese-code.core)</span><br><span class="line">(<span class="name">require</span> [&apos;the-divine-cheese-code.visualization.svg <span class="symbol">:as</span> &apos;svg])</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>You can require multiple libraries in a <code>(:require)</code> reference as follows. This:</p>
+</blockquote>
+<p>&#x4E00;&#x4E2A;<code>(:require)</code>&#x91CC;&#x53EF;&#x4EE5;&#x8BF7;&#x6C42;&#x591A;&#x4E2A;&#x5E93;,&#x8FD9;&#x4E2A;&#x4EE3;&#x7801;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">ns</span></span> the-divine-cheese-code.core</span><br><span class="line">  (<span class="symbol">:require</span> [the-divine-cheese-code.visualization.svg <span class="symbol">:as</span> svg]</span><br><span class="line">            [clojure.java.browse <span class="symbol">:as</span> browse]))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>is equivalent to this:</p>
+</blockquote>
+<p>&#x4E0E;&#x4E0B;&#x9762;&#x7684;&#x4EE3;&#x7801;&#x7B49;&#x6548;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">in-ns</span></span> &apos;the-divine-cheese-code.core)</span><br><span class="line">(<span class="name">require</span> [&apos;the-divine-cheese-code.visualization.svg <span class="symbol">:as</span> &apos;svg])</span><br><span class="line">(<span class="name">require</span> [&apos;clojure.java.browse <span class="symbol">:as</span> &apos;browse])</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>However, one difference between the <code>(:require)</code> reference and the <code>require</code> function is that the reference also allows you to refer names. This:</p>
+</blockquote>
+<p><code>(:require)</code>&#x5F15;&#x7528;&#x4E0E;<code>require</code>&#x51FD;&#x6570;&#x7684;&#x4E00;&#x4E2A;&#x4E0D;&#x540C;&#x662F;&#xFF0C;&#x524D;&#x8005;&#x5141;&#x8BB8;&#x4F60;&#x5F15;&#x7528;&#x540D;&#x79F0;&#x3002;&#x8FD9;&#x4E2A;&#x4EE3;&#x7801;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">ns</span></span> the-divine-cheese-code.core</span><br><span class="line">  (<span class="symbol">:require</span> [the-divine-cheese-code.visualization.svg <span class="symbol">:refer</span> [points]]))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>is equivalent to this:</p>
+</blockquote>
+<p>&#x4E0E;&#x4E0B;&#x9762;&#x7684;&#x4EE3;&#x7801;&#x7B49;&#x6548;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">in-ns</span></span> &apos;the-divine-cheese-code.core)</span><br><span class="line">(<span class="name">require</span> &apos;the-divine-cheese-code.visualization.svg)</span><br><span class="line">(<span class="name"><span class="builtin-name">refer</span></span> &apos;the-divine-cheese-code.visualization.svg <span class="symbol">:only</span> [&apos;points])</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>You can also refer all symbols (notice the <code>:all</code> keyword):</p>
+</blockquote>
+<p>&#x4E5F;&#x53EF;&#x4EE5;&#x7528;<code>:all</code>&#x5F15;&#x7528;&#x6240;&#x6709;&#x7B26;&#x53F7;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">ns</span></span> the-divine-cheese-code.core</span><br><span class="line">  (<span class="symbol">:require</span> [the-divine-cheese-code.visualization.svg <span class="symbol">:refer</span> <span class="symbol">:all</span>]))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>which is the same as doing this:</p>
+</blockquote>
+<p>&#x4E0A;&#x9762;&#x4EE3;&#x7801;&#x4E0E;&#x4E0B;&#x9762;&#x4EE3;&#x7801;&#x7B49;&#x6548;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">in-ns</span></span> &apos;the-divine-cheese-code.core)</span><br><span class="line">(<span class="name">require</span> &apos;the-divine-cheese-code.visualization.svg)</span><br><span class="line">(<span class="name"><span class="builtin-name">refer</span></span> &apos;the-divine-cheese-code.visualization.svg)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>This is the preferred way to require code, alias namespaces, and refer symbols. It&#x2019;s recommended that you not use <code>(:use)</code>, but since it&#x2019;s likely that you&#x2019;ll come across it, it&#x2019;s good to know how it works. You know the drill. This:</p>
+</blockquote>
+<p>&#x8FD9;&#x662F;&#x9996;&#x9009;&#x7684;&#x8BF7;&#x6C42;&#x4EE3;&#x7801;&#xFF0C;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x8D77;&#x522B;&#x540D;&#xFF0C;&#x5F15;&#x7528;&#x7B26;&#x53F7;&#x65B9;&#x5F0F;&#x3002;&#x5EFA;&#x8BAE;&#x4F60;&#x4E0D;&#x8981;&#x4F7F;&#x7528;<code>(:use)</code>&#xFF0C;&#x4F46;&#x65E2;&#x7136;&#x4F60;&#x53EF;&#x80FD;&#x78B0;&#x5230;&#x5B83;&#xFF0C;&#x6700;&#x597D;&#x77E5;&#x9053;&#x5B83;&#x662F;&#x600E;&#x4E48;&#x56DE;&#x4E8B;&#x3002;&#x8FD9;&#x6BB5;&#x4EE3;&#x7801;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">ns</span></span> the-divine-cheese-code.core</span><br><span class="line">  (<span class="symbol">:use</span> clojure.java.browse))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>does this:</p>
+</blockquote>
+<p>&#x4E0E;&#x4E0B;&#x9762;&#x4EE3;&#x7801;&#x7B49;&#x6548;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">in-ns</span></span> &apos;the-divine-cheese-code.core)</span><br><span class="line">(<span class="name"><span class="builtin-name">use</span></span> &apos;clojure.java.browse)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>whereas this:</p>
+</blockquote>
+<p>&#x8FD9;&#x6BB5;&#x4EE3;&#x7801;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">ns</span></span> the-divine-cheese-code.core</span><br><span class="line">  (<span class="symbol">:use</span> [clojure.java browse io]))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>does this:</p>
+</blockquote>
+<p>&#x4E0E;&#x4E0B;&#x9762;&#x4EE3;&#x7801;&#x7B49;&#x6548;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">in-ns</span></span> &apos;the-divine-cheese-code.core)</span><br><span class="line">(<span class="name"><span class="builtin-name">use</span></span> &apos;clojure.java.browse)</span><br><span class="line">(<span class="name"><span class="builtin-name">use</span></span> &apos;clojure.java.io)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Notice that when you follow <code>:use</code> with a vector, it takes the first symbol as the <em>base</em> and then calls <code>use</code> with each symbol that follows.</p>
+</blockquote>
+<p>&#x6CE8;&#x610F;&#xFF0C;<code>:use</code>&#x540E;&#x9762;&#x8DDF;&#x7740;&#x4E00;&#x4E2A;vector&#x65F6;&#xFF0C;&#x4EE5;&#x7B2C;&#x4E00;&#x4E2A;&#x7B26;&#x53F7;&#x4F5C;&#x4E3A;&#x57FA;&#x7840;&#xFF0C;&#x52A0;&#x4E0A;&#x6BCF;&#x4E2A;&#x540E;&#x9762;&#x7684;&#x7B26;&#x53F7;&#xFF0C;&#x7EC4;&#x6210;&#x6240;&#x6709;&#x9700;&#x8981;<code>use</code>&#x7684;&#x7B26;&#x53F7;&#xFF0C;&#x5E76;&#x5BF9;&#x5B83;&#x4EEC;&#x8C03;&#x7528;<code>use</code>&#x3002;</p>
+<blockquote>
+<p>Oh my god, that&#x2019;s it! Now you can use <code>ns</code> like a pro! And you&#x2019;re going to need to, dammit, because that <em>voleur des fromages</em> (as they probably say in French) is still running amok! Remember him/her?!</p>
+</blockquote>
+<p>&#x7EC8;&#x4E8E;&#x8BB2;&#x5B8C;&#x4E86;&#xFF01;&#x73B0;&#x5728;&#x4F60;&#x53EF;&#x4EE5;&#x50CF;&#x4E2A;&#x4E13;&#x5BB6;&#x4E00;&#x6837;&#x4F7F;&#x7528;<code>ns</code>&#x4E86;&#xFF01;</p>
+<blockquote>
+<p>To Catch a Burglar</p>
+</blockquote>
+<h2 id="&#x6293;&#x5C0F;&#x5077;"><a href="#&#x6293;&#x5C0F;&#x5077;" class="headerlink" title="&#x6293;&#x5C0F;&#x5077;"></a>&#x6293;&#x5C0F;&#x5077;</h2><blockquote>
+<p>We can&#x2019;t allow this plunderer of parmesan to make off with any more cheese! It&#x2019;s time to finish drawing lines based on the coordinates of the heists! That will surely reveal something!</p>
+</blockquote>
+<p>&#x4E0D;&#x80FD;&#x8BA9;&#x5C0F;&#x5077;&#x5077;&#x8D70;&#x66F4;&#x591A;&#x5976;&#x916A;&#x3002;&#x6211;&#x4EEC;&#x7EE7;&#x7EED;&#x5B8C;&#x6210;&#x6839;&#x636E;&#x5750;&#x6807;&#x753B;&#x7EBF;&#xFF0C;&#x8FD9;&#x4E00;&#x5B9A;&#x4F1A;&#x663E;&#x9732;&#x51FA;&#x4E00;&#x4E9B;&#x4E1C;&#x897F;&#xFF01;</p>
+<blockquote>
+<p>Using the latitude coordinates for each heist, you&#x2019;ll connect the dots in an SVG image. But if you draw lines using the given coordinates, the result won&#x2019;t look right for two reasons. First, latitude coordinates ascend from south to north, whereas SVG y-coordinates ascend from top to bottom. In other words, you need to flip the coordinates or the drawing will be upside down.</p>
+</blockquote>
+<p>&#x628A;&#x6BCF;&#x4E2A;&#x5077;&#x76D7;&#x5730;&#x70B9;&#x5750;&#x6807;&#x5728;SVG&#x56FE;&#x7247;&#x91CC;&#x8FDE;&#x6210;&#x7EBF;&#x3002;&#x4F46;&#x5982;&#x679C;&#x7528;&#x7ED9;&#x51FA;&#x7684;&#x5750;&#x6807;&#x753B;&#x7EBF;&#xFF0C;&#x7ED3;&#x679C;&#x4E0D;&#x5BF9;&#x3002;&#x539F;&#x56E0;&#x4E00;&#xFF0C;&#x7EAC;&#x5EA6;&#x5750;&#x6807;&#x4ECE;&#x5357;&#x5F80;&#x5317;&#xFF0C;&#x800C;SVG&#x7684;y&#x5750;&#x6807;&#x4ECE;&#x9876;&#x5F80;&#x4E0B;&#x589E;&#x52A0;&#x3002;&#x6240;&#x4EE5;&#x9700;&#x8981;&#x7FFB;&#x8F6C;&#x5750;&#x6807;&#xFF0C;&#x5426;&#x5219;&#x753B;&#x662F;&#x53CD;&#x7684;&#x3002;</p>
+<blockquote>
+<p>Second, the drawing will be very small. To fix that, you&#x2019;ll zoom in on it by translating and scaling it. It&#x2019;s like turning a drawing that looks like Figure 6-1a into Figure 6-1b.</p>
+</blockquote>
+<p>&#x539F;&#x56E0;&#x4E8C;&#xFF0C;&#x753B;&#x4F1A;&#x5F88;&#x5C0F;&#x3002;&#x4E3A;&#x6B64;&#x9700;&#x8981;&#x653E;&#x5927;&#x3002;&#x5C31;&#x50CF;&#x4E0B;&#x56FE;&#x4E2D;&#x628A;&#x56FE;&#x5F62;&#x7FFB;&#x8FC7;&#x6765;&#x4E00;&#x6837;&#x3002;</p>
+<p>&#x56FE;6-1</p>
+<p><img src="/2016/07/29/brave-clojure-organization/svg-before.png" alt="svg-before"></p>
+<p><img src="/2016/07/29/brave-clojure-organization/svg-after.png" alt="svg-before"></p>
+<blockquote>
+<p>Honestly, this is all completely arbitrary and it&#x2019;s no longer directly related to code organization, but it&#x2019;s fun and I think you&#x2019;ll have a good time going through the code! Make your <em>svg.clj</em> file match Listing 6-4:</p>
+</blockquote>
+<p>&#x5B9E;&#x8BDD;&#x8BF4;&#xFF0C;&#x8FD9;&#x8DDF;&#x4EE3;&#x7801;&#x7EC4;&#x7EC7;&#x6CA1;&#x4EC0;&#x4E48;&#x5173;&#x7CFB;&#xFF0C;&#x4F46;&#x8FD9;&#x5F88;&#x6709;&#x8DA3;&#xFF01;&#x8BD5;&#x4F60;&#x7684;<em>svg.clj</em>&#x6587;&#x4EF6;&#x4E0E;&#x4E0B;&#x9762;&#x7684;&#x4EE3;&#x7801;&#x4E00;&#x6837;:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">(ns the-divine-cheese-code.visualization.svg</span><br><span class="line">  (:require [clojure.string :as s])</span><br><span class="line">  (:refer-clojure :exclude [min max]))</span><br><span class="line"></span><br><span class="line">&#x278A; (defn comparator-over-maps</span><br><span class="line">  [comparison-fn ks]</span><br><span class="line">  (fn [maps]</span><br><span class="line">&#x278B;     (zipmap ks</span><br><span class="line">&#x278C;             (map (fn [k] (apply comparison-fn (map k maps)))</span><br><span class="line">                 ks))))</span><br><span class="line"></span><br><span class="line">&#x278D; (def min (comparator-over-maps clojure.core/min [:lat :lng]))</span><br><span class="line">(def max (comparator-over-maps clojure.core/max [:lat :lng]))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>You define the <code>comparator-over-maps</code> function at &#x278A;. This is probably the trickiest bit, so bear with me. <code>comparator-over-maps</code> is a function that returns a function. The returned function compares the values for the keys provided by the <code>ks</code> parameter using the supplied comparison function, <code>comparison-fn</code>.</p>
+</blockquote>
+<p>&#x5728;&#x278A;&#x5904;&#x5B9A;&#x4E49;&#x4E86;&#x51FD;&#x6570;<code>comparator-over-maps</code>&#x3002;&#x8FD9;&#x53EF;&#x80FD;&#x662F;&#x6700;&#x68D8;&#x624B;&#x7684;&#x90E8;&#x5206;&#x3002;&#x8FD9;&#x4E2A;&#x51FD;&#x6570;&#x63A5;&#x53D7;&#x4E00;&#x4E2A;&#x6BD4;&#x8F83;&#x51FD;&#x6570;&#xFF0C;<code>comparison-fn</code>&#x548C;&#x4E00;&#x4E2A;key&#x7684;&#x96C6;&#x5408;<code>ks</code>,&#x8FD4;&#x56DE;&#x4E00;&#x4E2A;&#x53C2;&#x6570;&#x662F;<code>maps</code>&#x51FD;&#x6570;&#x3002;&#x8FD4;&#x56DE;&#x7684;&#x51FD;&#x6570;&#x7528;<code>comparison-fn</code>&#x6BD4;&#x8F83;&#x4E86;<code>ks</code>&#x7684;&#x6BCF;&#x4E2A;key&#x5BF9;&#x5E94;&#x4E8E;<code>maps</code>&#x7684;&#x4E00;&#x7EC4;&#x503C;&#x3002;</p>
+<blockquote>
+<p>You use <code>comparator-over-maps</code> to construct the <code>min</code> and <code>max</code> functions &#x278D;, which you&#x2019;ll use to find the top-left and bottom-right corners of our drawing. Here&#x2019;s <code>min</code> in action:</p>
+</blockquote>
+<p>&#x5728;&#x278D;&#x5904;&#xFF0C;&#x7528;<code>comparator-over-maps</code>&#x5EFA;&#x7ACB;&#x4E86;<code>min</code>&#x548C;<code>max</code>&#x51FD;&#x6570;&#xFF0C;&#x7528;&#x4E8E;&#x627E;&#x5230;&#x56FE;&#x5F62;&#x7684;&#x5DE6;&#x4E0A;&#x89D2;&#x548C;&#x53F3;&#x4E0B;&#x89D2;&#x3002;&#x8FD9;&#x662F;<code>min</code>&#x7684;&#x5B9E;&#x9645;&#x4F7F;&#x7528;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">min</span></span> [{<span class="symbol">:lat</span> <span class="number">1</span> <span class="symbol">:lng</span> <span class="number">3</span>} {<span class="symbol">:lat</span> <span class="number">5</span> <span class="symbol">:lng</span> <span class="number">0</span>}])</span><br><span class="line"><span class="comment">; =&gt; {:lat 1, :lng 0}</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>When you call <code>min</code>, it calls <code>zipmap</code> , which takes two arguments, both seqs, and returns a new map. The elements of the first seq become the keys, and the elements of the second seq become the values:</p>
+</blockquote>
+<p><code>min</code>&#x91CC;&#x8C03;&#x7528;&#x4E86;<code>zipmap</code>,&#x4F5C;&#x7528;&#x662F;&#x63A5;&#x53D7;&#x4E24;&#x4E2A;&#x5E8F;&#x5217;&#xFF0C;&#x8FD4;&#x56DE;&#x4E00;&#x4E2A;map&#x3002;map&#x7684;key&#x7531;&#x7B2C;&#x4E00;&#x4E2A;&#x5E8F;&#x5217;&#x7EC4;&#x6210;&#xFF0C;&#x503C;&#x7531;&#x7B2C;2&#x4E2A;&#x5E8F;&#x5217;&#x7EC4;&#x6210;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">zipmap</span></span> [<span class="symbol">:a</span> <span class="symbol">:b</span>] [<span class="number">1</span> <span class="number">2</span>])</span><br><span class="line"><span class="comment">; =&gt; {:a 1 :b 2}</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>At , the first argument to <code>zipmap</code> is <code>ks</code>, so the elements of <code>ks</code> will be the keys of the returned map. The second argument is the result of the map call at &#x278C;. That map call actually performs the comparison.</p>
+</blockquote>
+<p><code>zipmap</code>&#x7684;&#x7B2C;&#x4E00;&#x4E2A;&#x53C2;&#x6570;&#x662F;<code>ks</code>&#xFF0C;&#x6240;&#x4EE5;<code>ks</code>&#x7684;&#x6210;&#x5458;&#x662F;&#x7ED3;&#x679C;map&#x7684;key&#x3002;&#x7B2C;&#x4E8C;&#x4E2A;&#x53C2;&#x6570;&#x662F;&#x278C;&#x5904;&#x7684;map&#x8C03;&#x7528;&#x7684;&#x7ED3;&#x679C;&#xFF0C;&#x8FD9;&#x4E2A;map&#x8C03;&#x7528;&#x6267;&#x884C;&#x4E86;&#x4E0A;&#x9762;&#x8BF4;&#x7684;&#x6BD4;&#x8F83;&#x3002;</p>
+<blockquote>
+<p>Finally, at &#x278D; you use <code>comparator-over-maps</code> to create the comparison functions. If you think of the drawing as being inscribed in a rectangle, <code>min</code> is the corner of the rectangle closest to (0, 0) and <code>max</code> is the corner farthest from it.</p>
+</blockquote>
+<p>&#x6700;&#x540E;&#x5728;&#x278D;&#x5904;&#xFF0C;&#x7528;<code>comparator-over-maps</code>&#x521B;&#x5EFA;&#x4E86;&#x6BD4;&#x8F83;&#x51FD;&#x6570;&#x3002;&#x5982;&#x679C;&#x56FE;&#x5F62;&#x662F;&#x523B;&#x5728;&#x4E00;&#x4E2A;&#x957F;&#x65B9;&#x5F62;&#x4E0A;&#xFF0C;<code>min</code>&#x662F;&#x6700;&#x63A5;&#x8FD1;(0, 0)&#x7684;&#x89D2;&#xFF0C;<code>max</code>&#x662F;&#x79BB;&#x5B83;&#x6700;&#x8FDC;&#x7684;&#x89D2;&#x3002;</p>
+<blockquote>
+<p>Here&#x2019;s the next part of the code:</p>
+</blockquote>
+<p>&#x8FD9;&#x662F;&#x5176;&#x4F59;&#x4EE3;&#x7801;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">defn</span></span> translate-to-00</span><br><span class="line">  [locations]</span><br><span class="line">  (<span class="name"><span class="builtin-name">let</span></span> [mincoords (<span class="name"><span class="builtin-name">min</span></span> locations)]</span><br><span class="line">    (<span class="name"><span class="builtin-name">map</span></span> #(<span class="name">merge-with</span> - % mincoords) locations)))</span><br><span class="line"></span><br><span class="line"> (<span class="name"><span class="builtin-name">defn</span></span> scale</span><br><span class="line">  [width height locations]</span><br><span class="line">  (<span class="name"><span class="builtin-name">let</span></span> [maxcoords (<span class="name"><span class="builtin-name">max</span></span> locations)</span><br><span class="line">        ratio {<span class="symbol">:lat</span> (/ height (<span class="symbol">:lat</span> maxcoords))</span><br><span class="line">               <span class="symbol">:lng</span> (/ width (<span class="symbol">:lng</span> maxcoords))}]</span><br><span class="line">    (<span class="name"><span class="builtin-name">map</span></span> #(<span class="name">merge-with</span> * % ratio) locations)))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><code>translate-to-00</code>, defined at , works by finding the <code>min</code> of our locations and subtracting that value from each location. It uses <code>merge-with</code>, which works like this:</p>
+</blockquote>
+<p><code>translate-to-00</code>&#x627E;&#x51FA;&#x6240;&#x6709;&#x4F4D;&#x7F6E;&#x7684;<code>min</code>,&#x6BCF;&#x4E2A;&#x4F4D;&#x7F6E;&#x90FD;&#x51CF;&#x6389;&#x5B83;&#x3002;&#x7528;&#x5230;&#x4E86;<code>merge-with</code>:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">merge-with</span> - {<span class="symbol">:lat</span> <span class="number">50</span> <span class="symbol">:lng</span> <span class="number">10</span>} {<span class="symbol">:lat</span> <span class="number">5</span> <span class="symbol">:lng</span> <span class="number">5</span>})</span><br><span class="line"><span class="comment">; =&gt; {:lat 45 :lng 5}</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Then we define the function <code>scale</code> at , which multiplies each point by the ratio between the maximum latitude and longitude and the desired height and width.</p>
+</blockquote>
+<p>&#x7136;&#x540E;&#x5B9A;&#x4E49;&#x4E86;<code>scale</code>&#x51FD;&#x6570;&#xFF0C;&#x6BCF;&#x4E2A;&#x4F4D;&#x7F6E;&#x90FD;&#x4E0E;&#x4E00;&#x4E2A;&#x6BD4;&#x4F8B;&#x76F8;&#x4E58;&#x3002;&#x7ECF;&#x5EA6;&#x4F7F;&#x7528;&#x7684;&#x6BD4;&#x4F8B;&#x662F;&#x56FE;&#x5F62;&#x5BBD;&#x5EA6;&#x4E0E;<code>max</code>&#x5F97;&#x5230;&#x7684;&#x70B9;&#x7684;&#x5BBD;&#x5EA6;&#x6BD4;&#xFF0C;&#x7EAC;&#x5EA6;&#x4F7F;&#x7528;&#x7684;&#x6BD4;&#x4F8B;&#x662F;&#x56FE;&#x5F62;&#x9AD8;&#x5EA6;&#x4E0E;<code>max</code>&#x7684;&#x5230;&#x7684;&#x70B9;&#x7684;&#x9AD8;&#x5EA6;&#x6BD4;&#x3002;</p>
+<blockquote>
+<p>Here&#x2019;s the rest of the code for <em>svg.clj</em>:</p>
+</blockquote>
+<p>&#x4E0B;&#x9762;&#x662F;<em>svg.clj</em>&#x7684;&#x5176;&#x4F59;&#x4EE3;&#x7801;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">defn</span></span> latlng-&gt;point</span><br><span class="line">  <span class="string">&quot;Convert lat/lng map to comma-separated string&quot;</span></span><br><span class="line">  [latlng]</span><br><span class="line">  (<span class="name"><span class="builtin-name">str</span></span> (<span class="symbol">:lat</span> latlng) <span class="string">&quot;,&quot;</span> (<span class="symbol">:lng</span> latlng)))</span><br><span class="line"></span><br><span class="line">(<span class="name"><span class="builtin-name">defn</span></span> points</span><br><span class="line">  <span class="string">&quot;Given a seq of lat/lng maps, return string of points joined by space&quot;</span></span><br><span class="line">  [locations]</span><br><span class="line">  (<span class="name">s/join</span> <span class="string">&quot; &quot;</span> (<span class="name"><span class="builtin-name">map</span></span> latlng-&gt;point locations)))</span><br><span class="line"></span><br><span class="line">(<span class="name"><span class="builtin-name">defn</span></span> line</span><br><span class="line">  [points]</span><br><span class="line">  (<span class="name"><span class="builtin-name">str</span></span> <span class="string">&quot;&lt;polyline points=\&quot;&quot;</span> points <span class="string">&quot;\&quot; /&gt;&quot;</span>))</span><br><span class="line"></span><br><span class="line">(<span class="name"><span class="builtin-name">defn</span></span> transform</span><br><span class="line">  <span class="string">&quot;Just chains other functions&quot;</span></span><br><span class="line">  [width height locations]</span><br><span class="line">  (<span class="name"><span class="builtin-name">-&gt;&gt;</span></span> locations</span><br><span class="line">       translate-to-00</span><br><span class="line">       (<span class="name">scale</span> width height)))</span><br><span class="line"></span><br><span class="line">(<span class="name"><span class="builtin-name">defn</span></span> xml</span><br><span class="line">  <span class="string">&quot;svg &apos;template&apos;, which also flips the coordinate system&quot;</span></span><br><span class="line">  [width height locations]</span><br><span class="line">  (<span class="name"><span class="builtin-name">str</span></span> <span class="string">&quot;&lt;svg height=\&quot;&quot;</span> height <span class="string">&quot;\&quot; width=\&quot;&quot;</span> width <span class="string">&quot;\&quot;&gt;&quot;</span></span><br><span class="line">       <span class="comment">;; These two &lt;g&gt; tags change the coordinate system so that</span></span><br><span class="line">       <span class="comment">;; 0,0 is in the lower-left corner, instead of SVG&apos;s default</span></span><br><span class="line">       <span class="comment">;; upper-left corner</span></span><br><span class="line">       <span class="string">&quot;&lt;g transform=\&quot;translate(0,&quot;</span> height <span class="string">&quot;)\&quot;&gt;&quot;</span></span><br><span class="line">       <span class="string">&quot;&lt;g transform=\&quot;rotate(-90)\&quot;&gt;&quot;</span></span><br><span class="line">       (<span class="name"><span class="builtin-name">-&gt;</span></span> (<span class="name">transform</span> width height locations)</span><br><span class="line">           points</span><br><span class="line">           line)</span><br><span class="line">       <span class="string">&quot;&lt;/g&gt;&lt;/g&gt;&quot;</span></span><br><span class="line">       <span class="string">&quot;&lt;/svg&gt;&quot;</span>))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>The functions here are pretty straightforward. They just take <code>{:lat x :lng y}</code> maps and transform them so that an SVG can be created. <code>latlng-&gt;point</code> returns a string that can be used to define a point in SVG markup. <code>points</code> converts a seq of <code>lat/lng</code> maps into a space-separated string of points. <code>line</code> returns the SVG markup for a line that connects all given space-separated strings of points. <code>transform</code> takes a seq of locations, translates them so they start at the point (0, 0), and scales them to the given width and height. Finally, <code>xml</code> produces the markup for displaying the given locations using SVG.</p>
+</blockquote>
+<p>&#x8FD9;&#x4E9B;&#x51FD;&#x6570;&#x90FD;&#x5F88;&#x76F4;&#x89C2;&#x3002;&#x5B83;&#x4EEC;&#x5C31;&#x662F;&#x63A5;&#x53D7;<code>{:lat x :lng y}</code>map,&#x7136;&#x540E;&#x8FDB;&#x884C;&#x8F6C;&#x6362;&#x7528;&#x4E8E;&#x521B;&#x5EFA;SVG&#x3002;</p>
+<blockquote>
+<p>With <em>svg.clj</em> all coded up, now make <em>core.clj</em> look like this:</p>
+</blockquote>
+<p>&#x4E0B;&#x9762;&#x662F;<em>core.clj</em>&#x7684;&#x4EE3;&#x7801;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">ns</span></span> the-divine-cheese-code.core</span><br><span class="line">  (<span class="symbol">:require</span> [clojure.java.browse <span class="symbol">:as</span> browse]</span><br><span class="line">            [the-divine-cheese-code.visualization.svg <span class="symbol">:refer</span> [xml]])</span><br><span class="line">  (<span class="symbol">:gen-class</span>))</span><br><span class="line"></span><br><span class="line">(<span class="name"><span class="builtin-name">def</span></span> heists [{<span class="symbol">:location</span> <span class="string">&quot;Cologne, Germany&quot;</span></span><br><span class="line">              <span class="symbol">:cheese-name</span> <span class="string">&quot;Archbishop Hildebold&apos;s Cheese Pretzel&quot;</span></span><br><span class="line">              <span class="symbol">:lat</span> <span class="number">50.95</span></span><br><span class="line">              <span class="symbol">:lng</span> <span class="number">6.97</span>}</span><br><span class="line">             {<span class="symbol">:location</span> <span class="string">&quot;Zurich, Switzerland&quot;</span></span><br><span class="line">              <span class="symbol">:cheese-name</span> <span class="string">&quot;The Standard Emmental&quot;</span></span><br><span class="line">              <span class="symbol">:lat</span> <span class="number">47.37</span></span><br><span class="line">              <span class="symbol">:lng</span> <span class="number">8.55</span>}</span><br><span class="line">             {<span class="symbol">:location</span> <span class="string">&quot;Marseille, France&quot;</span></span><br><span class="line">              <span class="symbol">:cheese-name</span> <span class="string">&quot;Le Fromage de Cosquer&quot;</span></span><br><span class="line">              <span class="symbol">:lat</span> <span class="number">43.30</span></span><br><span class="line">              <span class="symbol">:lng</span> <span class="number">5.37</span>}</span><br><span class="line">             {<span class="symbol">:location</span> <span class="string">&quot;Zurich, Switzerland&quot;</span></span><br><span class="line">              <span class="symbol">:cheese-name</span> <span class="string">&quot;The Lesser Emmental&quot;</span></span><br><span class="line">              <span class="symbol">:lat</span> <span class="number">47.37</span></span><br><span class="line">              <span class="symbol">:lng</span> <span class="number">8.55</span>}</span><br><span class="line">             {<span class="symbol">:location</span> <span class="string">&quot;Vatican City&quot;</span></span><br><span class="line">              <span class="symbol">:cheese-name</span> <span class="string">&quot;The Cheese of Turin&quot;</span></span><br><span class="line">              <span class="symbol">:lat</span> <span class="number">41.90</span></span><br><span class="line">              <span class="symbol">:lng</span> <span class="number">12.45</span>}])</span><br><span class="line"></span><br><span class="line">(<span class="name"><span class="builtin-name">defn</span></span> url</span><br><span class="line">  [filename]</span><br><span class="line">  (<span class="name"><span class="builtin-name">str</span></span> <span class="string">&quot;file:///&quot;</span></span><br><span class="line">       (<span class="name">System/getProperty</span> <span class="string">&quot;user.dir&quot;</span>)</span><br><span class="line">       <span class="string">&quot;/&quot;</span></span><br><span class="line">       filename))</span><br><span class="line"></span><br><span class="line">(<span class="name"><span class="builtin-name">defn</span></span> template</span><br><span class="line">  [contents]</span><br><span class="line">  (<span class="name"><span class="builtin-name">str</span></span> <span class="string">&quot;&lt;style&gt;polyline { fill:none; stroke:#5881d8; stroke-width:3}&lt;/style&gt;&quot;</span></span><br><span class="line">       contents))</span><br><span class="line"></span><br><span class="line">(<span class="name"><span class="builtin-name">defn</span></span> -main</span><br><span class="line">  [&amp; args]</span><br><span class="line">  (<span class="name"><span class="builtin-name">let</span></span> [filename <span class="string">&quot;map.html&quot;</span>]</span><br><span class="line">    (<span class="name"><span class="builtin-name">-&gt;&gt;</span></span> heists</span><br><span class="line">         (<span class="name">xml</span> <span class="number">50</span> <span class="number">100</span>)</span><br><span class="line">         template</span><br><span class="line">         (<span class="name">spit</span> filename))</span><br><span class="line">    (<span class="name">browse/browse-url</span> (<span class="name">url</span> filename))))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Nothing too complicated is going on here. Within <code>-main</code> you build up the drawing using the <code>xml</code> and <code>template</code> functions, write the drawing to a file with <code>spit</code>, and then open it with <code>browse/browse-url</code>. You should try that now! Run <code>lein run</code> and you&#x2019;ll see something that looks like Figure 6-2.</p>
+</blockquote>
+<p>&#x8FD9;&#x91CC;&#x6CA1;&#x6709;&#x592A;&#x590D;&#x6742;&#x7684;&#x4E1C;&#x897F;&#x3002;<code>-main</code>&#x91CC;&#x7528;<code>xml</code>&#x548C;<code>template</code>&#x51FD;&#x6570;&#x5EFA;&#x7ACB;&#x4E86;&#x56FE;&#x5F62;,&#x7528;<code>spit</code>&#x51FD;&#x6570;&#x628A;&#x5B83;&#x5199;&#x5165;&#x4E00;&#x4E2A;&#x6587;&#x4EF6;&#xFF0C;&#x7136;&#x540E;&#x7528;<code>browse/browse-url</code>&#x6253;&#x5F00;&#x3002;&#x4F60;&#x5E94;&#x8BE5;&#x8BD5;&#x8BD5;&#xFF01;&#x8FD0;&#x884C;<code>lein run</code>,&#x4F60;&#x4F1A;&#x770B;&#x5230;&#x8FD9;&#x4E2A;:</p>
+<p><img src="/2016/07/29/brave-clojure-organization/lambda.png" alt="lamda"></p>
+<blockquote>
+<p>Wait a minute . . . that looks a lot like . . . that looks a lot like a lambda. Clojure&#x2019;s logo is a lambda . . . oh my god! Clojure, it was you this whole time!</p>
+</blockquote>
+<p>&#x7B49;&#x7B49;&#x2026;&#x8FD9;&#x770B;&#x8D77;&#x6765;&#x50CF;&#x4E2A;lambda&#x3002;Clojure&#x7684;log&#x662F;&#x4E2A;lambda&#x2026;&#x5929;&#x54EA;&#xFF01;&#x539F;&#x6765;&#x5F04;&#x4E86;&#x534A;&#x5929;&#x662F;&#x4F60;&#xFF01;</p>
+<blockquote>
+<p>Summary</p>
+</blockquote>
+<h2 id="&#x603B;&#x7ED3;"><a href="#&#x603B;&#x7ED3;" class="headerlink" title="&#x603B;&#x7ED3;"></a>&#x603B;&#x7ED3;</h2><blockquote>
+<p>You learned a lot in this chapter. At this point, you should have all the tools you need to start organizing your projects. You now know that namespaces organize maps between symbols and vars, and that vars are references to Clojure objects (data structures, functions, and so on). <code>def</code> stores an object and updates the current namespace with a map between a symbol and a var that points to the object. You can create private functions with <code>defn-</code>.</p>
+</blockquote>
+<p>&#x8FD9;&#x7AE0;&#x5B66;&#x4E86;&#x5F88;&#x591A;&#x3002;&#x73B0;&#x5728;&#x4F60;&#x5E94;&#x8BE5;&#x62E5;&#x6709;&#x4E86;&#x6240;&#x6709;&#x7EC4;&#x7EC7;&#x9879;&#x76EE;&#x7684;&#x5DE5;&#x5177;&#x3002;&#x73B0;&#x5728;&#x4F60;&#x77E5;&#x9053;&#x4E86;&#xFF1A;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x7EC4;&#x7EC7;&#x7B26;&#x53F7;&#x4E0E;&#x53D8;&#x91CF;&#x95F4;&#x7684;&#x6620;&#x5C04;&#xFF0C;&#x53D8;&#x91CF;&#x662F;&#x5BF9;Clojure&#x5BF9;&#x8C61;(&#x6570;&#x636E;&#x7ED3;&#x6784;&#xFF0C;&#x51FD;&#x6570;&#x7B49;&#x7B49;)&#x7684;&#x5F15;&#x7528;&#x3002;<code>def</code>&#x4FDD;&#x5B58;&#x4E86;&#x4E00;&#x4E2A;&#x5BF9;&#x8C61;&#xFF0C;&#x5E76;&#x7528;&#x4E00;&#x4E2A;&#x7B26;&#x53F7;&#x4E0E;&#x6307;&#x5411;&#x90A3;&#x4E2A;&#x5BF9;&#x8C61;&#x7684;&#x53D8;&#x91CF;&#x95F4;&#x7684;&#x6620;&#x5C04;&#x66F4;&#x65B0;&#x4E86;&#x5F53;&#x524D;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x3002;&#x7528;<code>defn-</code>&#x521B;&#x5EFA;&#x79C1;&#x6709;&#x51FD;&#x6570;&#x3002;</p>
+<blockquote>
+<p>Clojure lets you create namespaces with <code>create-ns</code>, but often it&#x2019;s more useful to use <code>in-ns</code>, which switches to the namespace as well. You&#x2019;ll probably only use these functions in the REPL. When you&#x2019;re in the REPL, you&#x2019;re always in the current namespace. When you&#x2019;re defining namespaces in a file rather than the REPL, you should use the <code>ns</code> macro, and there&#x2019;s a one-to-one relationship between a namespace and its path on the filesystem.</p>
+</blockquote>
+<p>&#x7528;<code>create-ns</code>&#x80FD;&#x521B;&#x5EFA;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#xFF0C;&#x4F46;&#x901A;&#x5E38;<code>in-ns</code>&#x66F4;&#x6709;&#x7528;&#xFF0C;&#x56E0;&#x4E3A;&#x5B83;&#x8FD8;&#x5207;&#x6362;&#x5230;&#x90A3;&#x4E2A;&#x547D;&#x540D;&#x3002;&#x8FD9;&#x4E9B;&#x4E00;&#x822C;&#x7528;&#x4E8E;REPL&#xFF0C;&#x5728;&#x6587;&#x4EF6;&#x91CC;&#x5E94;&#x8BE5;&#x4F7F;&#x7528;<code>ns</code>&#x5B8F;&#xFF0C;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x4E0E;&#x5176;&#x6587;&#x4EF6;&#x7CFB;&#x7EDF;&#x4E0A;&#x7684;&#x8DEF;&#x5F84;&#x6709;&#x4E00;&#x4E00;&#x5BF9;&#x5E94;&#x5173;&#x7CFB;&#x3002;</p>
+<blockquote>
+<p>You can refer to objects in other namespaces by using the fully qualified name, like <code>cheese.taxonomy/cheddars</code>. <code>refer</code> lets you use names from other namespaces without having to fully qualify them, and <code>alias</code> lets you use a shorter name for a namespace when you&#x2019;re writing out a fully qualified name.</p>
+</blockquote>
+<p>&#x4F7F;&#x7528;&#x5B8C;&#x5168;&#x9650;&#x5B9A;&#x7684;&#x540D;&#x5B57;&#x53EF;&#x4EE5;&#x5F15;&#x7528;&#x5176;&#x4ED6;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x7684;&#x5BF9;&#x8C61;&#xFF0C;&#x6BD4;&#x5982;<code>cheese.taxonomy/cheddars</code>&#x3002;<code>refer</code>&#x8BA9;&#x4F60;&#x80FD;&#x4E0D;&#x4F7F;&#x7528;&#x5B8C;&#x5168;&#x9650;&#x5B9A;&#x7684;&#x540D;&#x5B57;&#xFF0C;<code>alias</code>&#x8BA9;&#x4F60;&#x7ED9;&#x4E00;&#x4E2A;&#x5B8C;&#x5168;&#x9650;&#x5B9A;&#x7684;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x8D77;&#x4E00;&#x4E2A;&#x77ED;&#x7684;&#x522B;&#x540D;&#x3002;</p>
+<blockquote>
+<p><code>require</code> and <code>use</code> ensure that a namespace exists and is ready to be used, and optionally let you <code>refer</code> and <code>alias</code> the corresponding namespaces. You should use <code>ns</code> to call <code>require</code> and <code>use</code> in your source files. <a href="https://gist.github.com/ghoseb/287710/" target="_blank" rel="external">https://gist.github.com/ghoseb/287710/</a> is a great reference for all the vagaries of using <code>ns</code>.</p>
+</blockquote>
+<p><code>require</code>&#x548C;<code>use</code>&#x786E;&#x4FDD;&#x4E00;&#x4E2A;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x5B58;&#x5728;&#x5E76;&#x53EF;&#x7528;&#xFF0C;&#x4E5F;&#x53EF;&#x4EE5;<code>refter</code>&#x548C;<code>alias</code>&#x8FD9;&#x4E2A;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x3002;&#x6E90;&#x6587;&#x4EF6;&#x91CC;&#x5E94;&#x8BE5;&#x7528;<code>ns</code>&#x8C03;&#x7528;<code>require</code>&#x548C;<code>use</code>&#x3002;&#x8FD9;&#x662F;&#x4E2A;&#x5F88;&#x68D2;&#x7684;<code>ns</code>&#x4F7F;&#x7528;&#x53C2;&#x8003; <a href="https://gist.github.com/ghoseb/287710/" target="_blank" rel="external">https://gist.github.com/ghoseb/287710/</a></p>
+<blockquote>
+<p>Lastly and most importantly, it ain&#x2019;t easy being cheesy.</p>
+</blockquote>
+<p>&#x6700;&#x540E;&#xFF0C;&#x4E5F;&#x662F;&#x6700;&#x91CD;&#x8981;&#x7684;&#xFF0C;&#x5E72;&#x916A;&#x771F;&#x4E0D;&#x5BB9;&#x6613;&#x3002;</p>
+<p><img src="/2016/07/29/brave-clojure-organization/cheese.png" alt="cheese"></p>
+<hr>
+<p>&#x8BD1;&#x6587;&#x7ED3;&#x675F;&#x3002;</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Clojure/" rel="tag">#Clojure</a>
+          
+            <a href="/tags/Clojure-For-The-Branve-And-True/" rel="tag">#Clojure For The Branve And True</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/07/22/clojure-metaphysics/" rel="next" title="【译】第十章:Clojure哲学体系:Atom, Refs, Vars与抱抱僵尸">
+                <i class="fa fa-chevron-left"></i> 【译】第十章:Clojure哲学体系:Atom, Refs, Vars与抱抱僵尸
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://s.gravatar.com/avatar/954a8b1f4c32dbb5a11399ae5e236a5f?s=80"
+               alt="胡军" />
+          <p class="site-author-name" itemprop="name">胡军</p>
+          <p class="site-description motion-element" itemprop="description">immutable values from past</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">21</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+          
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/morrxy" target="_blank">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#图书馆般的项目"><span class="nav-number">1.</span> <span class="nav-text">图书馆般的项目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用def保存对象"><span class="nav-number">2.</span> <span class="nav-text">用def保存对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建并切换命名空间"><span class="nav-number">3.</span> <span class="nav-text">创建并切换命名空间</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#refer"><span class="nav-number">3.1.</span> <span class="nav-text">refer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#alias"><span class="nav-number">3.2.</span> <span class="nav-text">alias</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#真实项目组织"><span class="nav-number">4.</span> <span class="nav-text">真实项目组织</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#文件路径与命名空间名称的关系"><span class="nav-number">4.1.</span> <span class="nav-text">文件路径与命名空间名称的关系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#请求与使用命名空间"><span class="nav-number">4.2.</span> <span class="nav-text">请求与使用命名空间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ns宏"><span class="nav-number">4.3.</span> <span class="nav-text">ns宏</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#抓小偷"><span class="nav-number">5.</span> <span class="nav-text">抓小偷</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">胡军</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+
+  
+
+
+
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
+
+
+
+  
+  
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.scheme !== 'Pisces' && (CONFIG.sidebar.display === 'post' || CONFIG.sidebar.display === 'always')) {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'morrxy';
+      var disqus_identifier = '2016/07/29/brave-clojure-organization/';
+      var disqus_title = '【译】第六章:组织项目:图书管理员传奇';
+      var disqus_url = 'http://yoursite.com/2016/07/29/brave-clojure-organization/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+  
+  
+  
+
+  
+
+
+</body>
+</html>
