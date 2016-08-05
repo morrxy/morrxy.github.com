@@ -4037,55 +4037,6 @@
   </entry>
   
   <entry>
-    <title>HTTP and MVC</title>
-    <link href="http://yoursite.com/2013/09/17/http-and-mvc/"/>
-    <id>http://yoursite.com/2013/09/17/http-and-mvc/</id>
-    <published>2013-09-16T16:00:00.000Z</published>
-    <updated>2016-02-27T09:48:01.000Z</updated>
-    
-    <content type="html">&lt;h2 id=&quot;HTTP&quot;&gt;&lt;a href=&quot;#HTTP&quot; class=&quot;headerlink&quot; title=&quot;HTTP:&quot;&gt;&lt;/a&gt;HTTP:&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;Request&lt;ul&gt;
-&lt;li&gt;verb/method (GET or POST)&lt;/li&gt;
-&lt;li&gt;url&lt;/li&gt;
-&lt;li&gt;parameters&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Response&lt;ul&gt;
-&lt;li&gt;status code (200, 301, 404, 500)&lt;/li&gt;
-&lt;li&gt;payload&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Stateless: we have to rebuild the world at every request.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;MVC&quot;&gt;&lt;a href=&quot;#MVC&quot; class=&quot;headerlink&quot; title=&quot;MVC:&quot;&gt;&lt;/a&gt;MVC:&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;Model, View, Controller&lt;/li&gt;
-&lt;li&gt;Controller&lt;ul&gt;
-&lt;li&gt;routes to appropriate action based on request&lt;/li&gt;
-&lt;li&gt;action my talk to model, and then either redirect (301) or render view (200) as the response&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;Important-Sinatra-concepts&quot;&gt;&lt;a href=&quot;#Important-Sinatra-concepts&quot; class=&quot;headerlink&quot; title=&quot;Important Sinatra concepts:&quot;&gt;&lt;/a&gt;Important Sinatra concepts:&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;Rendering template allows access by template to ivars set up in action&lt;/li&gt;
-&lt;li&gt;Template have access seeeion hash&lt;/li&gt;
-&lt;li&gt;session&lt;/li&gt;
-&lt;li&gt;params&lt;/li&gt;
-&lt;/ul&gt;
-</content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;HTTP&quot;&gt;&lt;a href=&quot;#HTTP&quot; class=&quot;headerlink&quot; title=&quot;HTTP:&quot;&gt;&lt;/a&gt;HTTP:&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;Request&lt;ul&gt;
-&lt;li&gt;verb/method (GET or POST)&lt;/li&gt;
-&lt;li&gt;url
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
     <title>Tools of Modern Web Development</title>
     <link href="http://yoursite.com/2013/09/17/tools-of-modern-web-development/"/>
     <id>http://yoursite.com/2013/09/17/tools-of-modern-web-development/</id>
@@ -4173,6 +4124,55 @@
     <summary type="html">
     
       &lt;h2 id=&quot;juggle-many-layers-of-technologies-all-with-different-syntax-amp-behaviors-and-understand-how-they-integrate-with-each-other&quot;&gt;&lt;a hre
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>HTTP and MVC</title>
+    <link href="http://yoursite.com/2013/09/17/http-and-mvc/"/>
+    <id>http://yoursite.com/2013/09/17/http-and-mvc/</id>
+    <published>2013-09-16T16:00:00.000Z</published>
+    <updated>2016-02-27T09:48:01.000Z</updated>
+    
+    <content type="html">&lt;h2 id=&quot;HTTP&quot;&gt;&lt;a href=&quot;#HTTP&quot; class=&quot;headerlink&quot; title=&quot;HTTP:&quot;&gt;&lt;/a&gt;HTTP:&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;Request&lt;ul&gt;
+&lt;li&gt;verb/method (GET or POST)&lt;/li&gt;
+&lt;li&gt;url&lt;/li&gt;
+&lt;li&gt;parameters&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Response&lt;ul&gt;
+&lt;li&gt;status code (200, 301, 404, 500)&lt;/li&gt;
+&lt;li&gt;payload&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Stateless: we have to rebuild the world at every request.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;MVC&quot;&gt;&lt;a href=&quot;#MVC&quot; class=&quot;headerlink&quot; title=&quot;MVC:&quot;&gt;&lt;/a&gt;MVC:&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;Model, View, Controller&lt;/li&gt;
+&lt;li&gt;Controller&lt;ul&gt;
+&lt;li&gt;routes to appropriate action based on request&lt;/li&gt;
+&lt;li&gt;action my talk to model, and then either redirect (301) or render view (200) as the response&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;Important-Sinatra-concepts&quot;&gt;&lt;a href=&quot;#Important-Sinatra-concepts&quot; class=&quot;headerlink&quot; title=&quot;Important Sinatra concepts:&quot;&gt;&lt;/a&gt;Important Sinatra concepts:&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;Rendering template allows access by template to ivars set up in action&lt;/li&gt;
+&lt;li&gt;Template have access seeeion hash&lt;/li&gt;
+&lt;li&gt;session&lt;/li&gt;
+&lt;li&gt;params&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;HTTP&quot;&gt;&lt;a href=&quot;#HTTP&quot; class=&quot;headerlink&quot; title=&quot;HTTP:&quot;&gt;&lt;/a&gt;HTTP:&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;Request&lt;ul&gt;
+&lt;li&gt;verb/method (GET or POST)&lt;/li&gt;
+&lt;li&gt;url
     
     </summary>
     
@@ -4378,58 +4378,39 @@ module Fetchable
   </entry>
   
   <entry>
-    <title>Ruby class template</title>
-    <link href="http://yoursite.com/2013/09/11/ruby-class-template/"/>
-    <id>http://yoursite.com/2013/09/11/ruby-class-template/</id>
+    <title>Ruby method scope</title>
+    <link href="http://yoursite.com/2013/09/11/ruby-method-scope/"/>
+    <id>http://yoursite.com/2013/09/11/ruby-method-scope/</id>
     <published>2013-09-10T16:00:00.000Z</published>
-    <updated>2016-02-27T09:46:30.000Z</updated>
+    <updated>2016-02-27T09:46:44.000Z</updated>
     
-    <content type="html">&lt;pre&gt;&lt;code&gt;class Dog
-  attr_accessor :name, :height, :weight
-
-  @@count = 0
-
-  def initialize(name, height, weight)
-    @name = name
-    @height = height
-    @weight = weight
-    @@count += 1
-  end
-
-  def bark
-    &amp;quot;#{ name } bark!&amp;quot;
-  end
-
-  def info
-    &amp;quot;#{ name } weights #{ weight } lbs and is #{ height } feet tall&amp;quot;
-  end
-
-  def update_info(n, h, w)
-    self.name = n
-    self.height = h
-    self.weight = w
-  end
-
+    <content type="html">&lt;h2 id=&quot;Ruby-method-scope-convention&quot;&gt;&lt;a href=&quot;#Ruby-method-scope-convention&quot; class=&quot;headerlink&quot; title=&quot;Ruby method scope convention&quot;&gt;&lt;/a&gt;Ruby method scope convention&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;Ruby method not have a strict pass by value or pass by reference.&lt;/li&gt;
+&lt;li&gt;if you passing an argument, and the argument calls a method that mutates the caller which may or may not have a &lt;code&gt;!&lt;/code&gt;, then it&amp;#x2019;s going to change that object.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;This is very common source bug.&lt;/p&gt;
+&lt;h2 id=&quot;example&quot;&gt;&lt;a href=&quot;#example&quot; class=&quot;headerlink&quot; title=&quot;example&quot;&gt;&lt;/a&gt;example&lt;/h2&gt;&lt;h3 id=&quot;pass-by-value-not-mutate-argument-in-method&quot;&gt;&lt;a href=&quot;#pass-by-value-not-mutate-argument-in-method&quot; class=&quot;headerlink&quot; title=&quot;pass by value(not mutate argument in method):&quot;&gt;&lt;/a&gt;pass by value(not mutate argument in method):&lt;/h3&gt;&lt;pre&gt;&lt;code&gt;a = [1, 2, 1]
+def my_method(a)
+  a.uniq
 end
-
-teddy = Dog.new(&amp;apos;teddy&amp;apos;, 3, 100)
-fido = Dog.new(&amp;apos;fido&amp;apos;, 1.5, 150)
-
-puts teddy.info
-teddy.update_info(&amp;apos;ted&amp;apos;, 2, 90)
-puts teddy.info
+puts a
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;will produce:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;1
+2
+1
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&quot;pass-by-reference-mutate-argument-in-method&quot;&gt;&lt;a href=&quot;#pass-by-reference-mutate-argument-in-method&quot; class=&quot;headerlink&quot; title=&quot;pass by reference(mutate argument in method):&quot;&gt;&lt;/a&gt;pass by reference(mutate argument in method):&lt;/h3&gt;&lt;pre&gt;&lt;code&gt;a = [1, 2, 1]
+def my_method(a)
+  a.uniq!
+end
+puts a
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;will produce:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;1
+2
 &lt;/code&gt;&lt;/pre&gt;</content>
     
     <summary type="html">
     
-      &lt;pre&gt;&lt;code&gt;class Dog
-  attr_accessor :name, :height, :weight
-
-  @@count = 0
-
-  def initialize(name, height, weight)
-    @name = name
-    @he
+      &lt;h2 id=&quot;Ruby-method-scope-convention&quot;&gt;&lt;a href=&quot;#Ruby-method-scope-convention&quot; class=&quot;headerlink&quot; title=&quot;Ruby method scope convention&quot;&gt;&lt;/a&gt;Ru
     
     </summary>
     

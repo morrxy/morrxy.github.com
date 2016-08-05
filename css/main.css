@@ -1545,7 +1545,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #ac04ee;
+  background: #5b4fff;
 }
 .sidebar-nav {
   margin: 0 0 20px;
@@ -2473,4 +2473,27 @@ body {
 }
 .feed-link a i {
   color: #555;
+}
+.site-author-image {
+  float: none;
+  margin: 0 auto;
+  max-width: 98%;
+}
+.site-author-name,
+.site-description {
+  text-align: center;
+}
+.site-state {
+  text-align: center;
+}
+.post-more-link .btn:hover {
+  border-color: #007dc5;
+  color: #fff;
+  background: #007dc5;
+}
+.site-subtitle {
+  font-size: 16px;
+}
+.back-to-top {
+  background-color: #007dc5;
 }

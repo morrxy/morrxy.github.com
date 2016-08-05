@@ -218,8 +218,8 @@
             
               
                 
-                <a class="post-title-link" href="/2013/09/11/ruby-method-scope/" itemprop="url">
-                  Ruby method scope
+                <a class="post-title-link" href="/2013/09/11/ruby-class-template/" itemprop="url">
+                  Ruby class template
                 </a>
               
             
@@ -243,8 +243,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2013/09/11/ruby-method-scope/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2013/09/11/ruby-method-scope/" itemprop="commentsCount"></span>
+                <a href="/2013/09/11/ruby-class-template/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2013/09/11/ruby-class-template/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -268,33 +268,45 @@
       
         
           
-          Ruby method scope convention
-Ruby method not have a strict pass by value or pass by reference.
-if you passing an argument, and the argument calls a method that mutates the caller which may or may not have a !, then it&#x2019;s going to change that object.
+          class Dog
+  attr_accessor :name, :height, :weight
 
-This is very common source bug.
-examplepass by value(not mutate argument in method):a = [1, 2, 1]
-def my_method(a)
-  a.uniq
+  @@count = 0
+
+  def initialize(name, height, weight)
+    @name = name
+    @height = height
+    @weight = weight
+    @@count += 1
+  end
+
+  def bark
+    &quot;#{ name } bark!&quot;
+  end
+
+  def info
+    &quot;#{ name } weights #{ weight } lbs and is #{ height } feet tall&quot;
+  end
+
+  def update_info(n, h, w)
+    self.name = n
+    self.height = h
+    self.weight = w
+  end
+
 end
-puts a
-will produce:
-1
-2
-1
-pass by reference(mutate argument in method):a = [1, 2, 1]
-def my_method(a)
-  a.uniq!
-end
-puts a
-will produce:
-1
-2
+
+teddy = Dog.new(&apos;teddy&apos;, 3, 100)
+fido = Dog.new(&apos;fido&apos;, 1.5, 150)
+
+puts teddy.info
+teddy.update_info(&apos;ted&apos;, 2, 90)
+puts teddy.info
 
           
 
           <div class="post-more-link text-center">
-            <a class="btn" href="/2013/09/11/ruby-method-scope/#more" rel="contents">
+            <a class="btn" href="/2013/09/11/ruby-class-template/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
