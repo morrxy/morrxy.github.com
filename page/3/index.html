@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next mist use-motion">
+<html class="theme-next pisces use-motion">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
@@ -59,23 +59,23 @@
 
 
 
-<meta name="description" content="immutable values from past">
+<meta name="description" content="学习是一种生活方式">
 <meta property="og:type" content="website">
 <meta property="og:title" content="胡军的网络日志">
 <meta property="og:url" content="http://yoursite.com/page/3/index.html">
 <meta property="og:site_name" content="胡军的网络日志">
-<meta property="og:description" content="immutable values from past">
+<meta property="og:description" content="学习是一种生活方式">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="胡军的网络日志">
-<meta name="twitter:description" content="immutable values from past">
+<meta name="twitter:description" content="学习是一种生活方式">
 
 
 
 <script type="text/javascript" id="hexo.configuration">
   var NexT = window.NexT || {};
   var CONFIG = {
-    scheme: 'Mist',
-    sidebar: {"position":"left","display":"post"},
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"post"},
     fancybox: true,
     motion: true,
     duoshuo: {
@@ -106,7 +106,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left 
+  <div class="container one-collumn sidebar-position-right 
    page-home 
  ">
     <div class="headband"></div>
@@ -122,7 +122,7 @@
       <span class="logo-line-after"><i></i></span>
     </a>
   </div>
-  <p class="site-subtitle"></p>
+  <p class="site-subtitle">pursue next update</p>
 </div>
 
 <div class="site-nav-toggle">
@@ -150,6 +150,16 @@
         </li>
       
         
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
@@ -171,39 +181,9 @@
       
 
       
-        <li class="menu-item menu-item-search">
-          
-            <a href="#" class="st-search-show-outputs">
-          
-            
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
-            
-            搜索
-          </a>
-        </li>
-      
     </ul>
   
 
-  
-    <div class="site-search">
-      
-  <form class="site-search-form">
-  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
-</form>
-
-<script type="text/javascript">
-  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
-    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
-    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
-  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
-
-  _st('install', 'wmG9FieA3KCB8x2CXpVc','2.0.0');
-</script>
-
-
-
-    </div>
   
 </nav>
 
@@ -238,8 +218,8 @@
             
               
                 
-                <a class="post-title-link" href="/2013/09/11/ruby-class-template/" itemprop="url">
-                  Ruby class template
+                <a class="post-title-link" href="/2013/09/11/ruby-method-scope/" itemprop="url">
+                  Ruby method scope
                 </a>
               
             
@@ -263,8 +243,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2013/09/11/ruby-class-template/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2013/09/11/ruby-class-template/" itemprop="commentsCount"></span>
+                <a href="/2013/09/11/ruby-method-scope/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2013/09/11/ruby-method-scope/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -288,45 +268,33 @@
       
         
           
-          class Dog
-  attr_accessor :name, :height, :weight
+          Ruby method scope convention
+Ruby method not have a strict pass by value or pass by reference.
+if you passing an argument, and the argument calls a method that mutates the caller which may or may not have a !, then it&#x2019;s going to change that object.
 
-  @@count = 0
-
-  def initialize(name, height, weight)
-    @name = name
-    @height = height
-    @weight = weight
-    @@count += 1
-  end
-
-  def bark
-    &quot;#{ name } bark!&quot;
-  end
-
-  def info
-    &quot;#{ name } weights #{ weight } lbs and is #{ height } feet tall&quot;
-  end
-
-  def update_info(n, h, w)
-    self.name = n
-    self.height = h
-    self.weight = w
-  end
-
+This is very common source bug.
+examplepass by value(not mutate argument in method):a = [1, 2, 1]
+def my_method(a)
+  a.uniq
 end
-
-teddy = Dog.new(&apos;teddy&apos;, 3, 100)
-fido = Dog.new(&apos;fido&apos;, 1.5, 150)
-
-puts teddy.info
-teddy.update_info(&apos;ted&apos;, 2, 90)
-puts teddy.info
+puts a
+will produce:
+1
+2
+1
+pass by reference(mutate argument in method):a = [1, 2, 1]
+def my_method(a)
+  a.uniq!
+end
+puts a
+will produce:
+1
+2
 
           
 
           <div class="post-more-link text-center">
-            <a class="btn" href="/2013/09/11/ruby-class-template/#more" rel="contents">
+            <a class="btn" href="/2013/09/11/ruby-method-scope/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -399,7 +367,7 @@ puts teddy.info
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
                 <a href="/2013/09/10/use-vpn-for-git/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2013/09/10/use-vpn-for-git/" itemprop="commentsCount"></span>
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2013/09/10/use-vpn-for-git/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -499,7 +467,7 @@ maybe(and very possible) beacuse of GFW, use VPN can solve this problem.
                src="https://s.gravatar.com/avatar/954a8b1f4c32dbb5a11399ae5e236a5f?s=80"
                alt="胡军" />
           <p class="site-author-name" itemprop="name">胡军</p>
-          <p class="site-description motion-element" itemprop="description">immutable values from past</p>
+          <p class="site-description motion-element" itemprop="description">学习是一种生活方式</p>
         </div>
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
@@ -538,6 +506,14 @@ maybe(and very possible) beacuse of GFW, use VPN can solve this problem.
                 <a href="https://github.com/morrxy" target="_blank">
                   
                     <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/morrxy" target="_blank">
+                  
+                    <i class="fa fa-twitter"></i> Twitter
                   
                 </a>
               </span>
@@ -583,7 +559,7 @@ maybe(and very possible) beacuse of GFW, use VPN can solve this problem.
 <div class="theme-info">
   主题 -
   <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Mist
+    NexT.Pisces
   </a>
 </div>
 
@@ -637,6 +613,13 @@ maybe(and very possible) beacuse of GFW, use VPN can solve this problem.
   
   
 
+
+  <script type="text/javascript" src="/js/src/affix.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=0.5.0"></script>
+
+
+
   
 
   
@@ -648,28 +631,28 @@ maybe(and very possible) beacuse of GFW, use VPN can solve this problem.
 
   
 
-
-
+  
+    
   
 
-    <script type="text/javascript">
-      var disqus_shortname = 'morrxy';
-      var disqus_identifier = 'page/3/index.html';
-      var disqus_title = '';
-      var disqus_url = '';
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"morrxy"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
 
-      function run_disqus_script(disqus_script){
-        var dsq = document.createElement('script');
-        dsq.type = 'text/javascript';
-        dsq.async = true;
-        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-      }
-
-      run_disqus_script('count.js');
-      
-    </script>
   
+    
+  
+
+
 
 
 

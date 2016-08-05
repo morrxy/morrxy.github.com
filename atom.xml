@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>胡军的网络日志</title>
-  
+  <subtitle>pursue next update</subtitle>
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2016-08-02T14:11:30.000Z</updated>
+  <updated>2016-08-04T13:55:33.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -16,11 +16,11 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>【译】第十一章:用core.async掌握并发过程</title>
+    <title>【译】Brave Clojure 第十一章:用core.async掌握并发过程</title>
     <link href="http://yoursite.com/2016/08/02/brave-clojure-core-async/"/>
     <id>http://yoursite.com/2016/08/02/brave-clojure-core-async/</id>
     <published>2016-08-02T14:11:30.000Z</published>
-    <updated>2016-08-02T14:11:30.000Z</updated>
+    <updated>2016-08-04T13:55:33.000Z</updated>
     
     <content type="html">&lt;p&gt;&amp;#x672C;&amp;#x6587;&amp;#x662F;&amp;#x6211;&amp;#x5BF9;Clojure&amp;#x4E66;&amp;#x7C4D; &lt;a href=&quot;http://www.braveclojure.com/clojure-for-the-brave-and-true/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;CLOJURE FOR THE BRAVE AND TRUE&lt;/a&gt;&amp;#x7B2C;&amp;#x5341;&amp;#x4E00;&amp;#x7AE0;&lt;a href=&quot;http://www.braveclojure.com/core-async/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Mastering Concurrent Processes with core.async&lt;/a&gt; &amp;#x505A;&amp;#x7684;&amp;#x7FFB;&amp;#x8BD1;&amp;#x3002;&amp;#x7FFB;&amp;#x8BD1;&amp;#x5F62;&amp;#x5F0F;&amp;#xFF0C;&amp;#x4E2D;&amp;#x82F1;&amp;#x5BF9;&amp;#x7167;&amp;#xFF0C;&amp;#x82F1;&amp;#x6587;&amp;#x5F15;&amp;#x7528;&amp;#x8DDF;&amp;#x7740;&amp;#x4E2D;&amp;#x6587;&amp;#x7FFB;&amp;#x8BD1;&amp;#x3002;&amp;#x5982;&amp;#x6709;&amp;#x9519;&amp;#x8BEF;&amp;#xFF0C;&amp;#x5728;&amp;#x6240;&amp;#x96BE;&amp;#x514D;&amp;#xFF0C;&amp;#x6B22;&amp;#x8FCE;&amp;#x6307;&amp;#x6B63;&amp;#x3002;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://morrxy.github.io/tags/Clojure-For-The-Branve-And-True/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;&amp;#x5176;&amp;#x4ED6;&amp;#x7AE0;&amp;#x7684;&amp;#x7FFB;&amp;#x8BD1;&amp;#x5728;&amp;#x8FD9;&amp;#x91CC;&lt;/a&gt;&lt;/p&gt;
@@ -376,11 +376,11 @@
   </entry>
   
   <entry>
-    <title>【译】第六章:组织项目:图书管理员传奇</title>
+    <title>【译】Brave Clojure 第六章:组织项目:图书管理员传奇</title>
     <link href="http://yoursite.com/2016/07/29/brave-clojure-organization/"/>
     <id>http://yoursite.com/2016/07/29/brave-clojure-organization/</id>
     <published>2016-07-29T09:50:04.000Z</published>
-    <updated>2016-07-29T09:50:04.000Z</updated>
+    <updated>2016-08-04T13:55:40.000Z</updated>
     
     <content type="html">&lt;p&gt;&amp;#x672C;&amp;#x6587;&amp;#x662F;&amp;#x6211;&amp;#x5BF9;Clojure&amp;#x4E66;&amp;#x7C4D; &lt;a href=&quot;http://www.braveclojure.com/clojure-for-the-brave-and-true/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;CLOJURE FOR THE BRAVE AND TRUE&lt;/a&gt;&amp;#x7B2C;&amp;#x516D;&amp;#x7AE0;&lt;a href=&quot;http://www.braveclojure.com/organization/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Organizing Your Project: A Librarian&amp;#x2019;s Tale&lt;/a&gt; &amp;#x505A;&amp;#x7684;&amp;#x7FFB;&amp;#x8BD1;&amp;#x3002;&amp;#x7FFB;&amp;#x8BD1;&amp;#x5F62;&amp;#x5F0F;&amp;#xFF0C;&amp;#x4E2D;&amp;#x82F1;&amp;#x5BF9;&amp;#x7167;&amp;#xFF0C;&amp;#x82F1;&amp;#x6587;&amp;#x5F15;&amp;#x7528;&amp;#x8DDF;&amp;#x7740;&amp;#x4E2D;&amp;#x6587;&amp;#x7FFB;&amp;#x8BD1;&amp;#x3002;&amp;#x5982;&amp;#x6709;&amp;#x9519;&amp;#x8BEF;&amp;#xFF0C;&amp;#x5728;&amp;#x6240;&amp;#x96BE;&amp;#x514D;&amp;#xFF0C;&amp;#x6B22;&amp;#x8FCE;&amp;#x6307;&amp;#x6B63;&amp;#x3002;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://morrxy.github.io/tags/Clojure-For-The-Branve-And-True/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;&amp;#x5176;&amp;#x4ED6;&amp;#x7AE0;&amp;#x7684;&amp;#x7FFB;&amp;#x8BD1;&amp;#x5728;&amp;#x8FD9;&amp;#x91CC;&lt;/a&gt;&lt;/p&gt;
@@ -1072,11 +1072,11 @@
   </entry>
   
   <entry>
-    <title>【译】第十章:Clojure哲学体系:Atom, Refs, Vars与抱抱僵尸</title>
+    <title>【译】Brave Clojure 第十章:Clojure哲学体系:Atom, Refs, Vars与抱抱僵尸</title>
     <link href="http://yoursite.com/2016/07/22/clojure-metaphysics/"/>
     <id>http://yoursite.com/2016/07/22/clojure-metaphysics/</id>
     <published>2016-07-22T13:51:52.000Z</published>
-    <updated>2016-07-22T14:00:00.000Z</updated>
+    <updated>2016-08-04T13:55:46.000Z</updated>
     
     <content type="html">&lt;p&gt;&amp;#x672C;&amp;#x6587;&amp;#x662F;&amp;#x6211;&amp;#x5BF9;Clojure&amp;#x4E66;&amp;#x7C4D; &lt;a href=&quot;http://www.braveclojure.com/clojure-for-the-brave-and-true/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;CLOJURE FOR THE BRAVE AND TRUE&lt;/a&gt;&amp;#x7B2C;&amp;#x5341;&amp;#x7AE0;&lt;a href=&quot;http://www.braveclojure.com/zombie-metaphysics/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Clojure Metaphysics: Atoms, Refs, Vars, and Cuddle Zombies&lt;/a&gt; &amp;#x505A;&amp;#x7684;&amp;#x7FFB;&amp;#x8BD1;&amp;#x3002;&amp;#x7FFB;&amp;#x8BD1;&amp;#x5F62;&amp;#x5F0F;&amp;#xFF0C;&amp;#x4E2D;&amp;#x82F1;&amp;#x5BF9;&amp;#x7167;&amp;#xFF0C;&amp;#x82F1;&amp;#x6587;&amp;#x5F15;&amp;#x7528;&amp;#x8DDF;&amp;#x7740;&amp;#x4E2D;&amp;#x6587;&amp;#x7FFB;&amp;#x8BD1;&amp;#x3002;&amp;#x5982;&amp;#x6709;&amp;#x9519;&amp;#x8BEF;&amp;#xFF0C;&amp;#x5728;&amp;#x6240;&amp;#x96BE;&amp;#x514D;&amp;#xFF0C;&amp;#x6B22;&amp;#x8FCE;&amp;#x6307;&amp;#x6B63;&amp;#x3002;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://morrxy.github.io/tags/Clojure-For-The-Branve-And-True/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;&amp;#x5176;&amp;#x4ED6;&amp;#x7AE0;&amp;#x7684;&amp;#x7FFB;&amp;#x8BD1;&amp;#x5728;&amp;#x8FD9;&amp;#x91CC;&lt;/a&gt;&amp;#x3002;&lt;/p&gt;
@@ -1941,11 +1941,11 @@
   </entry>
   
   <entry>
-    <title>【译】第九章:并发与并行编程</title>
+    <title>【译】Brave Clojure 第九章:并发与并行编程</title>
     <link href="http://yoursite.com/2016/07/15/braveclojure-concurrency/"/>
     <id>http://yoursite.com/2016/07/15/braveclojure-concurrency/</id>
     <published>2016-07-15T14:37:55.000Z</published>
-    <updated>2016-08-02T06:31:02.000Z</updated>
+    <updated>2016-08-04T13:55:53.000Z</updated>
     
     <content type="html">&lt;p&gt;&amp;#x672C;&amp;#x6587;&amp;#x662F;&amp;#x6211;&amp;#x5BF9;Clojure&amp;#x4E66;&amp;#x7C4D; &lt;a href=&quot;http://www.braveclojure.com/clojure-for-the-brave-and-true/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;CLOJURE FOR THE BRAVE AND TRUE&lt;/a&gt;&amp;#x7B2C;&amp;#x4E5D;&amp;#x7AE0;&lt;a href=&quot;http://www.braveclojure.com/concurrency/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;The Sacred Art of Concurrent and Parallel Programming&lt;/a&gt; &amp;#x505A;&amp;#x7684;&amp;#x7FFB;&amp;#x8BD1;&amp;#x3002;&amp;#x7FFB;&amp;#x8BD1;&amp;#x5F62;&amp;#x5F0F;&amp;#xFF0C;&amp;#x4E2D;&amp;#x82F1;&amp;#x5BF9;&amp;#x7167;&amp;#xFF0C;&amp;#x82F1;&amp;#x6587;&amp;#x5F15;&amp;#x7528;&amp;#x8DDF;&amp;#x7740;&amp;#x4E2D;&amp;#x6587;&amp;#x7FFB;&amp;#x8BD1;&amp;#x3002;&amp;#x5982;&amp;#x6709;&amp;#x9519;&amp;#x8BEF;&amp;#xFF0C;&amp;#x5728;&amp;#x6240;&amp;#x96BE;&amp;#x514D;&amp;#xFF0C;&amp;#x6B22;&amp;#x8FCE;&amp;#x6307;&amp;#x6B63;&amp;#x3002;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://morrxy.github.io/tags/Clojure-For-The-Branve-And-True/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;&amp;#x5176;&amp;#x4ED6;&amp;#x7AE0;&amp;#x7684;&amp;#x7FFB;&amp;#x8BD1;&amp;#x5728;&amp;#x8FD9;&amp;#x91CC;&lt;/a&gt;&lt;/p&gt;
@@ -2610,11 +2610,11 @@
   </entry>
   
   <entry>
-    <title>【译】第八章:写宏</title>
+    <title>【译】Brave Clojure 第八章:写宏</title>
     <link href="http://yoursite.com/2016/05/20/braveclojure-writing-macros/"/>
     <id>http://yoursite.com/2016/05/20/braveclojure-writing-macros/</id>
     <published>2016-05-20T09:03:14.000Z</published>
-    <updated>2016-07-22T14:00:49.000Z</updated>
+    <updated>2016-08-04T13:56:01.000Z</updated>
     
     <content type="html">&lt;p&gt;&amp;#x672C;&amp;#x6587;&amp;#x662F;&amp;#x6211;&amp;#x5BF9;Clojure&amp;#x4E66;&amp;#x7C4D; &lt;a href=&quot;http://www.braveclojure.com/clojure-for-the-brave-and-true/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;CLOJURE FOR THE BRAVE AND TRUE&lt;/a&gt;&amp;#x7B2C;&amp;#x516B;&amp;#x7AE0;&lt;a href=&quot;http://www.braveclojure.com/writing-macros/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Writing Macros&lt;/a&gt; &amp;#x505A;&amp;#x7684;&amp;#x7FFB;&amp;#x8BD1;&amp;#x3002;&amp;#x7FFB;&amp;#x8BD1;&amp;#x5F62;&amp;#x5F0F;&amp;#xFF0C;&amp;#x4E2D;&amp;#x82F1;&amp;#x5BF9;&amp;#x7167;&amp;#xFF0C;&amp;#x82F1;&amp;#x6587;&amp;#x5F15;&amp;#x7528;&amp;#x8DDF;&amp;#x7740;&amp;#x4E2D;&amp;#x6587;&amp;#x7FFB;&amp;#x8BD1;&amp;#x3002;&amp;#x5982;&amp;#x6709;&amp;#x9519;&amp;#x8BEF;&amp;#xFF0C;&amp;#x5728;&amp;#x6240;&amp;#x96BE;&amp;#x514D;&amp;#xFF0C;&amp;#x6B22;&amp;#x8FCE;&amp;#x6307;&amp;#x6B63;&amp;#x3002;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://morrxy.github.io/tags/Clojure-For-The-Branve-And-True/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;&amp;#x5176;&amp;#x4ED6;&amp;#x7AE0;&amp;#x7684;&amp;#x7FFB;&amp;#x8BD1;&amp;#x5728;&amp;#x8FD9;&amp;#x91CC;&lt;/a&gt;&lt;/p&gt;
@@ -3262,11 +3262,11 @@
   </entry>
   
   <entry>
-    <title>【译】第七章:Clojure炼金术:读取，求值，宏</title>
+    <title>【译】Brave Clojure 第七章:Clojure炼金术:读取，求值，宏</title>
     <link href="http://yoursite.com/2016/05/11/braveclojure-read-and-eval/"/>
     <id>http://yoursite.com/2016/05/11/braveclojure-read-and-eval/</id>
     <published>2016-05-11T07:42:47.000Z</published>
-    <updated>2016-07-22T14:01:00.000Z</updated>
+    <updated>2016-08-04T13:56:08.000Z</updated>
     
     <content type="html">&lt;p&gt;&amp;#x672C;&amp;#x6587;&amp;#x662F;&amp;#x6211;&amp;#x5BF9;Clojure&amp;#x4E66;&amp;#x7C4D; &lt;a href=&quot;http://www.braveclojure.com/clojure-for-the-brave-and-true/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;CLOJURE FOR THE BRAVE AND TRUE&lt;/a&gt;&amp;#x7B2C;&amp;#x4E03;&amp;#x7AE0;&lt;a href=&quot;http://www.braveclojure.com/read-and-eval/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Clojure Alchemy: Reading, Evaluation, and Macros&lt;/a&gt; &amp;#x505A;&amp;#x7684;&amp;#x7FFB;&amp;#x8BD1;&amp;#x3002;&amp;#x7FFB;&amp;#x8BD1;&amp;#x5F62;&amp;#x5F0F;&amp;#xFF0C;&amp;#x4E2D;&amp;#x82F1;&amp;#x5BF9;&amp;#x7167;&amp;#xFF0C;&amp;#x82F1;&amp;#x6587;&amp;#x5F15;&amp;#x7528;&amp;#x8DDF;&amp;#x7740;&amp;#x4E2D;&amp;#x6587;&amp;#x7FFB;&amp;#x8BD1;&amp;#x3002;&amp;#x5982;&amp;#x6709;&amp;#x9519;&amp;#x8BEF;&amp;#xFF0C;&amp;#x5728;&amp;#x6240;&amp;#x96BE;&amp;#x514D;&amp;#xFF0C;&amp;#x6B22;&amp;#x8FCE;&amp;#x6307;&amp;#x6B63;&amp;#x3002;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://morrxy.github.io/tags/Clojure-For-The-Branve-And-True/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;&amp;#x5176;&amp;#x4ED6;&amp;#x7AE0;&amp;#x7684;&amp;#x7FFB;&amp;#x8BD1;&amp;#x5728;&amp;#x8FD9;&amp;#x91CC;&lt;/a&gt;&lt;/p&gt;
@@ -4037,6 +4037,55 @@
   </entry>
   
   <entry>
+    <title>HTTP and MVC</title>
+    <link href="http://yoursite.com/2013/09/17/http-and-mvc/"/>
+    <id>http://yoursite.com/2013/09/17/http-and-mvc/</id>
+    <published>2013-09-16T16:00:00.000Z</published>
+    <updated>2016-02-27T09:48:01.000Z</updated>
+    
+    <content type="html">&lt;h2 id=&quot;HTTP&quot;&gt;&lt;a href=&quot;#HTTP&quot; class=&quot;headerlink&quot; title=&quot;HTTP:&quot;&gt;&lt;/a&gt;HTTP:&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;Request&lt;ul&gt;
+&lt;li&gt;verb/method (GET or POST)&lt;/li&gt;
+&lt;li&gt;url&lt;/li&gt;
+&lt;li&gt;parameters&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Response&lt;ul&gt;
+&lt;li&gt;status code (200, 301, 404, 500)&lt;/li&gt;
+&lt;li&gt;payload&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Stateless: we have to rebuild the world at every request.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;MVC&quot;&gt;&lt;a href=&quot;#MVC&quot; class=&quot;headerlink&quot; title=&quot;MVC:&quot;&gt;&lt;/a&gt;MVC:&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;Model, View, Controller&lt;/li&gt;
+&lt;li&gt;Controller&lt;ul&gt;
+&lt;li&gt;routes to appropriate action based on request&lt;/li&gt;
+&lt;li&gt;action my talk to model, and then either redirect (301) or render view (200) as the response&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;Important-Sinatra-concepts&quot;&gt;&lt;a href=&quot;#Important-Sinatra-concepts&quot; class=&quot;headerlink&quot; title=&quot;Important Sinatra concepts:&quot;&gt;&lt;/a&gt;Important Sinatra concepts:&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;Rendering template allows access by template to ivars set up in action&lt;/li&gt;
+&lt;li&gt;Template have access seeeion hash&lt;/li&gt;
+&lt;li&gt;session&lt;/li&gt;
+&lt;li&gt;params&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;HTTP&quot;&gt;&lt;a href=&quot;#HTTP&quot; class=&quot;headerlink&quot; title=&quot;HTTP:&quot;&gt;&lt;/a&gt;HTTP:&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;Request&lt;ul&gt;
+&lt;li&gt;verb/method (GET or POST)&lt;/li&gt;
+&lt;li&gt;url
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
     <title>Tools of Modern Web Development</title>
     <link href="http://yoursite.com/2013/09/17/tools-of-modern-web-development/"/>
     <id>http://yoursite.com/2013/09/17/tools-of-modern-web-development/</id>
@@ -4159,75 +4208,65 @@
   </entry>
   
   <entry>
-    <title>HTTP and MVC</title>
-    <link href="http://yoursite.com/2013/09/17/http-and-mvc/"/>
-    <id>http://yoursite.com/2013/09/17/http-and-mvc/</id>
-    <published>2013-09-16T16:00:00.000Z</published>
-    <updated>2016-02-27T09:48:01.000Z</updated>
-    
-    <content type="html">&lt;h2 id=&quot;HTTP&quot;&gt;&lt;a href=&quot;#HTTP&quot; class=&quot;headerlink&quot; title=&quot;HTTP:&quot;&gt;&lt;/a&gt;HTTP:&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;Request&lt;ul&gt;
-&lt;li&gt;verb/method (GET or POST)&lt;/li&gt;
-&lt;li&gt;url&lt;/li&gt;
-&lt;li&gt;parameters&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Response&lt;ul&gt;
-&lt;li&gt;status code (200, 301, 404, 500)&lt;/li&gt;
-&lt;li&gt;payload&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Stateless: we have to rebuild the world at every request.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;MVC&quot;&gt;&lt;a href=&quot;#MVC&quot; class=&quot;headerlink&quot; title=&quot;MVC:&quot;&gt;&lt;/a&gt;MVC:&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;Model, View, Controller&lt;/li&gt;
-&lt;li&gt;Controller&lt;ul&gt;
-&lt;li&gt;routes to appropriate action based on request&lt;/li&gt;
-&lt;li&gt;action my talk to model, and then either redirect (301) or render view (200) as the response&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;Important-Sinatra-concepts&quot;&gt;&lt;a href=&quot;#Important-Sinatra-concepts&quot; class=&quot;headerlink&quot; title=&quot;Important Sinatra concepts:&quot;&gt;&lt;/a&gt;Important Sinatra concepts:&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;Rendering template allows access by template to ivars set up in action&lt;/li&gt;
-&lt;li&gt;Template have access seeeion hash&lt;/li&gt;
-&lt;li&gt;session&lt;/li&gt;
-&lt;li&gt;params&lt;/li&gt;
-&lt;/ul&gt;
-</content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;HTTP&quot;&gt;&lt;a href=&quot;#HTTP&quot; class=&quot;headerlink&quot; title=&quot;HTTP:&quot;&gt;&lt;/a&gt;HTTP:&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;Request&lt;ul&gt;
-&lt;li&gt;verb/method (GET or POST)&lt;/li&gt;
-&lt;li&gt;url
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>process of design app&#39;s class and module</title>
-    <link href="http://yoursite.com/2013/09/12/process-of-design-apps-class-and-module/"/>
-    <id>http://yoursite.com/2013/09/12/process-of-design-apps-class-and-module/</id>
+    <title>Ruby&#39;s inheritance</title>
+    <link href="http://yoursite.com/2013/09/12/rubys-inheritance/"/>
+    <id>http://yoursite.com/2013/09/12/rubys-inheritance/</id>
     <published>2013-09-11T16:00:00.000Z</published>
-    <updated>2016-02-27T09:47:09.000Z</updated>
+    <updated>2016-02-27T09:47:43.000Z</updated>
     
-    <content type="html">&lt;ol&gt;
-&lt;li&gt;Write out the detailed specs&lt;/li&gt;
-&lt;li&gt;Extract out major nouns; these are your classes.&lt;/li&gt;
-&lt;li&gt;Extract out major verbs; these are your behaviors/methods.&lt;/li&gt;
-&lt;li&gt;Create objects out of those classes; these are your actors in your program.&lt;/li&gt;
-&lt;/ol&gt;
-</content>
+    <content type="html">&lt;pre&gt;&lt;code&gt;class Animal
+  attr_accessor :name
+
+  def initialize(name)
+    @name = name
+  end
+
+  def speak
+    &amp;quot;#{ name } is speaking!&amp;quot;
+  end
+end
+
+class Dog &amp;lt; Animal
+  def speak
+    &amp;quot;#{ name } is barking!&amp;quot;
+  end
+end
+
+class Cat &amp;lt; Animal
+end
+
+fido = Dog.new(&amp;apos;fido&amp;apos;)
+puts fido.name
+puts fido.speak
+
+kitty = Cat.new(&amp;apos;kitty&amp;apos;)
+puts kitty.name
+puts kitty.speak
+
+puts Dog.ancestors
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;produce&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;fido
+fido is barking!
+kitty
+kitty is speaking!
+Dog
+Animal
+Object
+Kernel
+BasicObject
+&lt;/code&gt;&lt;/pre&gt;</content>
     
     <summary type="html">
     
-      &lt;ol&gt;
-&lt;li&gt;Write out the detailed specs&lt;/li&gt;
-&lt;li&gt;Extract out major nouns; these are your classes.&lt;/li&gt;
-&lt;li&gt;Extract out major verbs; these are 
+      &lt;pre&gt;&lt;code&gt;class Animal
+  attr_accessor :name
+
+  def initialize(name)
+    @name = name
+  end
+
+  def speak
+    &amp;quot;#{ name } is speaking!&amp;q
     
     </summary>
     
@@ -4312,65 +4351,26 @@ module Fetchable
   </entry>
   
   <entry>
-    <title>Ruby&#39;s inheritance</title>
-    <link href="http://yoursite.com/2013/09/12/rubys-inheritance/"/>
-    <id>http://yoursite.com/2013/09/12/rubys-inheritance/</id>
+    <title>process of design app&#39;s class and module</title>
+    <link href="http://yoursite.com/2013/09/12/process-of-design-apps-class-and-module/"/>
+    <id>http://yoursite.com/2013/09/12/process-of-design-apps-class-and-module/</id>
     <published>2013-09-11T16:00:00.000Z</published>
-    <updated>2016-02-27T09:47:43.000Z</updated>
+    <updated>2016-02-27T09:47:09.000Z</updated>
     
-    <content type="html">&lt;pre&gt;&lt;code&gt;class Animal
-  attr_accessor :name
-
-  def initialize(name)
-    @name = name
-  end
-
-  def speak
-    &amp;quot;#{ name } is speaking!&amp;quot;
-  end
-end
-
-class Dog &amp;lt; Animal
-  def speak
-    &amp;quot;#{ name } is barking!&amp;quot;
-  end
-end
-
-class Cat &amp;lt; Animal
-end
-
-fido = Dog.new(&amp;apos;fido&amp;apos;)
-puts fido.name
-puts fido.speak
-
-kitty = Cat.new(&amp;apos;kitty&amp;apos;)
-puts kitty.name
-puts kitty.speak
-
-puts Dog.ancestors
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;produce&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;fido
-fido is barking!
-kitty
-kitty is speaking!
-Dog
-Animal
-Object
-Kernel
-BasicObject
-&lt;/code&gt;&lt;/pre&gt;</content>
+    <content type="html">&lt;ol&gt;
+&lt;li&gt;Write out the detailed specs&lt;/li&gt;
+&lt;li&gt;Extract out major nouns; these are your classes.&lt;/li&gt;
+&lt;li&gt;Extract out major verbs; these are your behaviors/methods.&lt;/li&gt;
+&lt;li&gt;Create objects out of those classes; these are your actors in your program.&lt;/li&gt;
+&lt;/ol&gt;
+</content>
     
     <summary type="html">
     
-      &lt;pre&gt;&lt;code&gt;class Animal
-  attr_accessor :name
-
-  def initialize(name)
-    @name = name
-  end
-
-  def speak
-    &amp;quot;#{ name } is speaking!&amp;q
+      &lt;ol&gt;
+&lt;li&gt;Write out the detailed specs&lt;/li&gt;
+&lt;li&gt;Extract out major nouns; these are your classes.&lt;/li&gt;
+&lt;li&gt;Extract out major verbs; these are 
     
     </summary>
     
@@ -4378,39 +4378,58 @@ BasicObject
   </entry>
   
   <entry>
-    <title>Ruby method scope</title>
-    <link href="http://yoursite.com/2013/09/11/ruby-method-scope/"/>
-    <id>http://yoursite.com/2013/09/11/ruby-method-scope/</id>
+    <title>Ruby class template</title>
+    <link href="http://yoursite.com/2013/09/11/ruby-class-template/"/>
+    <id>http://yoursite.com/2013/09/11/ruby-class-template/</id>
     <published>2013-09-10T16:00:00.000Z</published>
-    <updated>2016-02-27T09:46:44.000Z</updated>
+    <updated>2016-02-27T09:46:30.000Z</updated>
     
-    <content type="html">&lt;h2 id=&quot;Ruby-method-scope-convention&quot;&gt;&lt;a href=&quot;#Ruby-method-scope-convention&quot; class=&quot;headerlink&quot; title=&quot;Ruby method scope convention&quot;&gt;&lt;/a&gt;Ruby method scope convention&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;Ruby method not have a strict pass by value or pass by reference.&lt;/li&gt;
-&lt;li&gt;if you passing an argument, and the argument calls a method that mutates the caller which may or may not have a &lt;code&gt;!&lt;/code&gt;, then it&amp;#x2019;s going to change that object.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;This is very common source bug.&lt;/p&gt;
-&lt;h2 id=&quot;example&quot;&gt;&lt;a href=&quot;#example&quot; class=&quot;headerlink&quot; title=&quot;example&quot;&gt;&lt;/a&gt;example&lt;/h2&gt;&lt;h3 id=&quot;pass-by-value-not-mutate-argument-in-method&quot;&gt;&lt;a href=&quot;#pass-by-value-not-mutate-argument-in-method&quot; class=&quot;headerlink&quot; title=&quot;pass by value(not mutate argument in method):&quot;&gt;&lt;/a&gt;pass by value(not mutate argument in method):&lt;/h3&gt;&lt;pre&gt;&lt;code&gt;a = [1, 2, 1]
-def my_method(a)
-  a.uniq
+    <content type="html">&lt;pre&gt;&lt;code&gt;class Dog
+  attr_accessor :name, :height, :weight
+
+  @@count = 0
+
+  def initialize(name, height, weight)
+    @name = name
+    @height = height
+    @weight = weight
+    @@count += 1
+  end
+
+  def bark
+    &amp;quot;#{ name } bark!&amp;quot;
+  end
+
+  def info
+    &amp;quot;#{ name } weights #{ weight } lbs and is #{ height } feet tall&amp;quot;
+  end
+
+  def update_info(n, h, w)
+    self.name = n
+    self.height = h
+    self.weight = w
+  end
+
 end
-puts a
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;will produce:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;1
-2
-1
-&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&quot;pass-by-reference-mutate-argument-in-method&quot;&gt;&lt;a href=&quot;#pass-by-reference-mutate-argument-in-method&quot; class=&quot;headerlink&quot; title=&quot;pass by reference(mutate argument in method):&quot;&gt;&lt;/a&gt;pass by reference(mutate argument in method):&lt;/h3&gt;&lt;pre&gt;&lt;code&gt;a = [1, 2, 1]
-def my_method(a)
-  a.uniq!
-end
-puts a
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;will produce:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;1
-2
+
+teddy = Dog.new(&amp;apos;teddy&amp;apos;, 3, 100)
+fido = Dog.new(&amp;apos;fido&amp;apos;, 1.5, 150)
+
+puts teddy.info
+teddy.update_info(&amp;apos;ted&amp;apos;, 2, 90)
+puts teddy.info
 &lt;/code&gt;&lt;/pre&gt;</content>
     
     <summary type="html">
     
-      &lt;h2 id=&quot;Ruby-method-scope-convention&quot;&gt;&lt;a href=&quot;#Ruby-method-scope-convention&quot; class=&quot;headerlink&quot; title=&quot;Ruby method scope convention&quot;&gt;&lt;/a&gt;Ru
+      &lt;pre&gt;&lt;code&gt;class Dog
+  attr_accessor :name, :height, :weight
+
+  @@count = 0
+
+  def initialize(name, height, weight)
+    @name = name
+    @he
     
     </summary>
     

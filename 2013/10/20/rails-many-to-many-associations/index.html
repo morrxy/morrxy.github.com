@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next mist use-motion">
+<html class="theme-next pisces use-motion">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
@@ -108,8 +108,8 @@ additional join model required">
 <script type="text/javascript" id="hexo.configuration">
   var NexT = window.NexT || {};
   var CONFIG = {
-    scheme: 'Mist',
-    sidebar: {"position":"left","display":"post"},
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"post"},
     fancybox: true,
     motion: true,
     duoshuo: {
@@ -140,7 +140,7 @@ additional join model required">
     
   
 
-  <div class="container one-collumn sidebar-position-left page-post-detail ">
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -154,7 +154,7 @@ additional join model required">
       <span class="logo-line-after"><i></i></span>
     </a>
   </div>
-  <p class="site-subtitle"></p>
+  <p class="site-subtitle">pursue next update</p>
 </div>
 
 <div class="site-nav-toggle">
@@ -182,6 +182,16 @@ additional join model required">
         </li>
       
         
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
@@ -203,39 +213,9 @@ additional join model required">
       
 
       
-        <li class="menu-item menu-item-search">
-          
-            <a href="#" class="st-search-show-outputs">
-          
-            
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
-            
-            搜索
-          </a>
-        </li>
-      
     </ul>
   
 
-  
-    <div class="site-search">
-      
-  <form class="site-search-form">
-  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
-</form>
-
-<script type="text/javascript">
-  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
-    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
-    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
-  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
-
-  _st('install', 'wmG9FieA3KCB8x2CXpVc','2.0.0');
-</script>
-
-
-
-    </div>
   
 </nav>
 
@@ -293,7 +273,7 @@ additional join model required">
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
                 <a href="/2013/10/20/rails-many-to-many-associations/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2013/10/20/rails-many-to-many-associations/" itemprop="commentsCount"></span>
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2013/10/20/rails-many-to-many-associations/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -401,11 +381,8 @@ additional join model required">
           
   <div class="comments" id="comments">
     
-      <div id="disqus_thread">
-        <noscript>
-          Please enable JavaScript to view the
-          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
-        </noscript>
+      <div class="ds-thread" data-thread-key="2013/10/20/rails-many-to-many-associations/"
+           data-title="Rails Many to Many Associations" data-url="http://yoursite.com/2013/10/20/rails-many-to-many-associations/">
       </div>
     
   </div>
@@ -445,7 +422,7 @@ additional join model required">
                src="https://s.gravatar.com/avatar/954a8b1f4c32dbb5a11399ae5e236a5f?s=80"
                alt="胡军" />
           <p class="site-author-name" itemprop="name">胡军</p>
-          <p class="site-description motion-element" itemprop="description">immutable values from past</p>
+          <p class="site-description motion-element" itemprop="description">学习是一种生活方式</p>
         </div>
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
@@ -484,6 +461,14 @@ additional join model required">
                 <a href="https://github.com/morrxy" target="_blank">
                   
                     <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/morrxy" target="_blank">
+                  
+                    <i class="fa fa-twitter"></i> Twitter
                   
                 </a>
               </span>
@@ -546,7 +531,7 @@ additional join model required">
 <div class="theme-info">
   主题 -
   <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Mist
+    NexT.Pisces
   </a>
 </div>
 
@@ -599,6 +584,13 @@ additional join model required">
 
   
   
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=0.5.0"></script>
+
+
 
   
   
@@ -772,30 +764,28 @@ additional join model required">
 
   
 
-
-
+  
+    
   
 
-    <script type="text/javascript">
-      var disqus_shortname = 'morrxy';
-      var disqus_identifier = '2013/10/20/rails-many-to-many-associations/';
-      var disqus_title = 'Rails Many to Many Associations';
-      var disqus_url = 'http://yoursite.com/2013/10/20/rails-many-to-many-associations/';
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"morrxy"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
 
-      function run_disqus_script(disqus_script){
-        var dsq = document.createElement('script');
-        dsq.type = 'text/javascript';
-        dsq.async = true;
-        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-      }
-
-      run_disqus_script('count.js');
-      
-        run_disqus_script('embed.js');
-      
-    </script>
   
+    
+  
+
+
 
 
 
