@@ -1,0 +1,1312 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Clojure,Clojure For The Branve And True," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="胡军的网络日志" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.5.0" />
+
+
+
+
+
+
+<meta name="description" content="&amp;#x672C;&amp;#x6587;&amp;#x662F;&amp;#x6211;&amp;#x5BF9;Clojure&amp;#x4E66;&amp;#x7C4D; CLOJURE FOR THE BRAVE AND TRUE&amp;#x7B2C;&amp;#x5341;&amp;#x4E8C;&amp;#x7AE0;Working with the JVM &amp;#x505A;&amp;#x7684;&amp;#x7FFB;&amp;#x8BD1;&amp;#x3002;&amp;#x7FFB;&amp;#x8B">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【译】Brave Clojure 第十二章:与JVM共事">
+<meta property="og:url" content="http://yoursite.com/2016/08/20/brave-clojure-java/index.html">
+<meta property="og:site_name" content="胡军的网络日志">
+<meta property="og:description" content="&amp;#x672C;&amp;#x6587;&amp;#x662F;&amp;#x6211;&amp;#x5BF9;Clojure&amp;#x4E66;&amp;#x7C4D; CLOJURE FOR THE BRAVE AND TRUE&amp;#x7B2C;&amp;#x5341;&amp;#x4E8C;&amp;#x7AE0;Working with the JVM &amp;#x505A;&amp;#x7684;&amp;#x7FFB;&amp;#x8BD1;&amp;#x3002;&amp;#x7FFB;&amp;#x8B">
+<meta property="og:image" content="http://yoursite.com/2016/08/20/brave-clojure-java/compile.png">
+<meta property="og:image" content="http://yoursite.com/2016/08/20/brave-clojure-java/jvm-compile.png">
+<meta property="og:updated_time" content="2016-08-20T13:40:02.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【译】Brave Clojure 第十二章:与JVM共事">
+<meta name="twitter:description" content="&amp;#x672C;&amp;#x6587;&amp;#x662F;&amp;#x6211;&amp;#x5BF9;Clojure&amp;#x4E66;&amp;#x7C4D; CLOJURE FOR THE BRAVE AND TRUE&amp;#x7B2C;&amp;#x5341;&amp;#x4E8C;&amp;#x7AE0;Working with the JVM &amp;#x505A;&amp;#x7684;&amp;#x7FFB;&amp;#x8BD1;&amp;#x3002;&amp;#x7FFB;&amp;#x8B">
+<meta name="twitter:image" content="http://yoursite.com/2016/08/20/brave-clojure-java/compile.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 【译】Brave Clojure 第十二章:与JVM共事 | 胡军的网络日志 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">胡军的网络日志</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">pursue next update</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                【译】Brave Clojure 第十二章:与JVM共事
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-08-20T21:40:02+08:00" content="2016-08-20">
+              2016-08-20
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/08/20/brave-clojure-java/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/20/brave-clojure-java/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>&#x672C;&#x6587;&#x662F;&#x6211;&#x5BF9;Clojure&#x4E66;&#x7C4D; <a href="http://www.braveclojure.com/clojure-for-the-brave-and-true/" target="_blank" rel="external">CLOJURE FOR THE BRAVE AND TRUE</a>&#x7B2C;&#x5341;&#x4E8C;&#x7AE0;<a href="http://www.braveclojure.com/java/" target="_blank" rel="external">Working with the JVM</a> &#x505A;&#x7684;&#x7FFB;&#x8BD1;&#x3002;&#x7FFB;&#x8BD1;&#x5F62;&#x5F0F;&#xFF0C;&#x4E2D;&#x82F1;&#x5BF9;&#x7167;&#xFF0C;&#x82F1;&#x6587;&#x5F15;&#x7528;&#x8DDF;&#x7740;&#x4E2D;&#x6587;&#x7FFB;&#x8BD1;&#x3002;&#x5982;&#x6709;&#x9519;&#x8BEF;&#xFF0C;&#x5728;&#x6240;&#x96BE;&#x514D;&#xFF0C;&#x6B22;&#x8FCE;&#x6307;&#x6B63;&#x3002;</p>
+<p><a href="https://morrxy.github.io/tags/Clojure-For-The-Branve-And-True/" target="_blank" rel="external">&#x5176;&#x4ED6;&#x7AE0;&#x7684;&#x7FFB;&#x8BD1;&#x5728;&#x8FD9;&#x91CC;</a></p>
+<p>&#x8BD1;&#x6587;&#x5F00;&#x59CB;&#x3002;</p>
+<hr>
+<blockquote>
+<p>There comes a day in every Clojurist&#x2019;s life when she must venture forth from the sanctuary of pure functions and immutable data structures into the wild, barbaric Land of Java. This treacherous journey is necessary because Clojure is hosted on the Java Virtual Machine (JVM), which grants it three fundamental characteristics. First, you run Clojure applications the same way you run Java applications. Second, you need to use Java objects for core functionality like reading files and working with dates. Third, Java has a vast ecosystem of useful libraries, and you&#x2019;ll need to know a bit about Java to use them.</p>
+</blockquote>
+<p>&#x6BCF;&#x4E2A;Clojure&#x4F7F;&#x7528;&#x8005;&#x90FD;&#x4F1A;&#x6709;&#x8FD9;&#x4E00;&#x5929;&#xFF1A;&#x4ED6;&#x5FC5;&#x987B;&#x4ECE;&#x7EAF;&#x51FD;&#x6570;&#xFF0C;&#x4E0D;&#x53EF;&#x53D8;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x7684;&#x907F;&#x96BE;&#x6240;&#x8FDB;&#x5165;&#x91CE;&#x751F;&#x539F;&#x59CB;&#x7684;Java&#x5927;&#x9646;&#x3002;&#x8FD9;&#x4E2A;&#x5371;&#x9669;&#x7684;&#x65C5;&#x7A0B;&#x662F;&#x6709;&#x5FC5;&#x8981;&#x7684;&#xFF0C;&#x56E0;&#x4E3A;Clojure&#x7684;&#x5BBF;&#x4E3B;&#x662F;java&#x865A;&#x62DF;&#x673A;(JVM),&#x8FD9;&#x4F7F;Clojure&#x5177;&#x6709;&#x4E09;&#x4E2A;&#x57FA;&#x672C;&#x7279;&#x5F81;: &#x9996;&#x5148;&#xFF0C;&#x8FD0;&#x884C;Clojure&#x5E94;&#x7528;&#x7A0B;&#x5E8F;&#x7684;&#x65B9;&#x6CD5;&#x4E0E;&#x8FD0;&#x884C;Java&#x7684;&#x4E00;&#x6837;&#x3002;&#x7B2C;&#x4E8C;&#xFF0C;&#x4F60;&#x9700;&#x8981;&#x4F7F;&#x7528;Java&#x5BF9;&#x8C61;&#x5B8C;&#x6210;&#x6587;&#x4EF6;&#x8BFB;&#x53D6;&#xFF0C;&#x65E5;&#x671F;&#x64CD;&#x4F5C;&#x8FD9;&#x6837;&#x7684;&#x6838;&#x5FC3;&#x529F;&#x80FD;&#x3002;&#x7B2C;&#x4E09;&#xFF0C;Java&#x751F;&#x6001;&#x7CFB;&#x7EDF;&#x91CC;&#x6709;&#x5927;&#x91CF;&#x6709;&#x7528;&#x7684;&#x5E93;&#xFF0C;&#x4F60;&#x9700;&#x8981;&#x4E86;&#x89E3;&#x4E00;&#x70B9;Java&#x624D;&#x80FD;&#x4F7F;&#x7528;&#x5B83;&#x4EEC;&#x3002;</p>
+<blockquote>
+<p>In this way, Clojure is a bit like a utopian community plunked down in the middle of a dystopian country. Obviously you&#x2019;d prefer to interact with other utopians, but every once in a while you need to talk to the locals in order to get things done.</p>
+</blockquote>
+<p>&#x8FD9;&#x79CD;&#x8FD0;&#x884C;&#x65B9;&#x5F0F;&#x4F7F;Clojure&#x6709;&#x70B9;&#x50CF;&#x4E00;&#x4E2A;&#x4E4C;&#x6258;&#x90A6;&#x793E;&#x533A;&#xFF0C;&#x7A81;&#x7136;&#x6389;&#x5728;&#x4E00;&#x4E2A;&#x53CD;&#x4E4C;&#x6258;&#x90A6;&#x793E;&#x533A;&#x91CC;&#x3002;&#x4F60;&#x66F4;&#x613F;&#x610F;&#x8DDF;&#x4E4C;&#x6258;&#x90A6;&#x5C45;&#x6C11;&#x4EA4;&#x4E92;&#xFF0C;&#x4F46;&#x4E3A;&#x4E86;&#x89E3;&#x51B3;&#x95EE;&#x9898;&#xFF0C;&#x5076;&#x5C14;&#x4E5F;&#x9700;&#x8981;&#x8DDF;&#x672C;&#x5730;&#x4EBA;&#x4EA4;&#x8C08;&#x3002;</p>
+<blockquote>
+<p>This chapter is like a cross between a phrase book and cultural introduction for the Land of Java. You&#x2019;ll learn what the JVM is, how it runs programs, and how to compile programs for it. This chapter will also give you a brief tour of frequently used Java classes and methods, and explain how to interact with them using Clojure. You&#x2019;ll learn how to think about and understand Java so you can incorporate any Java library into your Clojure programs.</p>
+</blockquote>
+<p>&#x8FD9;&#x7AE0;&#x5C31;&#x50CF;Java&#x5927;&#x9646;&#x7684;&#x5E38;&#x7528;&#x5916;&#x8BED;&#x624B;&#x518C;&#x548C;&#x6587;&#x5316;&#x4ECB;&#x7ECD;&#x3002;&#x4F60;&#x5C06;&#x5B66;&#x4E60;&#x4EC0;&#x4E48;&#x662F;JVM&#xFF0C;&#x5B83;&#x5982;&#x4F55;&#x8FD0;&#x884C;&#x7A0B;&#x5E8F;&#xFF0C;&#x5982;&#x4F55;&#x7F16;&#x8BD1;JVM&#x4E0A;&#x8FD0;&#x884C;&#x7684;&#x7A0B;&#x5E8F;&#x3002;&#x8FD8;&#x4F1A;&#x7B80;&#x5355;&#x4ECB;&#x7ECD;&#x5E38;&#x7528;&#x7684;Java&#x7C7B;&#x548C;&#x65B9;&#x6CD5;&#xFF0C;&#x5E76;&#x89E3;&#x91CA;&#x5982;&#x4F55;&#x7528;Clojure&#x4E0E;&#x5176;&#x4EA4;&#x4E92;&#x3002;&#x4F60;&#x5C06;&#x5B66;&#x4E60;&#x5982;&#x4F55;&#x601D;&#x8003;&#x5E76;&#x7406;&#x89E3;Java&#xFF0C;&#x4EE5;&#x4FBF;&#x5728;Clojure&#x7A0B;&#x5E8F;&#x91CC;&#x4F7F;&#x7528;&#x4EFB;&#x4F55;Java&#x5E93;&#x3002;</p>
+<blockquote>
+<p>To run the examples in this chapter, you&#x2019;ll need to have the Java Development Kit ( JDK) version 1.6 or later installed on your computer. You can check by running <code>javac -version</code> at your terminal. You should see something like <code>java 1.8.0_40</code>; if you don&#x2019;t, visit <a href="http://www.oracle.com/" target="_blank" rel="external">http://www.oracle.com/</a> to download the latest JDK.</p>
+</blockquote>
+<p>&#x4E3A;&#x4E86;&#x8FD0;&#x884C;&#x8FD9;&#x7AE0;&#x7684;&#x4F8B;&#x5B50;&#xFF0C;&#x4F60;&#x9700;&#x8981;&#x5B89;&#x88C5;1.6&#x6216;&#x66F4;&#x9AD8;&#x7248;&#x672C;&#x7684;Java&#x5F00;&#x53D1;&#x5305;(JDK)&#x3002;&#x5728;&#x7EC8;&#x7AEF;&#x4E0A;&#x8FD0;&#x884C;<code>javac -version</code>&#x53EF;&#x4EE5;&#x67E5;&#x770B;&#x3002;&#x4F60;&#x5E94;&#x8BE5;&#x770B;&#x5230;&#x7C7B;&#x4F3C;<code>java 1.8.0_40</code>,&#x5982;&#x679C;&#x6CA1;&#x6709;&#xFF0C;&#x53BB; <a href="http://www.oracle.com/" target="_blank" rel="external">http://www.oracle.com/</a> &#x4E0B;&#x8F7D;&#x5E76;&#x5B89;&#x88C5;&#x6700;&#x65B0;&#x7684;JDK&#x3002;</p>
+<blockquote>
+<p>The JVM</p>
+</blockquote>
+<h2 id="JVM"><a href="#JVM" class="headerlink" title="JVM"></a>JVM</h2><blockquote>
+<p>Developers use the term JVM to refer to a few different things. You&#x2019;ll hear them say, &#x201C;Clojure runs on the JVM,&#x201D; and you&#x2019;ll also hear, &#x201C;Clojure programs run in a JVM.&#x201D; In the first case, JVM refers to an abstraction&#x2014;the general model of the Java Virtual Machine. In the second, it refers to a process&#x2014;an instance of a running program. We&#x2019;ll focus on the JVM model, but I&#x2019;ll point out when we&#x2019;re talking about running JVM processes.</p>
+</blockquote>
+<p>&#x5F00;&#x53D1;&#x8005;&#x7528;JVM&#x6307;&#x4E0D;&#x540C;&#x7684;&#x4E8B;&#x60C5;&#x3002;&#x4F60;&#x53EF;&#x80FD;&#x542C;&#x8BF4;&#xFF0C;&#x201C;Clojure&#x8FD0;&#x884C;&#x5728;JVM&#x4E0A;&#x201D;&#xFF0C;&#x4E5F;&#x53EF;&#x80FD;&#x542C;&#x8BF4;&#xFF0C;&#x201D;Clojure&#x7A0B;&#x5E8F;&#x8FD0;&#x884C;&#x5728;JVM&#x91CC;&#x201C;&#x3002;&#x7B2C;&#x4E00;&#x79CD;&#x60C5;&#x51B5;&#xFF0C;JVM&#x6307;&#x7684;&#x662F;&#x4E00;&#x79CD;&#x62BD;&#x8C61;&#xFF0C;&#x5373;java&#x865A;&#x62DF;&#x673A;&#x8FD9;&#x4E2A;&#x901A;&#x7528;&#x6A21;&#x578B;&#x3002;&#x7B2C;&#x4E8C;&#x79CD;&#x60C5;&#x51B5;&#xFF0C;JVM&#x6307;&#x7684;&#x662F;&#x4E00;&#x4E2A;&#x8FDB;&#x7A0B;&#xFF0C;&#x5373;&#x4E00;&#x4E2A;&#x6B63;&#x5728;&#x8FD0;&#x884C;&#x7684;&#x7A0B;&#x5E8F;&#x7684;&#x5B9E;&#x4F8B;&#x3002;&#x6211;&#x4EEC;&#x5C06;&#x96C6;&#x4E2D;&#x4E8E;JVM&#x6A21;&#x578B;&#xFF0C;&#x5F53;&#x8C08;&#x5230;&#x8FD0;&#x884C;&#x7684;JVM&#x8FDB;&#x7A0B;&#x65F6;&#xFF0C;&#x6211;&#x4F1A;&#x6307;&#x660E;&#x3002;</p>
+<blockquote>
+<p>To understand the JVM, let&#x2019;s step back and review how plain ol&#x2019; computers work. Deep in the cockles of a computer&#x2019;s heart is its CPU, and the CPU&#x2019;s job is to execute operations like <em>add</em> and <em>unsigned multiply</em>. You&#x2019;ve probably heard about programmers encoding these instructions on punch cards, in lightbulbs, in the sacred cracks of a tortoise shell, or <em>whatever</em>, but nowadays these operations are represented in assembly language by mnemonics like ADD and MUL. The CPU architecture (x86, ARMv7, and what have you) determines what operations are available as part of the architecture&#x2019;s instruction set.</p>
+</blockquote>
+<p>&#x4E3A;&#x7406;&#x89E3;JVM&#xFF0C;&#x6211;&#x4EEC;&#x9000;&#x540E;&#x4E00;&#x6B65;&#xFF0C;&#x770B;&#x770B;&#x8BA1;&#x7B97;&#x673A;&#x662F;&#x5982;&#x4F55;&#x5DE5;&#x4F5C;&#x7684;&#x3002;&#x8BA1;&#x7B97;&#x673A;&#x7684;&#x5FC3;&#x810F;&#x662F;CPU&#xFF0C;CPU&#x7684;&#x5DE5;&#x4F5C;&#x662F;&#x6267;&#x884C;<em>add</em>&#x548C;<em>unsigned multiply</em>&#x8FD9;&#x6837;&#x7684;&#x6307;&#x4EE4;&#x3002;&#x4F60;&#x53EF;&#x80FD;&#x542C;&#x8BF4;&#x8FC7;&#xFF0C;&#x7A0B;&#x5E8F;&#x5458;&#x628A;&#x8FD9;&#x4E9B;&#x6307;&#x4EE4;&#x6309;&#x7167;&#x67D0;&#x79CD;&#x5F62;&#x5F0F;&#x7F16;&#x7801;&#x5728;&#x7A7F;&#x5B54;&#x5361;&#x7247;&#x4E0A;&#xFF0C;&#x73B0;&#x4ECA;&#x8FD9;&#x4E9B;&#x6307;&#x4EE4;&#x7528;&#x6C47;&#x7F16;&#x8BED;&#x8A00;&#x7684;ADD&#x548C;MUL&#x8FD9;&#x6837;&#x7684;&#x52A9;&#x8BB0;&#x7B26;&#x8868;&#x793A;&#xFF0C;CPU&#x7ED3;&#x6784;(x86, ARMv7&#x7B49;&#x7B49;)&#x51B3;&#x5B9A;&#x4E86;&#x8FD9;&#x79CD;&#x7ED3;&#x6784;&#x7684;CPU&#x7684;&#x64CD;&#x4F5C;&#x6307;&#x4EE4;&#x96C6;&#x3002;</p>
+<blockquote>
+<p>Because it&#x2019;s no fun to program in assembly language, people have invented higher-level languages like C and C++, which are compiled into instructions that a CPU will understand. Broadly speaking, the process is:</p>
+</blockquote>
+<p>&#x7531;&#x4E8E;&#x7528;&#x6C47;&#x7F16;&#x8BED;&#x8A00;&#x7F16;&#x7A0B;&#x4E0D;&#x597D;&#x73A9;&#xFF0C;&#x4EBA;&#x4EEC;&#x53D1;&#x660E;&#x4E86;C&#x548C;C++&#x8FD9;&#x6837;&#x7684;&#x9AD8;&#x7EA7;&#x8BED;&#x8A00;&#xFF0C;&#x9AD8;&#x7EA7;&#x8BED;&#x8A00;&#x88AB;&#x7F16;&#x8BD1;&#x6210;CPU&#x7406;&#x89E3;&#x7684;&#x6307;&#x4EE4;&#x3002;&#x6982;&#x62EC;&#x8D77;&#x6765;&#xFF0C;&#x8FC7;&#x7A0B;&#x5982;&#x4E0B;:</p>
+<blockquote>
+<ol>
+<li>The compiler reads source code.</li>
+<li>The compiler outputs a file containing machine instructions.</li>
+<li>The CPU executes those instructions.</li>
+</ol>
+</blockquote>
+<ol>
+<li>&#x7F16;&#x8BD1;&#x5668;&#x8BFB;&#x53D6;&#x6E90;&#x4EE3;&#x7801;&#x3002;</li>
+<li>&#x7F16;&#x8BD1;&#x5668;&#x8F93;&#x51FA;&#x4E00;&#x4E2A;&#x542B;&#x6709;&#x673A;&#x5668;&#x6307;&#x4EE4;&#x7684;&#x6587;&#x4EF6;&#x3002;</li>
+<li>CPU&#x6267;&#x884C;&#x8FD9;&#x4E9B;&#x6307;&#x4EE4;&#x3002;</li>
+</ol>
+<p>&#x56FE;12-1</p>
+<p><img src="/2016/08/20/brave-clojure-java/compile.png" alt="compile"></p>
+<blockquote>
+<p>Notice in Figure 12-1 that, ultimately, you have to translate programs into instructions that a CPU will understand, and the CPU doesn&#x2019;t care which programming language you use to produce those instructions.</p>
+</blockquote>
+<p>&#x6CE8;&#x610F;&#xFF0C;&#x56FE;12-1&#x91CC;&#xFF0C;&#x7A0B;&#x5E8F;&#x6700;&#x7EC8;&#x88AB;&#x8F6C;&#x6362;&#x6210;CPU&#x80FD;&#x7406;&#x89E3;&#x7684;&#x6307;&#x4EE4;&#xFF0C;CPU&#x4E0D;&#x5173;&#x5FC3;&#x7528;&#x54EA;&#x79CD;&#x7F16;&#x7A0B;&#x8BED;&#x8A00;&#x4EA7;&#x751F;&#x8FD9;&#x4E9B;&#x6307;&#x4EE4;&#x3002;</p>
+<blockquote>
+<p>The JVM is analogous to a computer in that it also needs to translate code into low-level instructions, called Java bytecode. However, as a virtual machine, this translation is implemented as software rather than hardware. A running JVM executes bytecode by translating it on the fly into machine code that its host will understand, a process called <em>just-in-time compilation</em>.</p>
+</blockquote>
+<p>JVM&#x4E0E;&#x8BA1;&#x7B97;&#x673A;&#x7C7B;&#x4F3C;&#x4E4B;&#x5904;&#x662F;&#xFF0C;JVM&#x4E5F;&#x9700;&#x8981;&#x628A;&#x4EE3;&#x7801;&#x8F6C;&#x6362;&#x6210;&#x88AB;&#x79F0;&#x4E3A;Java&#x5B57;&#x8282;&#x7801;&#x7684;&#x4F4E;&#x7EA7;&#x6307;&#x4EE4;&#x3002;&#x4F46;&#x4F5C;&#x4E3A;&#x4E00;&#x4E2A;&#x865A;&#x62DF;&#x673A;&#x5668;&#xFF0C;&#x8FD9;&#x662F;&#x4E2A;&#x8F6F;&#x4EF6;&#x8F6C;&#x6362;&#x800C;&#x4E0D;&#x662F;&#x786C;&#x4EF6;&#x8F6C;&#x6362;&#x3002;&#x8FD0;&#x884C;&#x4E2D;&#x7684;JVM&#x9760;&#x5FEB;&#x901F;&#x628A;&#x5B57;&#x8282;&#x7801;&#x8F6C;&#x6362;&#x6210;&#x5BBF;&#x4E3B;&#x80FD;&#x7406;&#x89E3;&#x7684;&#x673A;&#x5668;&#x7801;&#x6267;&#x884C;&#x5B57;&#x8282;&#x7801;&#xFF0C;&#x8FD9;&#x4E2A;&#x8FC7;&#x7A0B;&#x53EB;<em>&#x5373;&#x65F6;&#x7F16;&#x8BD1;</em>&#x3002;</p>
+<blockquote>
+<p>For a program to run on the JVM, it must get compiled to Java bytecode. Usually, when you compile programs, the resulting bytecode is saved in a <em>.class</em> file. Then you&#x2019;ll package these files in <em>Java archive files</em> (JAR files). And just like how a CPU doesn&#x2019;t care which programming language you use to generate machine instructions, the JVM doesn&#x2019;t care how you create bytecode. It doesn&#x2019;t care if you use Scala, JRuby, Clojure, or even Java to create Java bytecode. Generally speaking, the process looks like that shown in Figure 12-2.</p>
+</blockquote>
+<p>&#x4E3A;&#x4E86;&#x8BA9;&#x4E00;&#x4E2A;&#x7A0B;&#x5E8F;&#x5728;JVM&#x4E0A;&#x8FD0;&#x884C;&#xFF0C;&#x5FC5;&#x987B;&#x628A;&#x5B83;&#x7F16;&#x8BD1;&#x6210;Java&#x5B57;&#x8282;&#x7801;&#x3002;&#x7F16;&#x8BD1;&#x7ED3;&#x679C;&#x7684;&#x5B57;&#x8282;&#x7801;&#x901A;&#x5E38;&#x4FDD;&#x5B58;&#x5728;&#x4E00;&#x4E2A;<em>.class</em>&#x6587;&#x4EF6;&#x91CC;&#x3002;&#x7136;&#x540E;&#x4F60;&#x628A;&#x8FD9;&#x4E9B;&#x6587;&#x4EF6;&#x6253;&#x5305;&#x8FDB;<em>Java&#x6863;&#x6848;&#x6587;&#x4EF6;</em>(JAR&#x6587;&#x4EF6;)&#x3002;&#x5C31;&#x50CF;CPU&#x4E0D;&#x5173;&#x5FC3;&#x7528;&#x4EC0;&#x4E48;&#x8BED;&#x8A00;&#x751F;&#x6210;&#x673A;&#x5668;&#x7801;&#x4E00;&#x6837;&#xFF0C;JVM&#x4E5F;&#x4E0D;&#x5173;&#x5FC3;&#x4F60;&#x600E;&#x4E48;&#x521B;&#x5EFA;&#x5B57;&#x8282;&#x7801;&#x3002;&#x5B83;&#x4E0D;&#x5173;&#x5FC3;&#x4F60;&#x521B;&#x5EFA;&#x5B57;&#x8282;&#x7801;&#x7528;&#x7684;&#x662F;Scala, JRuby, Cojure&#x8FD8;&#x662F;Java&#x3002;&#x603B;&#x7684;&#x6765;&#x8BF4;&#xFF0C;&#x8FD9;&#x4E2A;&#x8FC7;&#x7A0B;&#x5982;&#x56FE;12-2&#x6240;&#x793A;&#xFF1A;</p>
+<p>&#x56FE;12-2</p>
+<p><img src="/2016/08/20/brave-clojure-java/jvm-compile.png" alt="jvm-compile"></p>
+<blockquote>
+<ol>
+<li>The Java compiler reads source code.</li>
+<li>The compiler outputs bytecode, often to a JAR file.</li>
+<li>JVM executes the bytecode.</li>
+<li>The JVM sends machine instructions to the CPU.</li>
+</ol>
+</blockquote>
+<ol>
+<li>Java&#x7F16;&#x8BD1;&#x5668;&#x8BFB;&#x53D6;&#x6E90;&#x4EE3;&#x7801;&#x3002;</li>
+<li>&#x7F16;&#x8BD1;&#x5668;&#x8F93;&#x51FA;&#x5B57;&#x8282;&#x7801;&#xFF0C;&#x7ECF;&#x5E38;&#x8F93;&#x51FA;&#x5230;&#x4E00;&#x4E2A;JAR&#x6587;&#x4EF6;&#x91CC;&#x3002;</li>
+<li>JVM&#x6267;&#x884C;&#x5B57;&#x8282;&#x7801;&#x3002;</li>
+<li>JVM&#x628A;&#x673A;&#x5668;&#x6307;&#x4EE4;&#x53D1;&#x9001;&#x7ED9;CPU&#x3002;</li>
+</ol>
+<blockquote>
+<p>When someone says that Clojure runs on the JVM, one of the things they mean is that Clojure programs get compiled to Java bytecode and JVM processes execute them. From an operations perspective, this means you treat Clojure programs the same as Java programs. You compile them to JAR files and run them using the <code>java</code> command. If a client needs a program that runs on the JVM, you could secretly write it in Clojure instead of Java and they would be none the wiser. From the outside, you can&#x2019;t tell the difference between a Java and a Clojure program any more than you can tell the difference between a C and a C++ program. Clojure allows you to be productive and sneaky.</p>
+</blockquote>
+<p>&#x5F53;&#x67D0;&#x4EBA;&#x8BF4;Clojure&#x5728;JVM&#x4E0A;&#x8FD0;&#x884C;&#xFF0C;&#x5176;&#x4E2D;&#x4E00;&#x4E2A;&#x610F;&#x601D;&#x662F;Clojure&#x7A0B;&#x5E8F;&#x88AB;&#x7F16;&#x8BD1;&#x6210;Java&#x5B57;&#x8282;&#x7801;&#xFF0C;&#x5E76;&#x4E14;JVM&#x8FDB;&#x7A0B;&#x6267;&#x884C;&#x88AB;&#x7F16;&#x8BD1;&#x7684;&#x5B57;&#x8282;&#x7801;&#x3002;&#x4ECE;&#x8FD0;&#x7B97;&#x7684;&#x89D2;&#x5EA6;&#x770B;&#xFF0C;&#x8FD9;&#x610F;&#x5473;&#x7740;&#x4F60;&#x5BF9;&#x5F85;Clojure&#x7A0B;&#x5E8F;&#x540C;&#x5BF9;&#x5F85;Java&#x7A0B;&#x5E8F;&#x4E00;&#x6837;&#x3002;&#x628A;&#x5B83;&#x4EEC;&#x7F16;&#x8BD1;&#x6210;JAR&#x6587;&#x4EF6;&#xFF0C;&#x7136;&#x540E;&#x7528;<code>java</code>&#x547D;&#x4EE4;&#x8FD0;&#x884C;&#x5B83;&#x4EEC;&#x3002;&#x5982;&#x679C;&#x4E00;&#x4E2A;&#x5BA2;&#x6237;&#x9700;&#x8981;&#x4E00;&#x4E2A;&#x8FD0;&#x884C;&#x5728;JVM&#x4E0A;&#x7684;&#x7A0B;&#x5E8F;&#xFF0C;&#x4F60;&#x53EF;&#x4EE5;&#x5077;&#x5077;&#x7528;Clojure&#x800C;&#x4E0D;&#x662F;Java&#x5199;&#xFF0C;&#x800C;&#x5B83;&#x4EEC;&#x90FD;&#x4E0D;&#x4F1A;&#x5BDF;&#x89C9;&#x3002;&#x4ECE;&#x5916;&#x9762;&#x770B;&#xFF0C;&#x65E0;&#x6CD5;&#x5206;&#x8FA8;Clojure&#x7A0B;&#x5E8F;&#x548C;Java&#x7A0B;&#x5E8F;&#x3002;Clojure&#x8BA9;&#x4F7F;&#x4F60;&#x5BCC;&#x6709;&#x751F;&#x4EA7;&#x529B;&#x3002;</p>
+<blockquote>
+<p>Writing, Compiling, and Running a Java Program</p>
+</blockquote>
+<h2 id="&#x5199;&#xFF0C;&#x7F16;&#x8BD1;&#xFF0C;&#x8FD0;&#x884C;Java&#x7A0B;&#x5E8F;"><a href="#&#x5199;&#xFF0C;&#x7F16;&#x8BD1;&#xFF0C;&#x8FD0;&#x884C;Java&#x7A0B;&#x5E8F;" class="headerlink" title="&#x5199;&#xFF0C;&#x7F16;&#x8BD1;&#xFF0C;&#x8FD0;&#x884C;Java&#x7A0B;&#x5E8F;"></a>&#x5199;&#xFF0C;&#x7F16;&#x8BD1;&#xFF0C;&#x8FD0;&#x884C;Java&#x7A0B;&#x5E8F;</h2><blockquote>
+<p>Let&#x2019;s look at how a real Java program works. In this section, you&#x2019;ll learn about the object-oriented paradigm that Java uses. Then, you&#x2019;ll build a simple pirate phrase book using Java. This will help you feel more comfortable with the JVM, it will prepare you for the upcoming section on Java interop (writing Clojure code that uses Java classes, objects, and methods directly), and it&#x2019;ll come in handy should a scallywag ever attempt to scuttle your booty on the high seas. To tie all the information together, you&#x2019;ll take a peek at some of Clojure&#x2019;s Java code at the end of the chapter.</p>
+</blockquote>
+<p>&#x6211;&#x4EEC;&#x6765;&#x770B;&#x4E00;&#x4E0B;&#x771F;&#x6B63;&#x7684;Java&#x7A0B;&#x5E8F;&#x5982;&#x4F55;&#x5DE5;&#x4F5C;&#x3002;&#x8FD9;&#x8282;&#x4F60;&#x4F1A;&#x5B66;&#x4E60;Java&#x4F7F;&#x7528;&#x7684;&#x9762;&#x5411;&#x5BF9;&#x8C61;&#x8303;&#x5F0F;&#x3002;&#x7136;&#x540E;&#x4F1A;&#x7528;Java&#x5EFA;&#x7ACB;&#x4E00;&#x4E2A;&#x7B80;&#x5355;&#x7A0B;&#x5E8F;&#x3002;&#x8FD9;&#x4F1A;&#x4F7F;&#x4F60;&#x5BF9;&#x540E;&#x9762;&#x7684;Java&#x4E92;&#x64CD;&#x4F5C;(&#x76F4;&#x63A5;&#x4F7F;&#x7528;Java&#x7C7B;&#xFF0C;&#x5BF9;&#x8C61;&#x548C;&#x65B9;&#x6CD5;&#x7684;Clojure&#x4EE3;&#x7801;)&#x505A;&#x597D;&#x51C6;&#x5907;&#x3002;&#x4E3A;&#x4F7F;&#x6240;&#x6709;&#x4FE1;&#x606F;&#x7ED3;&#x5408;&#x5728;&#x4E00;&#x8D77;&#xFF0C;&#x8FD9;&#x7AE0;&#x6700;&#x540E;&#x4F1A;&#x770B;&#x4E00;&#x4E9B;Clojure&#x7684;Java&#x4EE3;&#x7801;&#x3002;</p>
+<blockquote>
+<p>Object-Oriented Programming in the World&#x2019;s Tiniest Nutshell</p>
+</blockquote>
+<h3 id="&#x4E16;&#x754C;&#x4E0A;&#x6700;&#x6982;&#x62EC;&#x7684;&#x9762;&#x76F8;&#x5BF9;&#x8C61;&#x7F16;&#x7A0B;"><a href="#&#x4E16;&#x754C;&#x4E0A;&#x6700;&#x6982;&#x62EC;&#x7684;&#x9762;&#x76F8;&#x5BF9;&#x8C61;&#x7F16;&#x7A0B;" class="headerlink" title="&#x4E16;&#x754C;&#x4E0A;&#x6700;&#x6982;&#x62EC;&#x7684;&#x9762;&#x76F8;&#x5BF9;&#x8C61;&#x7F16;&#x7A0B;"></a>&#x4E16;&#x754C;&#x4E0A;&#x6700;&#x6982;&#x62EC;&#x7684;&#x9762;&#x76F8;&#x5BF9;&#x8C61;&#x7F16;&#x7A0B;</h3><blockquote>
+<p>Java is an object-oriented language, so you need to understand how object-oriented programming (OOP) works if you want to understand what&#x2019;s happening when you use Java libraries or write Java interop code in your Clojure programming. You&#x2019;ll also find object-oriented terminology in Clojure documentation, so it&#x2019;s important to learn these concepts. If you&#x2019;re OOP savvy, feel free to skip this section. For those who need the two-minute lowdown, here it is: the central players in OOP are <em>classes</em>, <em>objects</em>, and <em>methods</em>.</p>
+</blockquote>
+<p>Java&#x662F;&#x9762;&#x76F8;&#x5BF9;&#x8C61;&#x7684;&#x8BED;&#x8A00;&#xFF0C;&#x5982;&#x679C;&#x4F60;&#x60F3;&#x7406;&#x89E3;&#x4F7F;&#x7528;Java&#x5E93;&#x65F6;&#x5019;&#x6216;&#x7528;Clojure&#x4E0E;Java&#x4E92;&#x64CD;&#x4F5C;&#x65F6;&#x5019;&#x53D1;&#x751F;&#x4E86;&#x4EC0;&#x4E48;&#xFF0C;&#x4F60;&#x9700;&#x8981;&#x7406;&#x89E3;&#x9762;&#x76F8;&#x5BF9;&#x8C61;&#x7F16;&#x7A0B;&#x4F7F;&#x5982;&#x4F55;&#x5DE5;&#x4F5C;&#x7684;&#x3002;&#x4F60;&#x5C06;&#x5728;Clojure&#x6587;&#x6863;&#x91CC;&#x770B;&#x5230;&#x9762;&#x76F8;&#x5BF9;&#x8C61;&#x672F;&#x8BED;&#xFF0C;&#x6240;&#x4EE5;&#x5B66;&#x4E60;&#x8FD9;&#x4E9B;&#x6982;&#x5FF5;&#x5F88;&#x91CD;&#x8981;&#x3002;&#x60F3;&#x77E5;&#x9053;&#x771F;&#x60F3;&#x5417;&#xFF1F;&#x5C31;&#x662F;&#xFF1A;OOP&#x7684;&#x4E3B;&#x8981;&#x6F14;&#x5458;&#x662F; <em>&#x7C7B;</em>&#xFF0C; <em>&#x5BF9;&#x8C61;</em> &#xFF0C;<em>&#x65B9;&#x6CD5;</em> &#x3002;</p>
+<blockquote>
+<p>I think of objects as really, really, ridiculously dumb androids. They&#x2019;re the kind of android that would never inspire philosophical debate about the ethics of forcing sentient creatures into perpetual servitude. These androids only do two things: they respond to commands and they maintain data. In my imagination they do this by writing stuff down on little Hello Kitty clipboards.</p>
+</blockquote>
+<p>&#x6211;&#x628A;&#x5BF9;&#x8C61;&#x770B;&#x4F5C;&#x975E;&#x5E38;&#x50BB;&#x7684;&#x673A;&#x5668;&#x4EBA;&#x3002;&#x8FD9;&#x4E9B;&#x673A;&#x5668;&#x4EBA;&#x53EA;&#x5E72;&#x4E24;&#x4EF6;&#x4E8B;: &#x5BF9;&#x547D;&#x4EE4;&#x505A;&#x51FA;&#x54CD;&#x5E94;&#x548C;&#x4FDD;&#x6301;&#x6570;&#x636E;&#x3002;</p>
+<blockquote>
+<p>Imagine a factory that makes these androids. Both the set of commands the android understands and the set of data it maintains are determined by the factory that makes the android. In OOP terms, the factories correspond to classes, the androids correspond to objects, and the commands correspond to methods. For example, you might have a <code>ScaryClown</code> factory (class) that produces androids (objects) that respond to the command (method) <code>makeBalloonArt</code>. The android keeps track of the number of balloons it has, and then updates that number whenever the number of balloons changes. It can report that number with <code>balloonCount</code> and receive any number of balloons with <code>receiveBalloons</code>. Here&#x2019;s how you might interact with a Java object representing Belly Rubs the Clown:</p>
+</blockquote>
+<p>&#x60F3;&#x8C61;&#x4E00;&#x4E2A;&#x751F;&#x4EA7;&#x8FD9;&#x4E9B;&#x673A;&#x5668;&#x4EBA;&#x7684;&#x5DE5;&#x5382;&#x3002;&#x673A;&#x5668;&#x4EBA;&#x7406;&#x89E3;&#x7684;&#x547D;&#x4EE4;&#x96C6;&#x548C;&#x4FDD;&#x6301;&#x7684;&#x6570;&#x636E;&#x90FD;&#x7531;&#x5DE5;&#x5382;&#x51B3;&#x5B9A;&#x3002;OOP&#x672F;&#x8BED;&#x91CC;&#xFF0C;&#x5DE5;&#x5382;&#x5BF9;&#x5E94;&#x7C7B;&#xFF0C;&#x673A;&#x5668;&#x4EBA;&#x5BF9;&#x5E94;&#x5BF9;&#x8C61;&#xFF0C;&#x547D;&#x4EE4;&#x5BF9;&#x5E94;&#x65B9;&#x6CD5;&#x3002;&#x4F8B;&#x5982;&#xFF0C;&#x6709;&#x4E00;&#x4E2A;<code>ScaryClown</code>&#x5DE5;&#x5382;(&#x7C7B;)&#x751F;&#x6210;&#x673A;&#x5668;&#x4EBA;(&#x5BF9;&#x8C61;)&#xFF0C;&#x8FD9;&#x79CD;&#x673A;&#x5668;&#x4EBA;&#x80FD;&#x5BF9;&#x547D;&#x4EE4;(&#x65B9;&#x6CD5;)<code>makeBalloonArt</code>&#x505A;&#x51FA;&#x54CD;&#x5E94;&#x3002;&#x8FD9;&#x79CD;&#x673A;&#x5668;&#x4EBA;&#x8BB0;&#x5F55;&#x7740;&#x5B83;&#x4EEC;&#x62E5;&#x6709;&#x7684;&#x6C14;&#x7403;&#x7684;&#x4E2A;&#x6570;&#xFF0C;&#x5E76;&#x4E14;&#x5F53;&#x4E2A;&#x6570;&#x6539;&#x53D8;&#x65F6;&#x66F4;&#x65B0;&#x90A3;&#x4E2A;&#x6570;&#x5B57;&#x3002;&#x5B83;&#x80FD;&#x7528;<code>balloonCount</code>&#x62A5;&#x544A;&#x90A3;&#x4E2A;&#x6570;&#x5B57;&#xFF0C;&#x80FD;&#x7528;<code>receiveBalloons</code>&#x63A5;&#x53D7;&#x4EFB;&#x610F;&#x4E2A;&#x6C14;&#x7403;&#x3002;&#x4E0B;&#x9762;&#x662F;&#x5982;&#x4F55;&#x4E0E;Java&#x5BF9;&#x8C61;&#x4EA4;&#x4E92;:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">ScaryClown bellyRubsTheClown = <span class="keyword">new</span> ScaryClown();</span><br><span class="line">bellyRubsTheClown.balloonCount();</span><br><span class="line"><span class="comment">// =&gt; 0</span></span><br><span class="line"></span><br><span class="line">bellyRubsTheClown.receiveBalloons(<span class="number">2</span>);</span><br><span class="line">bellyRubsTheClown.balloonCount();</span><br><span class="line"><span class="comment">// =&gt; 2</span></span><br><span class="line"></span><br><span class="line">bellyRubsTheClown.makeBalloonArt();</span><br><span class="line"><span class="comment">// =&gt; &quot;Belly Rubs makes a balloon shaped like a clown, because Belly Rubs</span></span><br><span class="line"><span class="comment">// =&gt; is trying to scare you and nothing is scarier than clowns.&quot;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>This example shows you how to create a new object, <code>bellyRubsTheClown</code>, using the <code>ScaryClown</code> class. It also shows you how to call methods (such as <code>balloonCount</code>, <code>receiveBalloons</code>, and <code>makeBalloonArt</code>) on the object, presumably so you can terrify children.</p>
+</blockquote>
+<p>&#x8FD9;&#x4E2A;&#x4F8B;&#x5B50;&#x6F14;&#x793A;&#x4E86;&#x5982;&#x4F55;&#x7528;<code>ScaryClown</code>&#x7C7B;&#x521B;&#x5EFA;&#x65B0;&#x5BF9;&#x8C61;<code>bellyRubsTheClown</code>&#x3002;&#x4E5F;&#x6F14;&#x793A;&#x4E86;&#x5982;&#x4F55;&#x8C03;&#x7528;&#x5BF9;&#x8C61;&#x7684;&#x65B9;&#x6CD5;(&#x6BD4;&#x5982;<code>balloonCount</code>,<code>receiveBalloons</code>&#x548C;<code>makeBalloonArt</code>)&#x3002;</p>
+<blockquote>
+<p>One final aspect of OOP that you should know, or at least how it&#x2019;s implemented in Java, is that you can also send commands to the factory. In OOP terms, you would say that classes also have methods. For example, the built-in class <code>Math</code> has many class methods, including <code>Math.abs</code>, which returns the absolute value of a number:</p>
+</blockquote>
+<p>&#x4F60;&#x9700;&#x8981;&#x4E86;&#x89E3;&#x7684;OOP&#x7684;&#x6700;&#x540E;&#x4E00;&#x70B9;&#x662F;&#xFF1A;&#x4F60;&#x4E5F;&#x53EF;&#x4EE5;&#x53D1;&#x547D;&#x4EE4;&#x7ED9;&#x5DE5;&#x5382;&#x3002;OOP&#x672F;&#x8BED;&#x91CC;&#x53EB;&#x7C7B;&#x4E5F;&#x6709;&#x65B9;&#x6CD5;&#x3002;&#x4F8B;&#x5982;&#xFF0C;&#x5167;&#x5EFA;&#x7684;<code>Math</code>&#x7C7B;&#x6709;&#x5F88;&#x591A;&#x7C7B;&#x65B9;&#x6CD5;&#xFF0C;&#x5305;&#x542B;<code>Math.abs</code>,&#x8FD4;&#x56DE;&#x4E00;&#x4E2A;&#x6570;&#x5B57;&#x7684;&#x7EDD;&#x5BF9;&#x503C;:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Math.abs(-<span class="number">50</span>)</span><br><span class="line"><span class="comment">// =&gt; 50</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>I hope those clowns weren&#x2019;t too traumatizing for you. Now let&#x2019;s put your OOP knowledge to work!</p>
+</blockquote>
+<p>&#x73B0;&#x5728;&#x6765;&#x5B9E;&#x9645;&#x4F7F;&#x7528;&#x8FD9;&#x4E9B;&#x77E5;&#x8BC6;&#xFF01;</p>
+<blockquote>
+<p>Ahoy, World</p>
+</blockquote>
+<h3 id="&#x5582;-&#x4E16;&#x754C;"><a href="#&#x5582;-&#x4E16;&#x754C;" class="headerlink" title="&#x5582;, &#x4E16;&#x754C;"></a>&#x5582;, &#x4E16;&#x754C;</h3><blockquote>
+<p>Go ahead and create a new directory called <em>phrasebook</em>. In that directory, create a file called <em>PiratePhrases.java</em>, and write the following:</p>
+</blockquote>
+<p>&#x521B;&#x5EFA;&#x4E00;&#x4E2A;<em>phrasebook</em>&#x76EE;&#x5F55;&#x3002;&#x5728;&#x76EE;&#x5F55;&#x91CC;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;<em>PiratePhrases.java</em>&#x6587;&#x4EF6;&#xFF0C;&#x4EE3;&#x7801;&#x5982;&#x4E0B;:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PiratePhrases</span></span><br><span class="line"></span>{</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span><br><span class="line">    </span>{</span><br><span class="line">        System.out.println(<span class="string">&quot;Shiver me timbers!!!&quot;</span>);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>This very simple program will print the phrase &#x201C;Shiver me timbers!!!&#x201D; (which is how pirates say &#x201C;Hello, world!&#x201D;) to your terminal when you run it. It consists of a class, <code>PiratePhrases</code>, and a static method belonging to that class, <code>main</code>. Static methods are essentially class methods.</p>
+</blockquote>
+<p>&#x8FD9;&#x4E2A;&#x7A0B;&#x5E8F;&#x8FD0;&#x884C;&#x65F6;&#x4F1A;&#x5F80;&#x7EC8;&#x7AEF;&#x6253;&#x5370;&#x201D;&#x201C;Shiver me timbers!!!&#x201D;(&#x6D77;&#x76D7;&#x7248;&#x7684;&#x201D;Hello, world!&#x201D;)&#x3002;&#x4EE3;&#x7801;&#x91CC;&#x6709;&#x4E00;&#x4E2A;&#x7C7B;<code>PiratePhrases</code>,&#x548C;&#x4E00;&#x4E2A;&#x5C5E;&#x4E8E;&#x8FD9;&#x4E2A;&#x7C7B;&#x7684;&#x9759;&#x6001;&#x65B9;&#x6CD5;<code>main</code>&#x3002;&#x9759;&#x6001;&#x65B9;&#x6CD5;&#x672C;&#x8D28;&#x4E0A;&#x5C31;&#x662F;&#x7C7B;&#x65B9;&#x6CD5;&#x3002;</p>
+<blockquote>
+<p>In your terminal, compile the <code>PiratePhrases</code> source code with the command <code>javac PiratePhrases.java</code>. If you typed everything correctly and you&#x2019;re pure of heart, you should see a file named <em>PiratePhrases.class</em>:</p>
+</blockquote>
+<p>&#x5728;&#x547D;&#x4EE4;&#x884C;&#x7528;<code>javac PiratePhrases.java</code>&#x7F16;&#x8BD1;<code>PiratePhrases</code>&#x3002;&#x8F93;&#x5165;&#x6B63;&#x786E;&#x7684;&#x8BDD;&#xFF0C;&#x4F1A;&#x51FA;&#x73B0;&#x4E00;&#x4E2A;&#x6587;&#x4EF6;<em>PiratePhrases.class</em>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ls</span><br><span class="line">PiratePhrases.class PiratePhrases.java</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>You&#x2019;ve just compiled your first Java program, me matey! Now run it with <code>java PiratePhrases</code>. You should see this:</p>
+</blockquote>
+<p>&#x4F60;&#x7F16;&#x8BD1;&#x4E86;&#x7B2C;&#x4E00;&#x4E2A;Java&#x7A0B;&#x5E8F;&#xFF01;&#x7528;<code>java PiratePhrases</code>&#x8FD0;&#x884C;&#x3002;&#x4F1A;&#x770B;&#x5230;&#xFF1A;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Shiver me timbers!!!</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>What&#x2019;s happening here is you used the Java compiler, <code>javac</code>, to create a Java class file, <em>PiratePhrases.class</em>. This file is packed with oodles of Java bytecode (well, for a program this size, maybe only one oodle).</p>
+</blockquote>
+<p>&#x8FD9;&#x91CC;&#x53D1;&#x751F;&#x7684;&#x662F;&#xFF0C;&#x4F60;&#x7528;Java&#x7F16;&#x8BD1;&#x5668;<code>javac</code>&#x521B;&#x5EFA;&#x4E86;&#x4E00;&#x4E2A;Java&#x7C7B;&#x6587;&#x4EF6;<em>PiratePhrases.class</em>&#x3002;&#x8FD9;&#x4E2A;&#x6587;&#x4EF6;&#x91CC;&#x662F;Java&#x5B57;&#x8282;&#x7801;&#x3002;</p>
+<blockquote>
+<p>When you ran <em>java PiratePhrases</em>, the JVM first looked at your classpath for a class named <code>PiratePhrases</code>. The classpath is the list of filesystem paths that the JVM searches to find a file that defines a class. By default, the classpath includes the directory you&#x2019;re in when you run java. Try running <code>java -classpath /tmp PiratePhrases</code> and you&#x2019;ll get an error, even though <em>PiratePhrases.class</em> is right there in your current directory.</p>
+</blockquote>
+<p>&#x5F53;&#x8FD0;&#x884C;<em>java PiratePhrases</em>&#x65F6;&#xFF0C;JVM&#x5148;&#x5728;&#x7C7B;&#x8DEF;&#x5F84;&#x91CC;&#x67E5;&#x627E;&#x540D;&#x5B57;&#x662F;<code>PiratePhrases</code>&#x7684;&#x7C7B;&#x3002;&#x7C7B;&#x8DEF;&#x5F84;&#x662F;&#x6587;&#x4EF6;&#x7CFB;&#x7EDF;&#x8DEF;&#x5F84;&#x5217;&#x8868;&#xFF0C;JVM&#x7528;&#x5B83;&#x641C;&#x7D22;&#x5B9A;&#x4E49;&#x7C7B;&#x7684;&#x6587;&#x4EF6;&#x3002;&#x9ED8;&#x8BA4;&#x60C5;&#x51B5;&#x4E0B;&#xFF0C;&#x7C7B;&#x8DEF;&#x5F84;&#x5305;&#x542B;&#x4F60;&#x8FD0;&#x884C;java&#x65F6;&#x7684;&#x76EE;&#x5F55;&#x3002;&#x5C1D;&#x8BD5;&#x4E00;&#x4E0B;&#xFF0C;&#x8FD0;&#x884C;<code>java -classpath /tmp PiratePhrases</code>&#xFF0C;&#x4F1A;&#x62A5;&#x9519;&#xFF0C;&#x5373;&#x4F7F;<em>PiratePhrases.class</em>&#x5728;&#x5F53;&#x524D;&#x76EE;&#x5F55;&#x91CC;&#x3002;</p>
+<blockquote>
+<p>Note    You can have multiple paths on your classpath by separating them with colons if you&#x2019;re on a Mac or running Linux, or semicolons if you&#x2019;re using Windows. For example, the classpath <code>/tmp:/var/maven:.</code> includes the <code>/tmp</code>, <code>/var/maven</code>, and <code>.</code> directories.</p>
+</blockquote>
+<p>&#x6CE8;&#x610F;&#xFF0C;&#x7C7B;&#x8DEF;&#x5F84;&#x4E0A;&#x53EF;&#x4EE5;&#x6709;&#x591A;&#x4E2A;&#x8DEF;&#x5F84;&#xFF0C;&#x7528;&#x5192;&#x53F7;(Mac&#x6216;Linux)&#x6216;&#x5206;&#x53F7;(Windows)&#x9694;&#x5F00;&#x3002;&#x4F8B;&#x5982;&#xFF0C;&#x7C7B;&#x8DEF;&#x5F84;<code>/tmp:/var/maven:.</code>&#x5305;&#x542B;&#x4E09;&#x4E2A;&#x76EE;&#x5F55;&#xFF0C;<code>/tmp</code>, <code>/var/maven</code>, &#x548C; <code>.</code>&#x76EE;&#x5F55;&#x3002;</p>
+<blockquote>
+<p>In Java, you&#x2019;re allowed only one public class per file, and the filename must match the class name. This is how <code>java</code> knows to try looking in <em>PiratePhrases.class</em> for the <code>PiratePhrases</code> class&#x2019;s bytecode. After <code>java</code> found the bytecode for the <code>PiratePhrases</code> class, it executed that class&#x2019;s <code>main</code> method. Java&#x2019;s similar to C in that whenever you say &#x201C;run something, and use this class as your entry point,&#x201D; it will always run that class&#x2019;s <code>main</code> method; therefore, that method must be <code>public</code>, as you can see in the <code>PiratePhrases</code>&#x2019;s source code.</p>
+</blockquote>
+<p>Java&#x53EA;&#x5141;&#x8BB8;&#x6BCF;&#x4E2A;&#x6587;&#x4EF6;&#x4E00;&#x4E2A;&#x516C;&#x5F00;&#x7C7B;&#xFF0C;&#x800C;&#x4E14;&#x6587;&#x4EF6;&#x540D;&#x5FC5;&#x987B;&#x4E0E;&#x7C7B;&#x540D;&#x4E00;&#x6837;&#x3002;&#x8FD9;&#x6837;<code>java</code>&#x624D;&#x80FD;&#x627E;&#x5230;<code>PiratePhrases</code>&#x7C7B;&#x7684;&#x5B57;&#x8282;&#x7801;<code>PiratePhrases.class</code>&#x3002;<code>java</code>&#x627E;&#x5230;<code>PiratePhrases</code>&#x7C7B;&#x7684;&#x5B57;&#x8282;&#x7801;&#x4EE5;&#x540E;&#xFF0C;&#x6267;&#x884C;&#x7C7B;&#x7684;<code>main</code>&#x65B9;&#x6CD5;&#x3002;Java&#x4E0E;C&#x7C7B;&#x4F3C;&#xFF0C;&#x65E0;&#x8BBA;&#x4F55;&#x65F6;&#xFF0C;&#x8FD0;&#x884C;&#x4E1C;&#x897F;&#xFF0C;&#x5E76;&#x7528;&#x7C7B;&#x4F5C;&#x4E3A;&#x5165;&#x53E3;&#x65F6;&#xFF0C;&#x90FD;&#x4F1A;&#x8FD0;&#x884C;&#x8FD9;&#x4E2A;&#x7C7B;&#x7684;<code>main</code>&#x65B9;&#x6CD5;&#xFF1B;&#x56E0;&#x6B64;&#x8FD9;&#x4E2A;&#x65B9;&#x6CD5;&#x5FC5;&#x987B;&#x662F;<code>public</code>&#x7684;&#xFF0C;&#x5982;&#x4E0A;&#x9762;&#x6E90;&#x7801;&#x6240;&#x793A;&#x3002;</p>
+<blockquote>
+<p>In the next section you&#x2019;ll learn how to handle program code that spans multiple files, and how to use Java libraries.</p>
+</blockquote>
+<p>&#x4E0B;&#x8282;&#x4F1A;&#x5B66;&#x4E60;&#x5982;&#x4F55;&#x5904;&#x7406;&#x591A;&#x4E2A;&#x6587;&#x4EF6;&#x7684;&#x7A0B;&#x5E8F;&#x4EE3;&#x7801;&#x548C;&#x5982;&#x4F55;&#x4F7F;&#x7528;Java&#x5E93;&#x3002;</p>
+<blockquote>
+<p>Packages and Imports</p>
+</blockquote>
+<h2 id="&#x5305;&#x4E0E;&#x5F15;&#x5165;"><a href="#&#x5305;&#x4E0E;&#x5F15;&#x5165;" class="headerlink" title="&#x5305;&#x4E0E;&#x5F15;&#x5165;"></a>&#x5305;&#x4E0E;&#x5F15;&#x5165;</h2><blockquote>
+<p>To see how to work with multi-file programs and Java libraries, we&#x2019;ll compile and run a program. This section has direct implications for Clojure because you&#x2019;ll use the same ideas and terminology to interact with Java libraries.</p>
+</blockquote>
+<p>&#x4E3A;&#x4E86;&#x89E3;&#x591A;&#x6587;&#x4EF6;&#x7A0B;&#x5E8F;&#x548C;Java&#x5E93;&#x5982;&#x4F55;&#x5DE5;&#x4F5C;&#xFF0C;&#x6211;&#x4EEC;&#x5C06;&#x7F16;&#x8BD1;&#x5E76;&#x8FD0;&#x884C;&#x4E00;&#x4E2A;&#x7A0B;&#x5E8F;&#x3002;&#x8FD9;&#x8282;&#x4E0E;Clojure&#x76F4;&#x63A5;&#x76F8;&#x5173;&#xFF0C;&#x56E0;&#x4E3A;&#x4F60;&#x5C06;&#x4F7F;&#x7528;&#x540C;&#x6837;&#x7684;&#x601D;&#x60F3;&#x548C;&#x672F;&#x8BED;&#x4E0E;Java&#x5E93;&#x4EA4;&#x4E92;&#x3002;</p>
+<blockquote>
+<p>Let&#x2019;s start with a couple of definitions:</p>
+</blockquote>
+<p>&#x5148;&#x6765;&#x4E24;&#x4E2A;&#x5B9A;&#x4E49;&#xFF1A;</p>
+<blockquote>
+<ul>
+<li><strong>package</strong> Similar to Clojure&#x2019;s namespaces, packages provide code organization. Packages contain classes, and package names correspond to filesystem directories. If a file has the line <code>package com.shapemaster</code> in it, the directory <em>com/shapemaster</em> must exist somewhere on your classpath. Within that directory will be files defining classes.</li>
+<li><strong>import</strong> Java allows you to import classes, which basically means that you can refer to them without using their namespace prefix. So if you have a class in <em>com.shapemaster</em> named <code>Square</code>, you could write <code>import  com.shapemaster.Square</code>; or <code>import com.shapemaster.*;</code> at the top of a <code>.java</code> file to use <code>Square</code> in your code instead of <code>com.shapemaster.Square</code>.</li>
+</ul>
+</blockquote>
+<ul>
+<li><strong>&#x5305;(package)</strong> &#x4E0E;Clojure&#x7684;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x7C7B;&#x4F3C;&#xFF0C;&#x7528;&#x4E8E;&#x7EC4;&#x7EC7;&#x4EE3;&#x7801;&#x3002;&#x5305;&#x5305;&#x542B;&#x7C7B;&#xFF0C;&#x5305;&#x540D;&#x4E0E;&#x6587;&#x4EF6;&#x7CFB;&#x7EDF;&#x76EE;&#x5F55;&#x5BF9;&#x5E94;&#x3002;&#x5982;&#x679C;&#x4E00;&#x4E2A;&#x6587;&#x4EF6;&#x91CC;&#x6709;&#x4E00;&#x884C;<code>package com.shapemaster</code>,&#x7C7B;&#x8DEF;&#x5F84;&#x91CC;&#x5FC5;&#x7136;&#x6709;&#x76EE;&#x5F55;<code>com/shapemaster</code>&#x3002;&#x90A3;&#x4E2A;&#x76EE;&#x5F55;&#x91CC;&#x662F;&#x7C7B;&#x6587;&#x4EF6;&#x3002;</li>
+<li><strong>&#x5F15;&#x5165;(import)</strong> Java&#x5141;&#x8BB8;&#x4F60;&#x5F15;&#x5165;&#x7C7B;&#xFF0C;&#x610F;&#x601D;&#x662F;&#x4F60;&#x53EF;&#x4EE5;&#x5F15;&#x7528;&#x5B83;&#x4EEC;&#x800C;&#x65E0;&#x9700;&#x4F7F;&#x7528;&#x5B83;&#x4EEC;&#x7684;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x524D;&#x7F00;&#x3002;&#x5982;&#x679C;<em>com.shapemaster</em>&#x6709;&#x4E2A;&#x7C7B;&#x53EB;<code>Square</code>,&#x4F60;&#x53EF;&#x4EE5;&#x5728;&#x6587;&#x4EF6;&#x6700;&#x4E0A;&#x9762;&#x5199;&#x4E0A;<code>import  com.shapemaster.Square</code> &#x6216; <code>import  com.shapemaster.*</code>&#xFF0C;&#x7136;&#x540E;&#x5C31;&#x53EF;&#x4EE5;&#x76F4;&#x63A5;&#x4F7F;&#x7528;<code>Square</code>&#xFF0C;&#x4E0D;&#x7528;&#x518D;&#x5199;<code>com.shapemaster.Square</code>&#x3002;</li>
+</ul>
+<blockquote>
+<p>Let&#x2019;s try using <code>package</code> and <code>import</code>. For this example, you&#x2019;ll create a package called <code>pirate_phrases</code> that has two classes, <code>Greetings</code> and <code>Farewells</code>. To start, navigate to your <em>phrasebook</em> and within that directory create another directory, <em>pirate_phrases</em>. It&#x2019;s necessary to create <em>pirate_phrases</em> because Java package names correspond to filesystem directories. Then, create <em>Greetings.java</em> within the <em>pirate_phrases</em> directory:</p>
+</blockquote>
+<p>&#x6211;&#x4EEC;&#x5C1D;&#x8BD5;&#x4E00;&#x4E0B;<code>package</code>&#x548C;<code>import</code>&#x3002;&#x6211;&#x4EEC;&#x5C06;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x53EB;<code>pirate_phrases</code>&#x5305;&#xFF0C;&#x542B;&#x6709;&#x4E24;&#x4E2A;&#x7C7B;&#xFF0C;<code>Greetings</code>&#x548C;<code>Farewells</code>&#x3002;&#x627E;&#x5230;<em>phrasebook</em>&#x76EE;&#x5F55;&#xFF0C;&#x5728;&#x91CC;&#x9762;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x76EE;&#x5F55;<em>pirate_phrases</em>&#x3002;&#x56E0;&#x4E3A;Java&#x5305;&#x540D;&#x4E0E;&#x6587;&#x4EF6;&#x7CFB;&#x7EDF;&#x76EE;&#x5F55;&#x5BF9;&#x5E94;&#xFF0C;&#x6240;&#x4EE5;&#x76EE;&#x5F55;&#x540D;&#x662F;&#x8FD9;&#x4E2A;&#x3002;&#x7136;&#x540E;&#x5728;&#x8FD9;&#x4E2A;&#x76EE;&#x5F55;&#x91CC;&#x521B;&#x5EFA;<em>Greetings.java</em>:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#x278A; <span class="keyword">package</span> pirate_phrases;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Greetings</span></span><br><span class="line"></span>{</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">hello</span><span class="params">()</span></span><br><span class="line">    </span>{</span><br><span class="line">        System.out.println(<span class="string">&quot;Shiver me timbers!!!&quot;</span>);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>At &#x278A;, <code>package pirate_phrases;</code> indicates that this class will be part of the <code>pirate_phrases</code> package. Now create <code>Farewells.java</code> within the <code>pirate_phrases</code> directory:</p>
+</blockquote>
+<p>&#x5728;&#x278A;&#x5904;&#xFF0C;<code>package pirate_phrases;</code>&#x6307;&#x660E;&#x8FD9;&#x4E2A;&#x7C7B;&#x662F;<code>pirate_phrases</code>&#x5305;&#x7684;&#x4E00;&#x90E8;&#x5206;&#x3002;&#x5728;<code>pirate_phrases</code>&#x76EE;&#x5F55;&#x91CC;&#x521B;&#x5EFA;<code>Farewells.java</code>:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> pirate_phrases;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Farewells</span></span><br><span class="line"></span>{</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">goodbye</span><span class="params">()</span></span><br><span class="line">    </span>{</span><br><span class="line">        System.out.println(<span class="string">&quot;A fair turn of the tide ter ye thar, ye magnificent sea friend!!&quot;</span>);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Now create <em>PirateConversation.java</em> in the <em>phrasebook</em> directory:</p>
+</blockquote>
+<p>&#x5728;<code>phrasebook</code>&#x76EE;&#x5F55;&#x91CC;&#x521B;&#x5EFA;<code>PirateConversation.java</code>:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pirate_phrases.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PirateConversation</span></span><br><span class="line"></span>{</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span><br><span class="line">    </span>{</span><br><span class="line">        Greetings greetings = <span class="keyword">new</span> Greetings();</span><br><span class="line">        greetings.hello();</span><br><span class="line"></span><br><span class="line">        Farewells farewells = <span class="keyword">new</span> Farewells();</span><br><span class="line">        farewells.goodbye();</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>The first line, <code>import pirate_phrases.*;</code>, imports all classes in the <code>pirate_phrases</code> package, which contains the <code>Greetings</code> and <code>Farewells</code> classes.</p>
+</blockquote>
+<p>&#x7B2C;&#x4E00;&#x884C;&#xFF0C;<code>import pirate_phrases.*;</code>,&#x5F15;&#x5165;<code>pirate_phrases</code>&#x5305;&#x91CC;&#x7684;&#x6240;&#x6709;&#x7C7B;&#xFF0C;<code>Greetings</code>&#x7C7B;&#x548C;<code>Farewells</code>&#x7C7B;&#x3002;</p>
+<blockquote>
+<p>If you run <code>javac PirateConversation.java</code> within the <em>phrasebook</em> directory followed by <code>java PirateConversation</code>, you should see this:</p>
+</blockquote>
+<p>&#x5982;&#x679C;&#x4F60;&#x5728;<em>phrasebook</em>&#x76EE;&#x5F55;&#x8FD0;&#x884C;<code>javac PirateConversation.java</code>&#xFF0C;&#x7136;&#x540E;&#x8FD0;&#x884C;<code>java PirateConversation</code>,&#x4F60;&#x5E94;&#x8BE5;&#x770B;&#x5230;:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Shiver me timbers!!!</span><br><span class="line">A fair turn of the tide ter ye thar, ye magnificent sea friend!!</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>And thar she blows, dear reader. Thar she blows indeed.</p>
+<p>Note that, when you&#x2019;re compiling a Java program, Java searches your classpath for packages. Try typing the following:</p>
+</blockquote>
+<p>&#x6CE8;&#x610F;&#xFF0C;&#x7F16;&#x8BD1;Java&#x7A0B;&#x5E8F;&#x65F6;&#xFF0C;&#x5728;&#x7C7B;&#x8DEF;&#x5F84;&#x91CC;&#x641C;&#x7D22;&#x5305;&#x3002;&#x8BD5;&#x8BD5;&#xFF1A;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd pirate_phrases</span><br><span class="line">javac ../PirateConversation.java</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>You&#x2019;ll get this:</p>
+</blockquote>
+<p>&#x4F1A;&#x5F97;&#x5230;&#x4E0B;&#x9762;&#x7ED3;&#x679C;:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">../PirateConversation.java:1: error: package pirate_phrases does not exist</span><br><span class="line">import pirate_phrases.*;</span><br><span class="line">^</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Boom! The Java compiler just told you to hang your head in shame and maybe weep a little.</p>
+</blockquote>
+<p>Java&#x7F16;&#x8BD1;&#x5668;&#x62A5;&#x9519;&#x4E86;&#x3002;</p>
+<blockquote>
+<p>Why? It thinks that the <code>pirate_phrases</code> package doesn&#x2019;t exist. But that&#x2019;s stupid, right? You&#x2019;re in the <code>pirate_phrases</code> directory!</p>
+</blockquote>
+<p>&#x4F60;&#x6B63;&#x5728;<code>pirate_phrases</code>&#x76EE;&#x5F55;&#x91CC;&#xFF0C;&#x62A5;&#x9519;&#x4FE1;&#x606F;&#x600E;&#x4E48;&#x8BF4;<code>pirate_phrases</code>&#x5305;&#x4E0D;&#x5B58;&#x5728;&#x5462;&#xFF1F;</p>
+<blockquote>
+<p>What&#x2019;s happening here is that the default classpath only includes the current directory, which in this case is <code>pirate_phrases</code>. <code>javac</code> is trying to find the directory <em>phrasebook/pirate_phrases/pirate_phrases</em>, which doesn&#x2019;t exist. When you run <code>javac ../PirateConversation.java</code> from within the phrasebook directory, <code>javac</code> tries to find the directory <em>phrasebook/pirate_phrases</em>, which does exist. Without changing directories, try running <code>javac -classpath ../ ../PirateConversation.java</code>. Shiver me timbers, it works! This works because you manually set the classpath to the parent directory of <em>pirate_phrases</em>, which is <em>phrasebook</em>. From there, <code>javac</code> can successfully find the <em>pirate_phrases</em> directory.</p>
+</blockquote>
+<p>&#x662F;&#x56E0;&#x4E3A;&#x9ED8;&#x8BA4;&#x7C7B;&#x8DEF;&#x5F84;&#x53EA;&#x5305;&#x542B;&#x5F53;&#x524D;&#x76EE;&#x5F55;<code>pirate_phrases</code>&#x3002;<code>javac</code>&#x627E;&#x7684;&#x662F;<em>phrasebook/pirate_phrases/pirate_phrases</em>&#x76EE;&#x5F55;&#xFF0C;&#x8FD9;&#x4E2A;&#x76EE;&#x5F55;&#x4E0D;&#x5B58;&#x5728;&#x3002;&#x8FD8;&#x5728;&#x8FD9;&#x4E2A;&#x76EE;&#x5F55;&#x4E0B;&#xFF0C;&#x8BD5;&#x4E00;&#x4E0B;<code>javac -classpath ../ ../PirateConversation.java</code>&#xFF0C;&#x6210;&#x529F;&#x4E86;&#x3002;&#x56E0;&#x4E3A;&#x624B;&#x52A8;&#x8BBE;&#x5B9A;&#x7C7B;&#x8DEF;&#x5F84;&#x4E3A;&#x7236;&#x76EE;&#x5F55;<em>phrasebook</em>&#x3002;<code>javac</code>&#x4ECE;&#x8FD9;&#x4E2A;&#x76EE;&#x5F55;&#x80FD;&#x627E;&#x5230;<em>pirate_phrases</em>&#x76EE;&#x5F55;&#x3002;</p>
+<blockquote>
+<p>In summary, packages organize code and require a matching directory structure. Importing classes allows you to refer to them without having to prepend the entire class&#x2019;s package name. <code>javac</code> and <code>java</code> find packages using the classpath.</p>
+</blockquote>
+<p>&#x603B;&#x7ED3;&#xFF0C;&#x5305;&#x7EC4;&#x7EC7;&#x4EE3;&#x7801;&#xFF0C;&#x5E76;&#x8981;&#x6C42;&#x4E0E;&#x76EE;&#x5F55;&#x5339;&#x914D;&#x3002;&#x5F15;&#x5165;&#x7C7B;&#x5141;&#x8BB8;&#x4F60;&#x65E0;&#x9700;&#x4F7F;&#x7528;&#x6574;&#x4E2A;&#x7C7B;&#x7684;&#x62A5;&#x540D;&#x5C31;&#x80FD;&#x5F15;&#x7528;&#x5B83;&#x4EEC;&#x3002;<code>javac</code>&#x548C;<code>java</code>&#x7528;&#x7C7B;&#x8DEF;&#x5F84;&#x67E5;&#x627E;&#x5305;&#x3002;</p>
+<blockquote>
+<p>JAR Files</p>
+</blockquote>
+<h2 id="JAR-&#x6587;&#x4EF6;"><a href="#JAR-&#x6587;&#x4EF6;" class="headerlink" title="JAR &#x6587;&#x4EF6;"></a>JAR &#x6587;&#x4EF6;</h2><blockquote>
+<p>JAR files allow you to bundle all your <em>.class</em> files into one single file. Navigate to your <em>phrasebook</em> directory and run the following:</p>
+</blockquote>
+<p>JAR&#x6587;&#x4EF6;&#x8BA9;&#x4F7F;&#x4F60;&#x80FD;&#x628A;&#x6240;&#x6709;<em>.class</em>&#x6587;&#x4EF6;&#x6253;&#x5305;&#x6210;&#x4E00;&#x4E2A;&#x5355;&#x72EC;&#x6587;&#x4EF6;&#x3002;&#x8FDB;&#x5165;<em>phrasebook</em>&#x76EE;&#x5F55;&#xFF0C;&#x8FD0;&#x884C;&#x4E0B;&#x9762;&#x4E24;&#x4E2A;&#x547D;&#x4EE4;:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">jar cvfe conversation.jar PirateConversation PirateConversation.class pirate_phrases/*.class</span><br><span class="line">java -jar conversation.jar</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>This displays the pirate conversation correctly. You bundled all the class files into <em>conversation.jar</em>. Using the <code>e</code> flag, you also indicated that the <code>PirateConversation</code> class is the <em>entry point</em>. The entry point is the class that contains the <code>main</code> method that should be executed when the JAR as a whole runs, and <code>jar</code> stores this information in the file <em>META-INF/MANIFEST.MF</em> within the JAR file. If you were to read that file, it would contain this line:</p>
+</blockquote>
+<p>&#x7ED3;&#x679C;&#x6B63;&#x786E;&#x3002;&#x4F60;&#x628A;&#x6240;&#x6709;&#x7C7B;&#x6587;&#x4EF6;&#x6253;&#x5305;&#x8FDB;<em>conversation.jar</em>&#x3002;&#x7528;<code>e</code>&#x6807;&#x8BB0;&#x6307;&#x5B9A;&#x4E86;<code>PirateConversation</code>&#x7C7B;&#x662F;<em>&#x8FDB;&#x5165;&#x70B9;</em>&#x3002;&#x8FDB;&#x5165;&#x70B9;&#x662F;&#x542B;&#x6709;<code>main</code>&#x65B9;&#x6CD5;&#x7684;&#x7C7B;&#xFF0C;&#x5F53;JAR&#x4F5C;&#x4E3A;&#x4E00;&#x4E2A;&#x6574;&#x4F53;&#x8FD0;&#x884C;&#x65F6;&#xFF0C;<code>main</code>&#x4F1A;&#x88AB;&#x8FD0;&#x884C;&#x3002;<code>jar</code>&#x628A;&#x8FD9;&#x4E2A;&#x4FE1;&#x606F;&#x50A8;&#x5B58;&#x5728;JAR&#x6587;&#x4EF6;&#x91CC;&#x7684;<em>META-INF/MANIFEST.MF</em>&#x6587;&#x4EF6;&#x91CC;&#xFF0C;&#x5B83;&#x4F1A;&#x5305;&#x542B;&#x8FD9;&#x884C;:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Main-Class: PirateConversation</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>By the way, when you execute JAR files, you don&#x2019;t have to worry which directory you&#x2019;re in, relative to the file. You could change to the <em>pirate_phrases</em> directory and run <code>java -jar ../conversation.jar</code>, and it would work fine. The reason is that the JAR file maintains the directory structure. You can see its contents with <code>jar tf conversation.jar</code>, which outputs this:</p>
+</blockquote>
+<p>&#x987A;&#x4FBF;&#x63D0;&#x4E00;&#x4E0B;&#xFF0C;&#x6267;&#x884C;JAR&#x6587;&#x4EF6;&#x65F6;&#xFF0C;&#x4E0D;&#x7528;&#x62C5;&#x5FC3;&#x5F53;&#x524D;&#x5728;&#x54EA;&#x4E2A;&#x76EE;&#x5F55;&#x3002;&#x4F60;&#x53EF;&#x4EE5;&#x6539;&#x53D8;&#x76EE;&#x5F55;&#x5230;<em>pirate_phrases</em>,&#x5E76;&#x6267;&#x884C;<code>java -jar ../conversation.jar</code>,&#x4E5F;&#x4F1A;&#x6267;&#x884C;&#x6210;&#x529F;&#x3002;&#x56E0;&#x4E3A;JAR&#x6587;&#x4EF6;&#x4FDD;&#x6301;&#x4E86;&#x76EE;&#x5F55;&#x7ED3;&#x6784;&#x3002;&#x6267;&#x884C;<code>jar tf conversation.jar</code>&#x53EF;&#x4EE5;&#x770B;&#x5230;:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">META-INF/</span><br><span class="line">META-INF/MANIFEST.MF</span><br><span class="line">PirateConversation.class</span><br><span class="line">pirate_phrases/Farewells.class</span><br><span class="line">pirate_phrases/Greetings.class</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>You can see that the JAR file includes the <em>pirate_phrases</em> directory. One more fun fact about JARs: they&#x2019;re really just ZIP files with a .jar extension. You can treat them the same as any other ZIP file.</p>
+</blockquote>
+<p>&#x53EF;&#x4EE5;&#x770B;&#x5230;JAR&#x6587;&#x4EF6;&#x5305;&#x542B;&#x4E86;<em>pirate_phrases</em>&#x76EE;&#x5F55;&#x3002;&#x4E00;&#x4E2A;&#x66F4;&#x6709;&#x8DA3;&#x7684;&#x4E8B;&#x5B9E;&#x662F;&#xFF1A;JAR&#x662F;&#x771F;&#x6B63;&#x7684;&#x6269;&#x5C55;&#x540D;&#x662F;<em>.jar</em>&#x7684;ZIP&#x6587;&#x4EF6;&#x3002;&#x4F60;&#x53EF;&#x4EE5;&#x50CF;&#x5BF9;&#x5F85;ZIP&#x6587;&#x4EF6;&#x4E00;&#x6837;&#x5BF9;&#x5F85;&#x5B83;&#x4EEC;&#x3002;</p>
+<blockquote>
+<p>clojure.jar</p>
+</blockquote>
+<h2 id="clojure-jar"><a href="#clojure-jar" class="headerlink" title="clojure.jar"></a>clojure.jar</h2><p>Now you&#x2019;re ready to see how Clojure works under the hood! Download <a href="http://repo1.maven.org/maven2/org/clojure/clojure/1.7.0/clojure-1.7.0.zip" target="_blank" rel="external">the 1.7.0 stable release</a> and run it:</p>
+<p>&#x73B0;&#x5728;&#x4F60;&#x5DF2;&#x7ECF;&#x505A;&#x597D;&#x51C6;&#x5907;&#x4E86;&#xFF0C;&#x6765;&#x770B;&#x770B;Clojure&#x5728;&#x5E95;&#x5C42;&#x662F;&#x5982;&#x4F55;&#x5DE5;&#x4F5C;&#x7684;&#xFF01;&#x4E0B;&#x8F7D;<a href="http://repo1.maven.org/maven2/org/clojure/clojure/1.7.0/clojure-1.7.0.zip" target="_blank" rel="external">the 1.7.0 stable release</a> &#x5E76;&#x8FD0;&#x884C;:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -jar clojure-1.7.0.jar</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>You should see the most soothing of sights, the Clojure REPL. How did it actually start up? Let&#x2019;s look at <em>META-INF/MANIFEST.MF</em> in the JAR file:</p>
+</blockquote>
+<p>&#x4F60;&#x5E94;&#x8BE5;&#x770B;&#x5230;&#x719F;&#x6089;&#x7684;&#x8001;&#x670B;&#x53CB;&#xFF0C;Clojure REPL&#x3002;&#x5B83;&#x5B9E;&#x9645;&#x4E0A;&#x662F;&#x5982;&#x4F55;&#x542F;&#x52A8;&#x7684;&#xFF1F;&#x770B;&#x4E00;&#x4E0B;JAR&#x6587;&#x4EF6;&#x91CC;&#x7684;<em>META-INF/MANIFEST.MF</em>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Manifest-Version: 1.0</span><br><span class="line">Archiver-Version: Plexus Archiver</span><br><span class="line">Created-By: Apache Maven</span><br><span class="line">Built-By: hudson</span><br><span class="line">Build-Jdk: 1.7.0_20</span><br><span class="line">Main-Class: clojure.main</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>It looks like <code>clojure.main</code> is specified as the entry point. Where does this class come from? Well, have a look at <em>clojure/main.java</em> on GitHub at <a href="https://github.com/clojure/clojure/blob/master/src/jvm/clojure/main.java" target="_blank" rel="external">https://github.com/clojure/clojure/blob/master/src/jvm/clojure/main.java</a>:</p>
+</blockquote>
+<p>&#x770B;&#x8D77;&#x6765;<code>clojure.main</code>&#x88AB;&#x6307;&#x5B9A;&#x4E3A;&#x5165;&#x53E3;&#x3002;&#x8FD9;&#x4E2A;&#x7C7B;&#x662F;&#x600E;&#x4E48;&#x6765;&#x7684;&#xFF1F;&#x770B;&#x4E00;&#x4E0B;Github&#x4E0A;&#x7684;<em>clojure/main.java</em>, <a href="https://github.com/clojure/clojure/blob/master/src/jvm/clojure/main.java" target="_blank" rel="external">&#x70B9;&#x51FB;&#x67E5;&#x770B;</a>:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span><br><span class="line"> *   Copyright (c) Rich Hickey. All rights reserved.</span><br><span class="line"> *   The use and distribution terms for this software are covered by the</span><br><span class="line"> *   Eclipse Public License 1.0 (http://opensource.org/licenses/eclipse-1.0.php)</span><br><span class="line"> *   which can be found in the file epl-v10.html at the root of this distribution.</span><br><span class="line"> *   By using this software in any fashion, you are agreeing to be bound by</span><br><span class="line"> *   the terms of this license.</span><br><span class="line"> *   You must not remove this notice, or any other, from this software.</span><br><span class="line"> **/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">package</span> clojure;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> clojure.lang.Symbol;</span><br><span class="line"><span class="keyword">import</span> clojure.lang.Var;</span><br><span class="line"><span class="keyword">import</span> clojure.lang.RT;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">main</span></span>{</span><br><span class="line"></span><br><span class="line"><span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">private</span> Symbol CLOJURE_MAIN = Symbol.intern(<span class="string">&quot;clojure.main&quot;</span>);</span><br><span class="line"><span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">private</span> Var REQUIRE = RT.var(<span class="string">&quot;clojure.core&quot;</span>, <span class="string">&quot;require&quot;</span>);</span><br><span class="line"><span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">private</span> Var LEGACY_REPL = RT.var(<span class="string">&quot;clojure.main&quot;</span>, <span class="string">&quot;legacy-repl&quot;</span>);</span><br><span class="line"><span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">private</span> Var LEGACY_SCRIPT = RT.var(<span class="string">&quot;clojure.main&quot;</span>, <span class="string">&quot;legacy-script&quot;</span>);</span><br><span class="line"><span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">private</span> Var MAIN = RT.var(<span class="string">&quot;clojure.main&quot;</span>, <span class="string">&quot;main&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">legacy_repl</span><span class="params">(String[] args)</span> </span>{</span><br><span class="line">    REQUIRE.invoke(CLOJURE_MAIN);</span><br><span class="line">    LEGACY_REPL.invoke(RT.seq(args));</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">legacy_script</span><span class="params">(String[] args)</span> </span>{</span><br><span class="line">    REQUIRE.invoke(CLOJURE_MAIN);</span><br><span class="line">    LEGACY_SCRIPT.invoke(RT.seq(args));</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{</span><br><span class="line">    REQUIRE.invoke(CLOJURE_MAIN);</span><br><span class="line">    MAIN.applyTo(RT.seq(args));</span><br><span class="line">}</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>As you can see, the file defines a class named <code>main</code>. It belongs to the package <code>clojure</code> and defines a <code>public static main</code> method, and the JVM is completely happy to use it as an entry point. Seen this way, Clojure is a JVM program just like any other.</p>
+</blockquote>
+<p>&#x5982;&#x4F60;&#x6240;&#x89C1;&#xFF0C;&#x8FD9;&#x4E2A;&#x6587;&#x4EF6;&#x5B9A;&#x4E49;&#x4E86;&#x4E00;&#x4E2A;&#x540D;&#x79F0;&#x662F;<code>main</code>&#x7684;&#x7C7B;&#x3002;&#x5B83;&#x5C5E;&#x4E8E;<code>clojure</code>&#x5305;&#xFF0C;&#x8FD8;&#x5B9A;&#x4E49;&#x4E86;&#x4E00;&#x4E2A;<code>public static main</code>&#x65B9;&#x6CD5;&#xFF0C;JVM&#x7528;&#x5B83;&#x4F5C;&#x4E3A;&#x5165;&#x53E3;&#x3002;&#x53EF;&#x4EE5;&#x770B;&#x5230;&#xFF0C;&#x5C31;&#x50CF;&#x5176;&#x4ED6;&#x7A0B;&#x5E8F;&#x4E00;&#x6837;&#xFF0C;Clojure&#x662F;&#x4E00;&#x4E2A;JVM&#x7A0B;&#x5E8F;&#x3002;</p>
+<blockquote>
+<p>This wasn&#x2019;t meant to be an in-depth Java tutorial, but I hope that it helped clarify what programmers mean when they talk about Clojure &#x201C;running on the JVM&#x201D; or being a &#x201C;hosted&#x201D; language. In the next section, you&#x2019;ll continue to explore the magic of the JVM as you learn how to use additional Java libraries within your Clojure project.</p>
+</blockquote>
+<p>&#x8FD9;&#x6CE8;&#x5B9A;&#x4E0D;&#x662F;&#x4E00;&#x4E2A;&#x6DF1;&#x5165;&#x7684;Java&#x6559;&#x7A0B;&#xFF0C;&#x4F46;&#x6211;&#x5E0C;&#x671B;&#x5B83;&#x5E2E;&#x52A9;&#x4F60;&#x6F84;&#x6E05;&#xFF0C;Clojure&#x8FD0;&#x884C;&#x5728;JVM&#x4E0A;&#xFF0C;&#x6216;Clojure&#x662F;&#x4E00;&#x4E2A;&#x5BBF;&#x4E3B;&#x8BED;&#x8A00;&#x7684;&#x542B;&#x4E49;&#x3002;&#x4E0B;&#x8282;&#x5C06;&#x5B66;&#x4E60;&#x5982;&#x4F55;&#x5728;Clojure&#x9879;&#x76EE;&#x91CC;&#x4F7F;&#x7528;Java&#x5E93;&#xFF0C;&#x4F60;&#x4F1A;&#x7EE7;&#x7EED;&#x63A2;&#x7D22;JVM&#x7684;&#x9B54;&#x529B;&#x3002;</p>
+<blockquote>
+<p>Clojure App JARs</p>
+</blockquote>
+<h2 id="Clojure-App-JARs"><a href="#Clojure-App-JARs" class="headerlink" title="Clojure App JARs"></a>Clojure App JARs</h2><blockquote>
+<p>You now know how Java runs Java JARs, but how does it run Clojure apps bundled as JARs? After all, Clojure applications don&#x2019;t have classes, do they?</p>
+</blockquote>
+<p>&#x73B0;&#x5728;&#x4F60;&#x77E5;&#x9053;&#x4E86;Java&#x5982;&#x4F55;&#x8FD0;&#x884C;Java JAR&#x6587;&#x4EF6;&#xFF0C;&#x4F46;&#x5B83;&#x5982;&#x4F55;&#x8FD0;&#x884C;&#x6253;&#x5305;&#x6210;JAR&#x6587;&#x4EF6;&#x7684;Clojure&#x5E94;&#x7528;&#x7A0B;&#x5E8F;&#x5462;&#xFF1F;&#x6BD5;&#x7ADF;&#xFF0C;Clojure&#x5E94;&#x7528;&#x7A0B;&#x5E8F;&#x6CA1;&#x6709;&#x7C7B;&#xFF0C;&#x5BF9;&#x5417;&#xFF1F;</p>
+<blockquote>
+<p>As it turns out, you can make the Clojure compiler generate a class for a namespace by putting the <code>(:gen-class)</code> directive in the namespace declaration. (You can see this in the very first Clojure program you created, clojure-noob in Chapter 1. Remember that program, little teapot?) This means that the compiler produces the bytecode necessary for the JVM to treat the namespace as if it defines a Java class.</p>
+</blockquote>
+<p>&#x539F;&#x6765;&#x662F;&#x8FD9;&#x6837;&#xFF0C;&#x53EF;&#x4EE5;&#x8BA9;Clojure&#x7F16;&#x8BD1;&#x5668;&#x4E3A;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x751F;&#x6210;&#x4E00;&#x4E2A;&#x7C7B;&#xFF0C;&#x9700;&#x8981;&#x505A;&#x7684;&#x662F;&#x628A;<code>(:gen-class)</code>&#x6307;&#x4EE4;&#x653E;&#x8FDB;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x58F0;&#x660E;&#x91CC;(&#x53EF;&#x4EE5;&#x5728;&#x7B2C;&#x4E00;&#x7AE0;&#x7684;&#x5C0F;&#x5E94;&#x7528;&#x7A0B;&#x5E8F;clojure-noob&#x91CC;&#x770B;&#x5230;)&#x3002;&#x8FD9;&#x610F;&#x5473;&#x7740;&#x7F16;&#x8BD1;&#x5668;&#x4E3A;JVM&#x751F;&#x6210;&#x5FC5;&#x8981;&#x7684;&#x5B57;&#x8282;&#x7801;&#xFF0C;&#x4EE5;&#x4FBF;&#x628A;&#x8FD9;&#x4E2A;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x5F53;&#x6210;&#x4E00;&#x4E2A;Java&#x7C7B;&#x3002;</p>
+<blockquote>
+<p>You set the namespace of the entry point for your program in the program&#x2019;s <em>project.clj</em> file, using the <code>:main</code> attribute. For <em>clojure-noob</em>, you should see <code>:main ^:skip-aot clojure-noob.core</code>. When Leiningen compiles this file, it will add a <em>meta-inf/manifest.mf</em> file that contains the entry point to the resulting JAR file.</p>
+</blockquote>
+<p>&#x4F60;&#x9700;&#x8981;&#x5728;<code>project.clj</code>&#x6587;&#x4EF6;&#x91CC;&#x4E3A;&#x5E94;&#x7528;&#x7A0B;&#x5E8F;&#x8BBE;&#x7F6E;&#x8FDB;&#x5165;&#x70B9;&#x7684;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#xFF0C;&#x4F7F;&#x7528;<code>:main</code>&#x5C5E;&#x6027;&#x3002;&#x5BF9;&#x4E8E;<em>clojure-noob</em>,&#x4F60;&#x5E94;&#x8BE5;&#x770B;&#x5230;<code>:main ^:skip-aot clojure-noob.core</code>&#x3002;Leiningen&#x7F16;&#x8BD1;&#x8FD9;&#x4E2A;&#x6587;&#x4EF6;&#x65F6;&#xFF0C;&#x5B83;&#x4F1A;&#x5F80;&#x751F;&#x6210;&#x5F97;JAR&#x6587;&#x4EF6;&#x91CC;&#x6DFB;&#x52A0;&#x4E00;&#x4E2A;&#x5305;&#x542B;&#x8FD9;&#x4E2A;&#x8FDB;&#x5165;&#x70B9;&#x7684;<em>meta-inf/manifest.mf</em>&#x6587;&#x4EF6;&#x3002;</p>
+<blockquote>
+<p>So, if you define a <code>-main</code> function in a namespace and include the <code>(:gen-class)</code> directive, and also set <code>:main</code> in your <em>project.clj</em> file, your program will have everything it needs for Java to run it when it gets compiled as a JAR. You can try this out in your terminal by navigating to your clojure-noob directory and running this:</p>
+</blockquote>
+<p>&#x90A3;&#x4E48;&#xFF0C;&#x5982;&#x679C;&#x4F60;&#x5728;&#x4E00;&#x4E2A;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x91CC;&#x5B9A;&#x4E49;&#x4E86;&#x4E00;&#x4E2A;<code>-main</code>&#x51FD;&#x6570;&#x5E76;&#x5305;&#x542B;&#x4E86;<code>(:gen-class)</code>&#x6307;&#x4EE4;&#xFF0C;&#x4E5F;&#x5728;<em>project.clj</em>&#x6587;&#x4EF6;&#x91CC;&#x8BBE;&#x7F6E;&#x4E86;<code>:main</code>,&#x628A;&#x4F60;&#x7684;&#x7A0B;&#x5E8F;&#x6253;&#x5305;&#x6210;JAR&#x6587;&#x4EF6;&#xFF0C;Java&#x5C31;&#x80FD;&#x8FD0;&#x884C;&#x5B83;&#x4E86;&#x3002;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lein uberjar</span><br><span class="line">java -jar target/uberjar/clojure-noob-0.1.0-SNAPSHOT-standalone.jar</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>You should see two messages printed out: &#x201C;Cleanliness is next to god&#xAD;liness&#x201D; and &#x201C;I&#x2019;m a little teapot!&#x201D; Note that you don&#x2019;t need Leiningen to run the JAR file; you can send it to friends and neighbors and they can run it as long as they have Java installed.</p>
+</blockquote>
+<p>&#x4F60;&#x5E94;&#x8BE5;&#x770B;&#x5230;&#x6253;&#x5370;&#x4E86;&#x4E24;&#x6761;&#x6D88;&#x606F;:&#x201D;Cleanliness is next to god&#xAD;liness&#x201D;&#x548C;&#x201C;I&#x2019;m a little teapot!&#x201D;&#x3002;&#x6CE8;&#x610F;&#x4F60;&#x4E0D;&#x9700;&#x8981;Leiningen&#x8FD0;&#x884C;JAR&#x6587;&#x4EF6;&#xFF1B;&#x4F60;&#x53EF;&#x4EE5;&#x628A;&#x5B83;&#x53D1;&#x7ED9;&#x4F60;&#x7684;&#x670B;&#x53CB;&#x548C;&#x90BB;&#x5C45;&#xFF0C;&#x53EA;&#x8981;&#x4ED6;&#x4EEC;&#x88C5;&#x4E86;Java&#x5C31;&#x80FD;&#x76F4;&#x63A5;&#x8FD0;&#x884C;&#x3002;</p>
+<blockquote>
+<p>Java Interop</p>
+</blockquote>
+<h2 id="Java&#x4E92;&#x64CD;&#x4F5C;"><a href="#Java&#x4E92;&#x64CD;&#x4F5C;" class="headerlink" title="Java&#x4E92;&#x64CD;&#x4F5C;"></a>Java&#x4E92;&#x64CD;&#x4F5C;</h2><blockquote>
+<p>One of Rich Hickey&#x2019;s design goals for Clojure was to create a practical language. For that reason, Clojure was designed to make it easy for you to interact with Java classes and objects, meaning you can use Java&#x2019;s extensive native functionality and its enormous ecosystem. The ability to use Java classes, objects, and methods is called <em>Java interop</em>. In this section, you&#x2019;ll learn how to use Clojure&#x2019;s interop syntax, how to import Java packages, and how to use the most frequently used Java classes.</p>
+</blockquote>
+<p>Rich Hickey&#x8BBE;&#x8BA1;Clojure&#x7684;&#x4E00;&#x4E2A;&#x76EE;&#x7684;&#x662F;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x5B9E;&#x7528;&#x7684;&#x8BED;&#x8A00;&#x3002;&#x56E0;&#x4E3A;&#x8FD9;&#x4E2A;&#x539F;&#x56E0;&#xFF0C;Clojure&#x88AB;&#x8BBE;&#x8BA1;&#x7684;&#x5F88;&#x5BB9;&#x6613;&#x4E0E;Java&#x7C7B;&#x548C;&#x5BF9;&#x8C61;&#x4EA4;&#x4E92;&#xFF0C;&#x610F;&#x5473;&#x7740;&#x4F60;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;Java&#x7684;&#x5927;&#x91CF;&#x6E90;&#x751F;&#x529F;&#x80FD;&#x548C;&#x5B83;&#x7684;&#x5DE8;&#x5927;&#x751F;&#x6001;&#x5708;&#x3002;&#x4F7F;&#x7528;Java&#x7C7B;&#xFF0C;&#x5BF9;&#x8C61;&#xFF0C;&#x65B9;&#x6CD5;&#x7684;&#x80FD;&#x529B;&#x53EB;<em>Java&#x4E92;&#x64CD;&#x4F5C;</em>&#x3002;&#x8FD9;&#x8282;&#xFF0C;&#x4F60;&#x5C06;&#x5B66;&#x4E60;&#x5982;&#x4F55;&#x4F7F;&#x7528;Clojure&#x7684;&#x4E92;&#x64CD;&#x4F5C;&#x8BED;&#x6CD5;&#xFF0C;&#x5982;&#x4F55;&#x5F15;&#x5165;Java&#x5305;&#xFF0C;&#x5982;&#x4F55;&#x4F7F;&#x7528;&#x6700;&#x9891;&#x7E41;&#x4F7F;&#x7528;&#x7684;Java&#x7C7B;&#x3002;</p>
+<blockquote>
+<p>Interop Syntax</p>
+</blockquote>
+<h3 id="&#x4E92;&#x64CD;&#x4F5C;&#x8BED;&#x6CD5;"><a href="#&#x4E92;&#x64CD;&#x4F5C;&#x8BED;&#x6CD5;" class="headerlink" title="&#x4E92;&#x64CD;&#x4F5C;&#x8BED;&#x6CD5;"></a>&#x4E92;&#x64CD;&#x4F5C;&#x8BED;&#x6CD5;</h3><blockquote>
+<p>Using Clojure&#x2019;s interop syntax, interacting with Java objects and classes is straightforward. Let&#x2019;s start with object interop syntax.</p>
+</blockquote>
+<p>&#x7528;Clojure&#x7684;&#x4E92;&#x64CD;&#x4F5C;&#x8BED;&#x6CD5;&#x4E0E;Java&#x5BF9;&#x8C61;&#xFF0C;&#x7C7B;&#x4E92;&#x64CD;&#x4F5C;&#x5F88;&#x7B80;&#x5355;&#x3002;&#x4ECE;&#x5BF9;&#x8C61;&#x4E92;&#x64CD;&#x4F5C;&#x8BED;&#x6CD5;&#x5F00;&#x59CB;&#x3002;</p>
+<blockquote>
+<p>You can call methods on an object using <code>(.methodName object)</code>. For example, because all Clojure strings are implemented as Java strings, you can call Java methods on them:</p>
+</blockquote>
+<p>&#x7528;<code>(.methodName object)</code>&#x53EF;&#x4EE5;&#x8C03;&#x7528;&#x5BF9;&#x8C61;&#x7684;&#x65B9;&#x6CD5;&#x3002;&#x6BD4;&#x5982;&#xFF0C;&#x6240;&#x6709;Clojure&#x5B57;&#x7B26;&#x4E32;&#x90FD;&#x5B9E;&#x73B0;&#x4E3A;Java&#x5B57;&#x7B26;&#x4E32;&#xFF0C;&#x53EF;&#x4EE5;&#x8C03;&#x7528;Java&#x65B9;&#x6CD5;:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(.toUpperCase &quot;By Bluebeard&apos;s bananas!&quot;)</span><br><span class="line">; =&gt; &quot;BY BLUEBEARD&apos;S BANANAS!&quot;</span><br><span class="line"></span><br><span class="line">&#x278A; (.indexOf &quot;Let&apos;s synergize our bleeding edges&quot; &quot;y&quot;)</span><br><span class="line">; =&gt; 7</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>These are equivalent to this Java:</p>
+</blockquote>
+<p>&#x4E0E;&#x4E0B;&#x9762;&#x5F97;Java&#x4EE3;&#x7801;&#x4E00;&#x6837;&#xFF1A;</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;By Bluebeard&apos;s bananas!&quot;</span>.toUpperCase()</span><br><span class="line"><span class="string">&quot;Let&apos;s synergize our bleeding edges&quot;</span>.indexOf(<span class="string">&quot;y&quot;</span>)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Notice that Clojure&#x2019;s syntax allows you to pass arguments to Java methods. In this example, at &#x278A; you passed the argument <code>&quot;y&quot;</code> to the <code>indexOf</code> method.</p>
+</blockquote>
+<p>&#x7528;Clojure&#x8BED;&#x6CD5;&#x53EF;&#x4EE5;&#x7ED9;Java&#x65B9;&#x6CD5;&#x4F20;&#x9012;&#x53C2;&#x6570;&#x3002;&#x5728;&#x278A;&#x5904;&#xFF0C;&#x7ED9;<code>indexOf</code>&#x65B9;&#x6CD5;&#x4F20;&#x9012;&#x4E86;&#x53C2;&#x6570;<code>&quot;y&quot;</code>&#x3002;</p>
+<blockquote>
+<p>You can also call static methods on classes and access classes&#x2019; static fields. Observe!</p>
+</blockquote>
+<p>&#x4E5F;&#x53EF;&#x4EE5;&#x8C03;&#x7528;&#x7C7B;&#x7684;&#x9759;&#x6001;&#x65B9;&#x6CD5;&#x6216;&#x8BBF;&#x95EE;&#x7C7B;&#x7684;&#x9759;&#x6001;&#x5B57;&#x6BB5;&#x3002;</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#x278A; (java.lang.Math/abs -3)</span><br><span class="line">; =&gt; 3</span><br><span class="line"></span><br><span class="line">&#x278B; java.lang.Math/PI</span><br><span class="line">; =&gt; 3.141592653589793</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>At &#x278A; you called the <code>abs</code> static method on the <code>java.lang.Math</code> class, and at &#x278B; you accessed that class&#x2019;s <code>PI</code> static field.</p>
+</blockquote>
+<p>&#x5728;&#x278A;&#x5904;&#xFF0C;&#x8C03;&#x7528;&#x4E86;<code>java.lang.Math</code>&#x7C7B;&#x7684;&#x9759;&#x6001;<code>abs</code>&#x65B9;&#x6CD5;&#xFF0C;&#x5728;&#x278B;&#x5904;&#xFF0C;&#x8BBF;&#x95EE;&#x4E86;&#x8FD9;&#x4E2A;&#x7C7B;&#x7684;&#x9759;&#x6001;&#x5B57;&#x6BB5;<code>PI</code>&#x3002;</p>
+<blockquote>
+<p>All of these examples (except <code>java.lang.Math/PI</code>) use macros that expand to use the dot special form. In general, you won&#x2019;t need to use the dot special form unless you want to write your own macros to interact with Java objects and classes. Nevertheless, here is each example followed by its macroexpansion:</p>
+</blockquote>
+<p>&#x6240;&#x6709;&#x7684;&#x4F8B;&#x5B50;(&#x9664;&#x4E86;<code>java.lang.Math/PI</code>)&#x90FD;&#x88AB;&#x5B8F;&#x5C55;&#x5F00;&#x4E3A;&#x4F7F;&#x7528;&#x70B9;&#x7279;&#x6B8A;&#x5F62;&#x5F0F;&#x3002;&#x901A;&#x5E38;&#x4E0D;&#x9700;&#x8981;&#x4F7F;&#x7528;&#x70B9;&#x7279;&#x6B8A;&#x5F62;&#x5F0F;&#xFF0C;&#x9664;&#x975E;&#x4F60;&#x9700;&#x8981;&#x81EA;&#x5DF1;&#x5199;&#x5B8F;&#x4E0E;Java&#x5BF9;&#x8C61;&#x548C;&#x7C7B;&#x4EA4;&#x4E92;&#x3002;&#x4E0B;&#x9762;&#x662F;&#x5B8F;&#x5C55;&#x5F00;&#x4F8B;&#x5B50;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">macroexpand-1</span></span> &apos;(<span class="name">.toUpperCase</span> <span class="string">&quot;By Bluebeard&apos;s bananas!&quot;</span>))</span><br><span class="line"><span class="comment">; =&gt; (. &quot;By Bluebeard&apos;s bananas!&quot; toUpperCase)</span></span><br><span class="line"></span><br><span class="line">(<span class="name"><span class="builtin-name">macroexpand-1</span></span> &apos;(<span class="name">.indexOf</span> <span class="string">&quot;Let&apos;s synergize our bleeding edges&quot;</span> <span class="string">&quot;y&quot;</span>))</span><br><span class="line"><span class="comment">; =&gt; (. &quot;Let&apos;s synergize our bleeding edges&quot; indexOf &quot;y&quot;)</span></span><br><span class="line"></span><br><span class="line">(<span class="name"><span class="builtin-name">macroexpand-1</span></span> &apos;(<span class="name">Math/abs</span> <span class="number">-3</span>))</span><br><span class="line"><span class="comment">; =&gt; (. Math abs -3)</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>This is the general form of the dot operator:</p>
+</blockquote>
+<p>&#x8FD9;&#x662F;&#x70B9;&#x64CD;&#x4F5C;&#x7B26;&#x7684;&#x901A;&#x7528;&#x5F62;&#x5F0F;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">.</span></span> object-expr-or-classname-symbol method-or-member-symbol optional-args*)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>The dot operator has a few more capabilities, and if you&#x2019;re interested in exploring it further, you can look at clojure.org&#x2019;s documentation on Java interop at <a href="http://clojure.org/java_interop#Java%20Interop-The%20Dot%20special%20form" target="_blank" rel="external">http://clojure.org/java_interop#Java%20Interop-The%20Dot%20special%20form</a>.</p>
+</blockquote>
+<p>&#x70B9;&#x64CD;&#x4F5C;&#x7B26;&#x8FD8;&#x6709;&#x51E0;&#x4E2A;&#x529F;&#x80FD;&#xFF0C;&#x5982;&#x679C;&#x4F60;&#x611F;&#x5174;&#x8DA3;&#xFF0C;&#x53EF;&#x4EE5;&#x770B;<a href="http://clojure.org/java_interop#Java%20Interop-The%20Dot%20special%20form" target="_blank" rel="external">Clojure&#x7684;&#x6587;&#x6863;</a>&#x3002;</p>
+<blockquote>
+<p>Creating and Mutating Objects</p>
+</blockquote>
+<h3 id="&#x521B;&#x5EFA;&#x548C;&#x4FEE;&#x6539;&#x5BF9;&#x8C61;"><a href="#&#x521B;&#x5EFA;&#x548C;&#x4FEE;&#x6539;&#x5BF9;&#x8C61;" class="headerlink" title="&#x521B;&#x5EFA;&#x548C;&#x4FEE;&#x6539;&#x5BF9;&#x8C61;"></a>&#x521B;&#x5EFA;&#x548C;&#x4FEE;&#x6539;&#x5BF9;&#x8C61;</h3><blockquote>
+<p>The previous section showed you how to call methods on objects that already exist. This section shows you how to create new objects and how to interact with them.</p>
+</blockquote>
+<p>&#x524D;&#x4E00;&#x8282;&#x5B66;&#x4E60;&#x4E86;&#x5982;&#x4F55;&#x8C03;&#x7528;&#x5DF2;&#x7ECF;&#x5B58;&#x5728;&#x7684;&#x5BF9;&#x8C61;&#x7684;&#x65B9;&#x6CD5;&#x3002;&#x8FD9;&#x8282;&#x5B66;&#x4E60;&#x5982;&#x4F55;&#x521B;&#x5EFA;&#x5BF9;&#x8C61;&#x5E76;&#x4E0E;&#x4E4B;&#x4EA4;&#x4E92;&#x3002;</p>
+<blockquote>
+<p>You can create a new object in two ways: <code>(new ClassName optional-args)</code> and <code>(ClassName. optional-args)</code>:</p>
+</blockquote>
+<p>&#x521B;&#x5EFA;&#x5BF9;&#x8C61;&#x6709;&#x4E24;&#x79CD;&#x65B9;&#x6CD5;&#xFF1A;<code>(new ClassName optional-args)</code>&#x548C;<code>(ClassName. optional-args)</code>:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">new</span></span> String)</span><br><span class="line"><span class="comment">; =&gt; &quot;&quot;</span></span><br><span class="line"></span><br><span class="line">(<span class="name">String.</span>)</span><br><span class="line"><span class="comment">; =&gt; &quot;&quot;</span></span><br><span class="line"></span><br><span class="line">(<span class="name">String.</span> <span class="string">&quot;To Davey Jones&apos;s Locker with ye hardies&quot;</span>)</span><br><span class="line"><span class="comment">; =&gt; &quot;To Davey Jones&apos;s Locker with ye hardies&quot;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Most people use the dot version, <code>(ClassName.)</code>.</p>
+</blockquote>
+<p>&#x5927;&#x90E8;&#x5206;&#x4EBA;&#x7528;<code>(ClassName.)</code>&#x3002;</p>
+<blockquote>
+<p>To modify an object, you call methods on it like you did in the previous section. To investigate this, let&#x2019;s use <code>java.util.Stack</code>. This class represents a last-in, first-out (LIFO) stack of objects, or just stack. Stacks are a common data structure, and they&#x2019;re called stacks because you can visualize them as a physical stack of objects, say, a stack of gold coins that you just plundered. When you add a coin to your stack, you add it to the top of the stack. When you remove a coin, you remove it from the top. Thus, the last object added is the first object removed.</p>
+</blockquote>
+<p>&#x540C;&#x4E0A;&#x4E00;&#x8282;&#x4E00;&#x6837;&#xFF0C;&#x8981;&#x4FEE;&#x6539;&#x4E00;&#x4E2A;&#x5BF9;&#x8C61;&#x4E5F;&#x8C03;&#x7528;&#x5BF9;&#x8C61;&#x7684;&#x65B9;&#x6CD5;&#x3002;&#x6211;&#x4EEC;&#x7528;<code>java.util.Stack</code>&#x6F14;&#x793A;&#x3002;&#x8FD9;&#x4E2A;&#x7C7B;&#x8868;&#x793A;&#x4E00;&#x4E2A;&#x540E;&#x8FDB;&#x5148;&#x51FA;&#x7684;&#x6808;&#x3002;</p>
+<blockquote>
+<p>Unlike Clojure data structure, Java stacks are mutable. You can add items to them and remove items, changing the object instead of deriving a new value. Here&#x2019;s how you might create a stack and add an object to it:</p>
+</blockquote>
+<p>&#x4E0E;Clojure&#x6570;&#x636E;&#x7ED3;&#x6784;&#x4E0D;&#x540C;&#xFF0C;Java&#x6808;&#x662F;&#x53EF;&#x53D8;&#x7684;&#x3002;&#x5F80;&#x6808;&#x91CC;&#x6DFB;&#x52A0;&#x4E1C;&#x897F;&#x6216;&#x4ECE;&#x6808;&#x91CC;&#x79FB;&#x9664;&#x4E1C;&#x897F;&#xFF0C;&#x90FD;&#x662F;&#x4FEE;&#x6539;&#x8FD9;&#x4E2A;&#x5BF9;&#x8C61;&#x800C;&#x4E0D;&#x662F;&#x751F;&#x6210;&#x4E00;&#x4E2A;&#x65B0;&#x503C;&#x3002;&#x4E0B;&#x9762;&#x662F;&#x5982;&#x4F55;&#x521B;&#x5EFA;&#x6808;&#x548C;&#x5F80;&#x6808;&#x91CC;&#x52A0;&#x4E1C;&#x897F;:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(java.util.Stack.)</span><br><span class="line">; =&gt; []</span><br><span class="line"></span><br><span class="line">&#x278A; (let [stack (java.util.Stack.)]</span><br><span class="line">  (.push stack &quot;Latest episode of Game of Thrones, ho!&quot;)</span><br><span class="line">  stack)</span><br><span class="line">; =&gt; [&quot;Latest episode of Game of Thrones, ho!&quot;]</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>There are a couple of interesting details here. First, you need to create a <code>let</code> binding for <code>stack</code> like you see at &#x278A; and add it as the last expression in the let form. If you didn&#x2019;t do that, the value of the overall expression would be the string <code>&quot;Latest episode of Game of Thrones, ho!&quot;</code> because that&#x2019;s the return value of <code>push</code>.</p>
+</blockquote>
+<p>&#x8FD9;&#x91CC;&#x6709;&#x51E0;&#x4E2A;&#x7EC6;&#x8282;&#x3002;&#x9996;&#x5148;&#xFF0C;&#x5728;&#x278A;&#x51FA;&#xFF0C;&#x4F60;&#x9700;&#x8981;&#x7ED9;<code>stack</code>&#x521B;&#x5EFA;&#x4E00;&#x4E2A;<code>let</code>&#x7ED1;&#x5B9A;&#x3002;&#x53E6;&#x5916;&#x9700;&#x8981;&#x628A;<code>stack</code>&#x653E;&#x5728;<code>let</code>&#x7684;&#x6700;&#x540E;&#xFF0C;&#x4EE5;&#x4FBF;&#x8FD4;&#x56DE;&#x8FD9;&#x4E2A;&#x5BF9;&#x8C61;&#xFF0C;&#x5426;&#x5219;&#x6574;&#x4E2A;&#x8868;&#x8FBE;&#x5F0F;&#x7684;&#x7ED3;&#x679C;&#x5C31;&#x662F;<code>push</code>&#x7684;&#x8FD4;&#x56DE;&#x7ED3;&#x679C;<code>&quot;Latest episode of Game of Thrones, ho!&quot;</code>&#x3002;</p>
+<blockquote>
+<p>Second, Clojure prints the stack with square brackets, the same textual representation it uses for a vector, which could throw you because it&#x2019;s not a vector. However, you can use Clojure&#x2019;s <code>seq</code> functions for reading a data structure, like <code>first</code>, on the stack:</p>
+</blockquote>
+<p>&#x6808;&#x4E0D;&#x662F;vector,&#x4F46;Clojure&#x7528;&#x65B9;&#x62EC;&#x53F7;&#x6253;&#x5370;&#x6808;&#xFF0C;&#x4E0E;vector&#x7684;&#x6587;&#x672C;&#x8868;&#x793A;&#x76F8;&#x540C;&#xFF0C;&#x8FD9;&#x53EF;&#x80FD;&#x4F7F;&#x4F60;&#x611F;&#x5230;&#x8FF7;&#x60D1;&#x3002;&#x4F46;&#x4F60;&#x53EF;&#x4EE5;&#x5728;&#x6808;&#x4E0A;&#x4F7F;&#x7528;Clojure&#x7684;<code>seq</code>&#x51FD;&#x6570;&#xFF0C;&#x6BD4;&#x5982;<code>first</code>:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">let</span></span> [stack (<span class="name">java.util.Stack.</span>)]</span><br><span class="line">  (<span class="name">.push</span> stack <span class="string">&quot;Latest episode of Game of Thrones, ho!&quot;</span>)</span><br><span class="line">  (<span class="name"><span class="builtin-name">first</span></span> stack))</span><br><span class="line"><span class="comment">; =&gt; &quot;Latest episode of Game of Thrones, ho!&quot;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>But you can&#x2019;t use functions like <code>conj</code> and <code>into</code> to add elements to the stack. If you do, you&#x2019;ll get an exception. It&#x2019;s possible to read the stack using Clojure functions because Clojure extends its abstractions to <code>java.util.Stack</code>, a topic you&#x2019;ll learn about in Chapter 13.</p>
+</blockquote>
+<p>&#x4F46;&#x4F60;&#x4E0D;&#x80FD;&#x7528;<code>conj</code>,<code>into</code>&#x8FD9;&#x6837;&#x7684;&#x51FD;&#x6570;&#x5F80;&#x6808;&#x91CC;&#x6DFB;&#x52A0;&#x6210;&#x5458;&#x3002;&#x8FD9;&#x4E48;&#x505A;&#x4F1A;&#x51FA;&#x73B0;&#x5F02;&#x5E38;&#x3002;&#x80FD;&#x7528;Clojure&#x7684;&#x51FD;&#x6570;&#x8BFB;&#x6808;&#x7684;&#x539F;&#x56E0;&#x662F;:Clojure&#x7684;&#x62BD;&#x8C61;&#x6269;&#x5C55;&#x5230;&#x4E86;<code>java.util.Stack</code>&#x3002;13&#x7AE0;&#x5C06;&#x5B66;&#x4E60;&#x8FD9;&#x4E2A;&#x4E3B;&#x9898;&#x3002;</p>
+<blockquote>
+<p>Clojure provides the <code>doto</code> macro, which allows you to execute multiple methods on the same object more succinctly:</p>
+</blockquote>
+<p>Clojure&#x63D0;&#x4F9B;&#x4E86;<code>doto</code>&#x5B8F;&#xFF0C;&#x8BA9;&#x4F60;&#x66F4;&#x7B80;&#x6D01;&#x5730;&#x5728;&#x540C;&#x4E00;&#x5BF9;&#x8C61;&#x4E0A;&#x6267;&#x884C;&#x591A;&#x4E2A;&#x65B9;&#x6CD5;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">doto</span></span> (<span class="name">java.util.Stack.</span>)</span><br><span class="line">  (<span class="name">.push</span> <span class="string">&quot;Latest episode of Game of Thrones, ho!&quot;</span>)</span><br><span class="line">  (<span class="name">.push</span> <span class="string">&quot;Whoops, I meant &apos;Land, ho!&apos;&quot;</span>))</span><br><span class="line"><span class="comment">; =&gt; [&quot;Latest episode of Game of Thrones, ho!&quot; &quot;Whoops, I meant &apos;Land, ho!&apos;&quot;]</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>The <code>doto</code> macro returns the object rather than the return value of any of the method calls, and it&#x2019;s easier to understand. If you expand it using <code>macroexpand-1</code>, you can see its structure is identical to the <code>let</code> expression you just saw in an earlier example:</p>
+</blockquote>
+<p><code>doto</code>&#x5B8F;&#x8FD4;&#x56DE;&#x7684;&#x662F;&#x8FD9;&#x4E2A;&#x5BF9;&#x8C61;&#xFF0C;&#x800C;&#x4E0D;&#x662F;&#x4EFB;&#x4F55;&#x65B9;&#x6CD5;&#x65B9;&#x6CD5;&#x8C03;&#x7528;&#x7684;&#x8FD4;&#x56DE;&#x503C;&#x3002;&#x5982;&#x679C;&#x7528;<code>macroexpand-1</code>&#x5C55;&#x5F00;&#xFF0C;&#x53EF;&#x4EE5;&#x770B;&#x5230;&#x7ED3;&#x679C;&#x4E0E;&#x524D;&#x9762;&#x7684;<code>let</code>&#x8868;&#x8FBE;&#x5F0F;&#x7684;&#x7ED3;&#x6784;&#x5B8C;&#x5168;&#x4E00;&#x6837;:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">(macroexpand-1</span><br><span class="line"> &apos;(doto (java.util.Stack.)</span><br><span class="line">    (.push &quot;Latest episode of Game of Thrones, ho!&quot;)</span><br><span class="line">    (.push &quot;Whoops, I meant &apos;Land, ho!&apos;&quot;)))</span><br><span class="line">; =&gt; (clojure.core/let</span><br><span class="line">      [G__2876 (java.util.Stack.)]</span><br><span class="line">      (.push G__2876 &quot;Latest episode of Game of Thrones, ho!&quot;)</span><br><span class="line">      (.push G__2876 &quot;Whoops, I meant &apos;Land, ho!&apos;&quot;)</span><br><span class="line">      G__2876)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Convenient!</p>
+</blockquote>
+<p>&#x592A;&#x65B9;&#x4FBF;&#x4E86;&#xFF01;</p>
+<blockquote>
+<p>Importing</p>
+</blockquote>
+<h3 id="&#x5BFC;&#x5165;"><a href="#&#x5BFC;&#x5165;" class="headerlink" title="&#x5BFC;&#x5165;"></a>&#x5BFC;&#x5165;</h3><blockquote>
+<p>In Clojure, importing has the same effect as it does in Java: you can use classes without having to type out their entire package prefix:</p>
+</blockquote>
+<p>Clojure&#x91CC;&#x7684;&#x5BFC;&#x5165;&#x4E0E;Java&#x91CC;&#x7684;&#x4E00;&#x6837;&#xFF1A;&#x4F7F;&#x7528;&#x7C7B;&#x65F6;&#x5019;&#x65E0;&#x9700;&#x518D;&#x8F93;&#x5165;&#x5B8C;&#x6574;&#x5305;&#x524D;&#x7F00;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">import</span></span> java.util.Stack)</span><br><span class="line">(<span class="name">Stack.</span>)</span><br><span class="line"><span class="comment">; =&gt; []</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>You can also import multiple classes at once using this general form:</p>
+</blockquote>
+<p>&#x4E5F;&#x53EF;&#x4EE5;&#x7528;&#x8FD9;&#x4E2A;&#x901A;&#x7528;&#x5F62;&#x5F0F;&#x4E00;&#x6B21;&#x5BFC;&#x5165;&#x591A;&#x4E2A;&#x7C7B;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">import</span></span> [package.name1 ClassName1 ClassName2]</span><br><span class="line">        [package.name2 ClassName3 ClassName4])</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Here&#x2019;s an example:</p>
+</blockquote>
+<p>&#x4F8B;&#x5982;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">import</span></span> [java.util Date Stack]</span><br><span class="line">        [java.net Proxy URI])</span><br><span class="line"></span><br><span class="line">(<span class="name">Date.</span>)</span><br><span class="line"><span class="comment">; =&gt; #inst &quot;2016-09-19T20:40:02.733-00:00&quot;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>But usually, you&#x2019;ll do all your importing in the <code>ns</code> macro, like this:</p>
+</blockquote>
+<p>&#x4F46;&#x901A;&#x5E38;&#x90FD;&#x662F;&#x5728;<code>ns</code>&#x5B8F;&#x91CC;&#x4F7F;&#x7528;&#x5BFC;&#x5165;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">ns</span></span> pirate.talk</span><br><span class="line">  (<span class="symbol">:import</span> [java.util Date Stack]</span><br><span class="line">           [java.net Proxy URI]))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>The two different methods of importing classes have the same results, but the second is usually preferable because it&#x2019;s convenient for people reading your code to see all the code involving naming in the <code>ns</code> declaration.</p>
+</blockquote>
+<p>&#x8FD9;&#x4E24;&#x79CD;&#x5BFC;&#x5165;&#x65B9;&#x6CD5;&#x7684;&#x7ED3;&#x679C;&#x4E00;&#x6837;&#xFF0C;&#x4F46;&#x7B2C;&#x4E8C;&#x79CD;&#x66F4;&#x597D;&#x3002;&#x56E0;&#x4E3A;&#x9605;&#x8BFB;&#x4EE3;&#x7801;&#x7684;&#x4EBA;&#x80FD;&#x5F88;&#x65B9;&#x4FBF;&#x5730;&#x5728;<code>ns</code>&#x91CC;&#x770B;&#x5230;&#x6240;&#x6709;&#x6D89;&#x53CA;&#x5230;&#x547D;&#x540D;&#x7684;&#x4EE3;&#x7801;&#x3002;</p>
+<blockquote>
+<p>And that&#x2019;s how you import classes! Pretty easy. To make life even easier, Clojure automatically imports the classes in <code>java.lang</code>, including <code>java.lang.String</code> and <code>java.lang.Math</code>, which is why you were able to use <code>String</code> without a preceding package name.</p>
+</blockquote>
+<p>&#x8FD9;&#x5C31;&#x662F;&#x5982;&#x4F55;&#x5BFC;&#x5165;&#x7C7B;&#xFF0C;&#x5F88;&#x5BB9;&#x6613;&#x3002;&#x4E3A;&#x65B9;&#x4FBF;&#x4F7F;&#x7528;&#x8005;&#xFF0C;Clojure&#x81EA;&#x52A8;&#x5BFC;&#x5165;<code>java.lang</code>&#x91CC;&#x7684;&#x7C7B;&#xFF0C;&#x5305;&#x62EC;<code>java.lang.String</code>&#x548C;<code>java.lang.Math</code>&#x3002;&#x8FD9;&#x5C31;&#x662F;&#x80FD;&#x4F7F;&#x7528;&#x76F4;&#x63A5;<code>String</code>&#x7684;&#x539F;&#x56E0;&#x3002;</p>
+<blockquote>
+<p>Commonly Used Java Classes</p>
+</blockquote>
+<h2 id="&#x5E38;&#x7528;Java&#x7C7B;"><a href="#&#x5E38;&#x7528;Java&#x7C7B;" class="headerlink" title="&#x5E38;&#x7528;Java&#x7C7B;"></a>&#x5E38;&#x7528;Java&#x7C7B;</h2><blockquote>
+<p>To round out this chapter, let&#x2019;s take a quick tour of the Java classes that you&#x2019;re most likely to use.</p>
+</blockquote>
+<p>&#x770B;&#x4E00;&#x4E0B;&#x5E38;&#x7528;&#x7684;Java&#x7C7B;&#x3002;</p>
+<blockquote>
+<p>The System Class</p>
+</blockquote>
+<h3 id="System&#x7C7B;"><a href="#System&#x7C7B;" class="headerlink" title="System&#x7C7B;"></a>System&#x7C7B;</h3><blockquote>
+<p>The <code>System</code> class has useful class fields and methods for interacting with the environment that your program&#x2019;s running in. You can use it to get environment variables and interact with the standard input, standard output, and error output streams.</p>
+</blockquote>
+<p><code>System</code>&#x7C7B;&#x7684;&#x5B57;&#x6BB5;&#x548C;&#x65B9;&#x6CD5;&#x53EF;&#x4EE5;&#x7528;&#x6765;&#x4E0E;&#x7A0B;&#x5E8F;&#x8FD0;&#x884C;&#x7684;&#x73AF;&#x5883;&#x4EA4;&#x4E92;&#x3002;&#x53EF;&#x4EE5;&#x7528;&#x6765;&#x83B7;&#x53D6;&#x73AF;&#x5883;&#x53D8;&#x91CF;&#xFF0C;&#x4E0E;&#x6807;&#x51C6;&#x8F93;&#x5165;&#x6D41;&#xFF0C;&#x6807;&#x51C6;&#x8F93;&#x51FA;&#x6D41;&#xFF0C;&#x9519;&#x8BEF;&#x8F93;&#x51FA;&#x6D41;&#x4EA4;&#x4E92;&#x3002;</p>
+<blockquote>
+<p>The most useful methods and members are <code>exit</code>, <code>getenv</code>, and <code>getProperty</code>. You might recognize <code>System/exit</code> from Chapter 5, where you used it to exit the Peg Thing game. <code>System/exit</code> terminates the current program, and you can pass it a status code as an argument. If you&#x2019;re not familiar with status codes, I recommend Wikipedia&#x2019;s &#x201C;Exit status&#x201D; article at <a href="http://en.wikipedia.org/wiki/Exit_status" target="_blank" rel="external">http://en.wikipedia.org/wiki/Exit_status</a>.</p>
+</blockquote>
+<p>&#x6700;&#x6709;&#x7528;&#x7684;&#x65B9;&#x6CD5;&#x662F;<code>exit</code>,<code>getenv</code>,&#x548C;<code>getProperty</code>&#x3002;&#x7B2C;5&#x7AE0;&#xFF0C;&#x6211;&#x4EEC;&#x7528;&#x8FC7;<code>System/exit</code>&#x9000;&#x51FA;&#x6E38;&#x620F;&#x3002;<code>System/exit</code>&#x4E2D;&#x6B62;&#x5F53;&#x524D;&#x7A0B;&#x5E8F;&#xFF0C;&#x53EF;&#x4EE5;&#x4F20;&#x7ED9;&#x5B83;&#x4E00;&#x4E2A;&#x72B6;&#x6001;&#x7801;&#x4F5C;&#x4E3A;&#x53C2;&#x6570;&#x3002;&#x5982;&#x679C;&#x4F60;&#x5BF9;&#x72B6;&#x6001;&#x7801;&#x4E0D;&#x719F;&#x6089;&#xFF0C;&#x6211;&#x63A8;&#x8350;&#x4F60;&#x770B;&#x7EF4;&#x57FA;&#x767E;&#x79D1;&#x7684;<a href="http://en.wikipedia.org/wiki/Exit_status" target="_blank" rel="external">&#x201C;Exit status&#x201D;&#x6587;&#x7AE0;</a>&#x3002;</p>
+<blockquote>
+<p><code>System/getenv</code> will return all of your system&#x2019;s environment variables as a map:</p>
+</blockquote>
+<p><code>System/getenv</code>&#x8FD4;&#x56DE;&#x4E00;&#x4E2A;map,&#x5305;&#x542B;&#x4E86;&#x6240;&#x6709;&#x7CFB;&#x7EDF;&#x73AF;&#x5883;&#x53D8;&#x91CF;&#x503C;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">System/getenv</span>)</span><br><span class="line">{<span class="string">&quot;USER&quot;</span> <span class="string">&quot;the-incredible-bulk&quot;</span></span><br><span class="line"> <span class="string">&quot;JAVA_ARCH&quot;</span> <span class="string">&quot;x86_64&quot;</span>}</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>One common use for environment variables is to configure your program.</p>
+</blockquote>
+<p>&#x73AF;&#x5883;&#x53D8;&#x91CF;&#x901A;&#x5E38;&#x7528;&#x4E8E;&#x914D;&#x7F6E;&#x7A0B;&#x5E8F;&#x3002;</p>
+<blockquote>
+<p>The JVM has its own list of properties separate from the computer&#x2019;s environment variables, and if you need to read them, you can use <code>System/getProperty</code>:</p>
+</blockquote>
+<p>JVM&#x6709;&#x81EA;&#x5DF1;&#x7684;&#x4E0E;&#x8BA1;&#x7B97;&#x673A;&#x73AF;&#x5883;&#x53D8;&#x91CF;&#x5206;&#x5F00;&#x7684;&#x5C5E;&#x6027;&#x5217;&#x8868;&#xFF0C;&#x53EF;&#x4EE5;&#x7528;<code>System/getProperty</code>&#x8BFB;&#x53D6;:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#x278A; (System/getProperty &quot;user.dir&quot;)</span><br><span class="line">; =&gt; &quot;/Users/dabulk/projects/dabook&quot;</span><br><span class="line"></span><br><span class="line">&#x278B; (System/getProperty &quot;java.version&quot;)</span><br><span class="line">; =&gt; &quot;1.7.0_17&quot;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>The first call at &#x278A; returned the directory that the JVM started from, and the second call at &#x278B; returned the version of the JVM.</p>
+</blockquote>
+<p>&#x278A;&#x5904;&#x8FD4;&#x56DE;&#x4E86;JVM&#x542F;&#x52A8;&#x76EE;&#x5F55;&#xFF0C;&#x278B;&#x5904;&#x8FD4;&#x56DE;&#x4E86;JVM&#x7248;&#x672C;&#x3002;</p>
+<blockquote>
+<p>The Date Class</p>
+</blockquote>
+<h3 id="The-Date-Class"><a href="#The-Date-Class" class="headerlink" title="The Date Class"></a>The Date Class</h3><blockquote>
+<p>Java has good tools for working with dates. I won&#x2019;t go into too much detail about the <code>java.util.Date</code> class because the online API documentation (available at <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Date.html" target="_blank" rel="external">http://docs.oracle.com/javase/7/docs/api/java/util/Date.html</a>) is thorough. As a Clojure developer, you should know three features of this <code>date</code> class. First, Clojure allows you to represent dates as literals using a form like this:</p>
+</blockquote>
+<p>Java&#x6709;&#x5F88;&#x597D;&#x7684;&#x65E5;&#x671F;&#x5DE5;&#x5177;&#x3002;&#x6211;&#x4E0D;&#x4F1A;&#x8BB2;&#x592A;&#x591A;<code>java.util.Date</code>&#x7C7B;&#x7684;&#x7EC6;&#x8282;&#xFF0C;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Date.html" target="_blank" rel="external">&#x5728;&#x7EBF;&#x6587;&#x6863;</a>&#x8BB2;&#x7684;&#x5F88;&#x8BE6;&#x7EC6;&#x3002;&#x4F5C;&#x4E3A;&#x4E00;&#x4E2A;Clojure&#x5F00;&#x53D1;&#x8005;&#xFF0C;&#x4F60;&#x5E94;&#x8BE5;&#x77E5;&#x9053;<code>data</code>&#x7C7B;&#x7684;&#x4E09;&#x4E2A;&#x7279;&#x5F81;&#x3002;&#x9996;&#x5148;&#xFF0C;Clojure&#x5141;&#x8BB8;&#x4F60;&#x7528;&#x8FD9;&#x6837;&#x7684;&#x5B57;&#x9762;&#x91CF;&#x8868;&#x793A;&#x65E5;&#x671F;:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#inst &quot;2016-09-19T20:40:02.733-00:00&quot;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Second, you need to use the <code>java.util.DateFormat</code> class if you want to customize how you convert dates to strings or if you want to convert strings to dates. Third, if you&#x2019;re doing tasks like comparing dates or trying to add minutes, hours, or other units of time to a date, you should use the immensely useful <code>clj-time</code> library (which you can check out at <a href="https://github.com/clj-time/clj-time" target="_blank" rel="external">https://github.com/clj-time/clj-time</a>).</p>
+</blockquote>
+<p>&#x7B2C;&#x4E8C;&#xFF0C;&#x5982;&#x679C;&#x4F60;&#x9700;&#x8981;&#x81EA;&#x5B9A;&#x4E49;&#x65E5;&#x671F;&#x4E0E;&#x5B57;&#x7B26;&#x4E32;&#x7684;&#x76F8;&#x4E92;&#x8F6C;&#x6362;&#xFF0C;&#x4F60;&#x9700;&#x8981;<code>java.util.DateFormat</code>&#x7C7B;&#x3002;&#x7B2C;&#x4E09;&#xFF0C;&#x5982;&#x679C;&#x4F60;&#x60F3;&#x6BD4;&#x8F83;&#x65E5;&#x671F;&#xFF0C;&#x6216;&#x5BF9;&#x4E00;&#x4E2A;&#x65E5;&#x671F;&#x589E;&#x52A0;&#x5206;&#x949F;&#xFF0C;&#x5C0F;&#x65F6;&#x7B49;&#x65F6;&#x95F4;&#x5355;&#x4F4D;&#xFF0C;&#x4F60;&#x5E94;&#x8BE5;&#x4F7F;&#x7528;<a href="https://github.com/clj-time/clj-time" target="_blank" rel="external">clj-time&#x5E93;</a>&#x3002;</p>
+<blockquote>
+<p>Files and Input/Output</p>
+</blockquote>
+<h2 id="&#x6587;&#x4EF6;&#x4E0E;Input-Output"><a href="#&#x6587;&#x4EF6;&#x4E0E;Input-Output" class="headerlink" title="&#x6587;&#x4EF6;&#x4E0E;Input/Output"></a>&#x6587;&#x4EF6;&#x4E0E;Input/Output</h2><blockquote>
+<p>In this section you&#x2019;ll learn about Java&#x2019;s approach to input/output (IO) and how Clojure simplifies it. The <code>clojure.java.io</code> namespace provides many handy functions for simplifying IO (<a href="https://clojure.github.io/clojure/clojure.java.io-api.html" target="_blank" rel="external">https://clojure.github.io/clojure/clojure.java.io-api.html</a>). This is great because Java IO isn&#x2019;t exactly straightforward. Because you&#x2019;ll probably want to perform IO at some point during your programming career, let&#x2019;s start wrapping your mind tentacles around it.</p>
+</blockquote>
+<p>&#x8FD9;&#x8282;&#x5C06;&#x5B66;&#x4E60;Java&#x7684;I/O&#x65B9;&#x6CD5;&#xFF0C;&#x4EE5;&#x53CA;Clojure&#x5982;&#x4F55;&#x5B9E;&#x73B0;I/O&#x3002;<a href="https://clojure.github.io/clojure/clojure.java.io-api.html" target="_blank" rel="external"><code>clojure.java.io</code></a>&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x63D0;&#x4F9B;&#x4E86;&#x8BB8;&#x591A;&#x7528;&#x4E8E;&#x7B80;&#x5316;IO&#x7684;&#x51FD;&#x6570;&#x3002;&#x8FD9;&#x5F88;&#x68D2;&#xFF0C;&#x56E0;&#x4E3A;Java&#x7684;IO&#x4E0D;&#x662F;&#x5F88;&#x76F4;&#x89C2;&#x3002;&#x5F00;&#x59CB;&#x5B66;&#x4E60;&#x3002;</p>
+<blockquote>
+<p>IO involves resources, be they files, sockets, buffers, or whatever. Java has separate classes for reading a resource&#x2019;s contents, for writings its contents, and for interacting with the resource&#x2019;s properties.</p>
+</blockquote>
+<p>IO&#x6D89;&#x53CA;&#x5404;&#x79CD;&#x8D44;&#x6E90;&#xFF0C;&#x53EF;&#x80FD;&#x662F;&#x6587;&#x4EF6;&#xFF0C;socket&#xFF0C;buffer,&#x6216;&#x5176;&#x4ED6;&#x4EC0;&#x4E48;&#x3002;Java&#x4E3A;&#x8D44;&#x6E90;&#x8BFB;&#x53D6;&#xFF0C;&#x8D44;&#x6E90;&#x5199;&#x5165;&#xFF0C;&#x8D44;&#x6E90;&#x5C5E;&#x6027;&#x5206;&#x522B;&#x63D0;&#x4F9B;&#x4E86;&#x7C7B;&#x3002;</p>
+<blockquote>
+<p>For example, the <code>java.io.File</code> class is used to interact with a file&#x2019;s properties:</p>
+</blockquote>
+<p>&#x4F8B;&#x5982;&#xFF0C;<code>java.io.FIle</code>&#x7528;&#x6765;&#x8BFB;&#x53D6;&#x6587;&#x4EF6;&#x5C5E;&#x6027;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">let</span></span> [file (<span class="name">java.io.File.</span> <span class="string">&quot;/&quot;</span>)]</span><br><span class="line">&#x278A;   (<span class="name">println</span> (<span class="name">.exists</span> file))  </span><br><span class="line">&#x278B;   (<span class="name">println</span> (<span class="name">.canWrite</span> file))</span><br><span class="line">&#x278C;   (<span class="name">println</span> (<span class="name">.getPath</span> file)))</span><br><span class="line"><span class="comment">; =&gt; true</span></span><br><span class="line"><span class="comment">; =&gt; false</span></span><br><span class="line"><span class="comment">; =&gt; /</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Among other tasks, you can use it to check whether a file exists, to get the file&#x2019;s read/write/execute permissions, and to get its filesystem path, which you can see at &#x278A;, &#x278B;, and &#x278C;, respectively.</p>
+</blockquote>
+<p>&#x278A;&#x5904;&#x68C0;&#x67E5;&#x6587;&#x4EF6;&#x662F;&#x5426;&#x5B58;&#x5728;&#xFF0C;&#x278B;&#x5904;&#x83B7;&#x53D6;&#x6587;&#x4EF6;&#x7684;&#x8BFB;/&#x5199;/&#x6267;&#x884C;&#x6743;&#x9650;&#xFF0C;&#x278C;&#x5904;&#x83B7;&#x53D6;&#x6587;&#x4EF6;&#x8DEF;&#x5F84;&#x3002;</p>
+<blockquote>
+<p>Reading and writing are noticeably missing from this list of capabilities. To read a file, you could use the <code>java.io.BufferedReader</code> class or perhaps <code>java.io.FileReader</code>. Likewise, you can use the <code>java.io.BufferedWriter</code> or <code>java.io.FileWriter</code> class for writing. Other classes are available for reading and writing as well, and which one you choose depends on your specific needs. Reader and writer classes all have the same base set of methods for their interfaces; readers implement <code>read</code>, <code>close</code>, and more, while writers implement <code>append</code>, <code>write</code>, <code>close</code>, and <code>flush</code>. Java gives you a variety of IO tools. A cynical person might say that Java gives you enough rope to hang yourself, and if you find such a person, I hope you give them a hug.</p>
+</blockquote>
+<p>&#x8981;&#x8BFB;&#x6587;&#x4EF6;&#xFF0C;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;<code>java.io.BufferedReader</code>&#x6216;<code>java.io.FileReader</code>&#x7C7B;&#x3002;&#x8981;&#x5199;&#x6587;&#x4EF6;&#xFF0C;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;<code>java.io.BufferedWriter</code>&#x6216;<code>java.io.FileWriter</code>&#x7C7B;&#x3002;&#x4F7F;&#x7528;&#x54EA;&#x4E00;&#x4E2A;&#x770B;&#x4F60;&#x7684;&#x5177;&#x4F53;&#x9700;&#x8981;&#x3002;&#x8BFB;&#x5199;&#x7C7B;&#x5404;&#x81EA;&#x90FD;&#x6709;&#x540C;&#x6837;&#x7684;interface&#x65B9;&#x6CD5;&#x3002;&#x8BFB;&#x6709;<code>read</code>,<code>close</code>&#x548C;&#x5176;&#x4ED6;&#x7684;&#xFF0C;&#x5199;&#x6709;<code>append</code>,<code>write</code>,<code>close</code>&#x548C;<code>flush</code>&#x3002;Java&#x63D0;&#x4F9B;&#x4E86;&#x5404;&#x79CD;IO&#x5DE5;&#x5177;&#x3002;&#x7231;&#x5632;&#x8BBD;&#x7684;&#x4EBA;&#x53EF;&#x80FD;&#x4F1A;&#x8BF4;&#xFF1A;Java&#x7ED9;&#x4E86;&#x4F60;&#x8DB3;&#x591F;&#x591A;&#x7684;&#x4E0A;&#x540A;&#x7528;&#x7684;&#x7EF3;&#x5B50;&#xFF0C;&#x5982;&#x679C;&#x4F60;&#x53D1;&#x73B0;&#x4E86;&#x8FD9;&#x6837;&#x7684;&#x4EBA;&#xFF0C;&#x6211;&#x5E0C;&#x671B;&#x4F60;&#x7ED9;&#x4ED6;&#x4E00;&#x4E2A;&#x62E5;&#x62B1;&#x3002;</p>
+<blockquote>
+<p>Either way, Clojure makes reading and writing easier for you because it includes functions that unify reading and writing across different kinds of resources. For example, <code>spit</code> writes to a resource, and <code>slurp</code> reads from one. Here&#x2019;s an example of using them to write and read a file:</p>
+</blockquote>
+<p>&#x603B;&#x4E4B;&#xFF0C;Clojure&#x4F7F;&#x8BFB;&#x5199;&#x66F4;&#x5BB9;&#x6613;&#xFF0C;&#x56E0;&#x4E3A;&#x4F60;&#x53EF;&#x4EE5;&#x5BF9;&#x4E0D;&#x540C;&#x8D44;&#x6E90;&#x7684;&#x8BFB;&#x5199;&#x4F7F;&#x7528;&#x540C;&#x6837;&#x7684;&#x51FD;&#x6570;&#x3002;&#x4F8B;&#x5982;<code>spit</code>&#x5199;&#x5165;&#x4E00;&#x4E2A;&#x8D44;&#x6E90;&#xFF0C;<code>slurp</code>&#x8BFB;&#x53D6;&#x4E00;&#x4E2A;&#x8D44;&#x6E90;&#x3002;&#x8BFB;&#x5199;&#x6587;&#x4EF6;&#x4F8B;&#x5B50;:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(spit &quot;/tmp/hercules-todo-list&quot;</span><br><span class="line">&quot;- kill dat lion brov</span><br><span class="line">- chop up what nasty multi-headed snake thing&quot;)</span><br><span class="line"></span><br><span class="line">(slurp &quot;/tmp/hercules-todo-list&quot;)</span><br><span class="line"></span><br><span class="line">; =&gt; &quot;- kill dat lion brov</span><br><span class="line">;     - chop up what nasty multi-headed snake thing&quot;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>You can also use these functions with objects representing resources other than files. The next example uses a <code>StringWriter</code>, which allows you to perform IO operations on a string:</p>
+</blockquote>
+<p>&#x8FD9;&#x4E9B;&#x51FD;&#x6570;&#x4E5F;&#x53EF;&#x4EE5;&#x4F5C;&#x7528;&#x4E8E;&#x8868;&#x793A;&#x8D44;&#x6E90;&#x7684;&#x5BF9;&#x8C61;&#x3002;&#x4E0B;&#x9762;&#x7684;&#x4F8B;&#x5B50;&#x4F7F;&#x7528;&#x4E86;<code>StringWriter</code>,&#x5B83;&#x5141;&#x8BB8;&#x4F60;&#x5728;&#x5B57;&#x7B26;&#x4E32;&#x4E0A;&#x6267;&#x884C;IO:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">let</span></span> [s (<span class="name">java.io.StringWriter.</span>)]</span><br><span class="line">  (<span class="name">spit</span> s <span class="string">&quot;- capture cerynian hind like for real&quot;</span>)</span><br><span class="line">  (<span class="name">.toString</span> s))</span><br><span class="line"><span class="comment">; =&gt; &quot;- capture cerynian hind like for real&quot;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>You can also read from a <code>StringReader</code> using <code>slurp</code>:</p>
+</blockquote>
+<p><code>slurp</code>&#x4E5F;&#x80FD;&#x4ECE;<code>StringReader</code>&#x8BFB;&#x53D6;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">let</span></span> [s (<span class="name">java.io.StringReader.</span> <span class="string">&quot;- get erymanthian pig what with the tusks&quot;</span>)]</span><br><span class="line">  (<span class="name"><span class="builtin-name">slurp</span></span> s))</span><br><span class="line"><span class="comment">; =&gt; &quot;- get erymanthian pig what with the tusks&quot;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>In addition, you can use the <code>read</code> and <code>write</code> methods for resources. It doesn&#x2019;t really make much difference which you use; <code>spit</code> and <code>slurp</code> are convenient because they work with just a string representing a filesystem path or a URL.</p>
+</blockquote>
+<p>&#x53E6;&#x5916;&#xFF0C;&#x4E5F;&#x53EF;&#x4EE5;&#x7528;<code>read</code>&#x548C;<code>write</code>&#x8BFB;&#x5199;&#x8D44;&#x6E90;&#x3002;&#x7528;&#x54EA;&#x4E2A;&#x6CA1;&#x6709;&#x592A;&#x5927;&#x5DEE;&#x522B;&#xFF0C;<code>spit</code>&#x548C;<code>slurp</code>&#x7684;&#x65B9;&#x4FBF;&#x5728;&#x4E8E;&#xFF0C;&#x4ED6;&#x4EEC;&#x53EF;&#x4EE5;&#x7528;&#x4E8E;&#x8868;&#x793A;&#x6587;&#x4EF6;&#x7CFB;&#x7EDF;&#x8DEF;&#x5F84;&#x6216;URL&#x7684;&#x5B57;&#x7B26;&#x4E32;&#x3002;</p>
+<blockquote>
+<p>The <code>with-open</code> macro is another convenience: it implicitly closes a resource at the end of its body, ensuring that you don&#x2019;t accidentally tie up resources by forgetting to manually close the resource. The <code>reader</code> function is a handy utility that, according to the <code>clojure.java.io</code> API docs, &#x201C;attempts to coerce its argument to an open <code>java.io.Reader</code>.&#x201D; This is convenient when you don&#x2019;t want to use <code>slurp</code>, because you don&#x2019;t want to try to read a resource in its entirety and you don&#x2019;t want to figure out which Java class you need to use. You could use <code>reader</code> along with <code>with-open</code> and the <code>line-seq</code> function if you&#x2019;re trying to read a file one line at a time. Here&#x2019;s how you could print just the first item of the Hercules to-do list:</p>
+</blockquote>
+<p><code>with-open</code>&#x5B8F;&#x4E5F;&#x5F88;&#x65B9;&#x4FBF;&#xFF1A;&#x5728;&#x5B83;&#x4E3B;&#x4F53;&#x672B;&#x5C3E;&#xFF0C;&#x4F1A;&#x6697;&#x4E2D;&#x5173;&#x95ED;&#x8D44;&#x6E90;&#xFF0C;&#x786E;&#x4FDD;&#x4E0D;&#x4F1A;&#x56E0;&#x4E3A;&#x4F60;&#x5FD8;&#x8BB0;&#x5173;&#x95ED;&#x800C;&#x5360;&#x7528;&#x8D44;&#x6E90;&#x3002;<code>reader</code>&#x51FD;&#x6570;&#x5F88;&#x65B9;&#x4FBF;&#xFF0C;&#x5B83;&#x628A;&#x53C2;&#x6570;&#x5F3A;&#x5236;&#x8F6C;&#x6210;&#x5F00;&#x653E;&#x7684;<code>java.io.Reader</code>&#x3002;&#x5F53;&#x4E0D;&#x60F3;&#x7528;<code>slurp</code>&#x6574;&#x4E2A;&#x8BFB;&#x5165;&#x4E00;&#x4E2A;&#x8D44;&#x6E90;&#xFF0C;&#x5E76;&#x4E14;&#x4E0D;&#x60F3;&#x641E;&#x6E05;&#x695A;&#x9700;&#x8981;&#x4F7F;&#x7528;&#x54EA;&#x4E2A;Java&#x7C7B;&#x65F6;&#xFF0C;&#x5B83;&#x975E;&#x5E38;&#x65B9;&#x4FBF;&#x3002;&#x5982;&#x679C;&#x60F3;&#x4E00;&#x6B21;&#x8BFB;&#x5165;&#x4E00;&#x884C;&#x6587;&#x4EF6;&#xFF0C;&#x53EF;&#x4EE5;&#x7528;<code>reader</code>&#x52A0;&#x4E0A;<code>with-open</code>&#x548C;<code>line-seq</code>&#x3002;&#x4E0B;&#x9762;&#x5F97;&#x4F8B;&#x5B50;&#x53EA;&#x6253;&#x5370;Hercules to-do list&#x7684;&#x7B2C;&#x4E00;&#x6761;&#x3002;</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">with-open</span></span> [todo-list-rdr (<span class="name">clojure.java.io/reader</span> <span class="string">&quot;/tmp/hercules-todo-list&quot;</span>)]</span><br><span class="line">  (<span class="name">println</span> (<span class="name"><span class="builtin-name">first</span></span> (<span class="name"><span class="builtin-name">line-seq</span></span> todo-list-rdr))))</span><br><span class="line"><span class="comment">; =&gt; - kill dat lion brov</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>That should be enough for you to get started with IO in Clojure. If you&#x2019;re trying to do more sophisticated tasks, definitely check out the <a href="https://clojure.github.io/clojure/clojure.java.io-api.html" target="_blank" rel="external"><code>clojure.java.io</code> docs</a>, the <a href="https://docs.oracle.com/javase/7/docs/api/java/nio/file/package-summary.html" target="_blank" rel="external"><code>java.nio.file</code></a> package docs, or the <a href="http://docs.oracle.com/javase/7/docs/api/java/io/package-summary.html" target="_blank" rel="external"><code>java.io</code></a> package docs.</p>
+</blockquote>
+<p>&#x8FD9;&#x4E9B;&#x8DB3;&#x591F;&#x8BA9;&#x4F60;&#x5F00;&#x59CB;&#x5728;Clojure&#x91CC;&#x4F7F;&#x7528;IO&#x4E86;&#x3002;&#x5982;&#x679C;&#x4EFB;&#x52A1;&#x66F4;&#x590D;&#x6742;&#xFF0C;&#x53EF;&#x4EE5;&#x770B;&#xFF1A;<a href="https://clojure.github.io/clojure/clojure.java.io-api.html" target="_blank" rel="external"><code>clojure.java.io</code></a>&#xFF0C;<a href="https://docs.oracle.com/javase/7/docs/api/java/nio/file/package-summary.html" target="_blank" rel="external"><code>java.nio.file</code></a> &#x6216; <a href="http://docs.oracle.com/javase/7/docs/api/java/io/package-summary.html" target="_blank" rel="external"><code>java.io</code></a></p>
+<blockquote>
+<p>Resources</p>
+</blockquote>
+<h2 id="&#x8D44;&#x6E90;"><a href="#&#x8D44;&#x6E90;" class="headerlink" title="&#x8D44;&#x6E90;"></a>&#x8D44;&#x6E90;</h2><blockquote>
+<ul>
+<li>&#x201C;The Java Virtual Machine and Compilers Explained&#x201D; (<a href="https://www.youtube.com/watch?v=XjNwyXx2os8" target="_blank" rel="external">https://www.youtube.com/watch?v=XjNwyXx2os8</a>)</li>
+<li>clojure.org Java interop documentation (<a href="http://clojure.org/java_interop" target="_blank" rel="external">http://clojure.org/java_interop</a>)</li>
+<li>Wikipedia&#x2019;s &#x201C;Exit status&#x201D; article (<a href="http://en.wikipedia.org/wiki/Exit_status" target="_blank" rel="external">http://en.wikipedia.org/wiki/Exit_status</a>)</li>
+</ul>
+<p>Summary</p>
+</blockquote>
+<h2 id="&#x603B;&#x7ED3;"><a href="#&#x603B;&#x7ED3;" class="headerlink" title="&#x603B;&#x7ED3;"></a>&#x603B;&#x7ED3;</h2><blockquote>
+<p>In this chapter, you learned what it means for Clojure to be hosted on the JVM. Clojure programs get compiled to Java bytecode and executed within a JVM process. Clojure programs also have access to Java libraries, and you can easily interact with them using Clojure&#x2019;s interop facilities.</p>
+</blockquote>
+<p>&#x8FD9;&#x7AE0;&#x4F60;&#x4E86;&#x89E3;&#x4E86;Clojure&#x5BBF;&#x4E3B;&#x5728;JVM&#x4E0A;&#x662F;&#x4EC0;&#x4E48;&#x610F;&#x601D;&#x3002;Clojure&#x7A0B;&#x5E8F;&#x88AB;&#x7F16;&#x8BD1;&#x6210;Java&#x5B57;&#x8282;&#x7801;&#xFF0C;&#x5E76;&#x4E14;&#x5728;&#x4E00;&#x4E2A;JVM&#x8FDB;&#x7A0B;&#x5185;&#x6267;&#x884C;&#x3002;Clojure&#x7A0B;&#x5E8F;&#x53EF;&#x4EE5;&#x8BBF;&#x95EE;Java&#x5E93;&#xFF0C;&#x4F7F;&#x7528;Clojure&#x4E92;&#x64CD;&#x4F5C;&#x529F;&#x80FD;&#x53EF;&#x4EE5;&#x5BB9;&#x6613;&#x5730;&#x4E0E;&#x5B83;&#x4EEC;&#x4EA4;&#x4E92;&#x3002;</p>
+<hr>
+<p>&#x8BD1;&#x6587;&#x7ED3;&#x675F;&#x3002;</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Clojure/" rel="tag">#Clojure</a>
+          
+            <a href="/tags/Clojure-For-The-Branve-And-True/" rel="tag">#Clojure For The Branve And True</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/08/02/brave-clojure-core-async/" rel="next" title="【译】Brave Clojure 第十一章:用core.async掌握并发过程">
+                <i class="fa fa-chevron-left"></i> 【译】Brave Clojure 第十一章:用core.async掌握并发过程
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/08/20/brave-clojure-java/"
+     data-title="【译】Brave Clojure 第十二章:与JVM共事"
+     data-content=""
+     data-url="http://yoursite.com/2016/08/20/brave-clojure-java/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/08/20/brave-clojure-java/"
+           data-title="【译】Brave Clojure 第十二章:与JVM共事" data-url="http://yoursite.com/2016/08/20/brave-clojure-java/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://s.gravatar.com/avatar/954a8b1f4c32dbb5a11399ae5e236a5f?s=80"
+               alt="胡军" />
+          <p class="site-author-name" itemprop="name">胡军</p>
+          <p class="site-description motion-element" itemprop="description">学习是一种生活方式</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">23</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+          
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/morrxy" target="_blank">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/morrxy" target="_blank">
+                  
+                    <i class="fa fa-twitter"></i> Twitter
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#JVM"><span class="nav-number">1.</span> <span class="nav-text">JVM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#写，编译，运行Java程序"><span class="nav-number">2.</span> <span class="nav-text">写，编译，运行Java程序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#世界上最概括的面相对象编程"><span class="nav-number">2.1.</span> <span class="nav-text">世界上最概括的面相对象编程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#喂-世界"><span class="nav-number">2.2.</span> <span class="nav-text">喂, 世界</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#包与引入"><span class="nav-number">3.</span> <span class="nav-text">包与引入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JAR-文件"><span class="nav-number">4.</span> <span class="nav-text">JAR 文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#clojure-jar"><span class="nav-number">5.</span> <span class="nav-text">clojure.jar</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Clojure-App-JARs"><span class="nav-number">6.</span> <span class="nav-text">Clojure App JARs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java互操作"><span class="nav-number">7.</span> <span class="nav-text">Java互操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#互操作语法"><span class="nav-number">7.1.</span> <span class="nav-text">互操作语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建和修改对象"><span class="nav-number">7.2.</span> <span class="nav-text">创建和修改对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#导入"><span class="nav-number">7.3.</span> <span class="nav-text">导入</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常用Java类"><span class="nav-number">8.</span> <span class="nav-text">常用Java类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#System类"><span class="nav-number">8.1.</span> <span class="nav-text">System类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#The-Date-Class"><span class="nav-number">8.2.</span> <span class="nav-text">The Date Class</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件与Input-Output"><span class="nav-number">9.</span> <span class="nav-text">文件与Input/Output</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#资源"><span class="nav-number">10.</span> <span class="nav-text">资源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">11.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">胡军</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+
+  
+
+
+
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=0.5.0"></script>
+
+
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.scheme !== 'Pisces' && (CONFIG.sidebar.display === 'post' || CONFIG.sidebar.display === 'always')) {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"morrxy"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+
+</body>
+</html>
