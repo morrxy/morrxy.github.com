@@ -1,0 +1,1040 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Clojure,Clojure For The Branve And True," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="胡军的网络日志" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.5.0" />
+
+
+
+
+
+
+<meta name="description" content="&amp;#x672C;&amp;#x6587;&amp;#x662F;&amp;#x6211;&amp;#x5BF9;Clojure&amp;#x4E66;&amp;#x7C4D; CLOJURE FOR THE BRAVE AND TRUE&amp;#x7B2C;&amp;#x5341;&amp;#x4E8C;&amp;#x7AE0;Creating and Extending Abstractions with Multimethods, Protocols, and Reco">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【译】Brave Clojure 第十三章:用Multimethod,Protocol和Record创建并扩展抽象">
+<meta property="og:url" content="http://yoursite.com/2016/09/03/brave-clojure-multimethods-records-protocols/index.html">
+<meta property="og:site_name" content="胡军的网络日志">
+<meta property="og:description" content="&amp;#x672C;&amp;#x6587;&amp;#x662F;&amp;#x6211;&amp;#x5BF9;Clojure&amp;#x4E66;&amp;#x7C4D; CLOJURE FOR THE BRAVE AND TRUE&amp;#x7B2C;&amp;#x5341;&amp;#x4E8C;&amp;#x7AE0;Creating and Extending Abstractions with Multimethods, Protocols, and Reco">
+<meta property="og:updated_time" content="2016-09-03T14:10:38.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【译】Brave Clojure 第十三章:用Multimethod,Protocol和Record创建并扩展抽象">
+<meta name="twitter:description" content="&amp;#x672C;&amp;#x6587;&amp;#x662F;&amp;#x6211;&amp;#x5BF9;Clojure&amp;#x4E66;&amp;#x7C4D; CLOJURE FOR THE BRAVE AND TRUE&amp;#x7B2C;&amp;#x5341;&amp;#x4E8C;&amp;#x7AE0;Creating and Extending Abstractions with Multimethods, Protocols, and Reco">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 【译】Brave Clojure 第十三章:用Multimethod,Protocol和Record创建并扩展抽象 | 胡军的网络日志 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">胡军的网络日志</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">pursue next update</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                【译】Brave Clojure 第十三章:用Multimethod,Protocol和Record创建并扩展抽象
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-03T22:10:38+08:00" content="2016-09-03">
+              2016-09-03
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/03/brave-clojure-multimethods-records-protocols/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/03/brave-clojure-multimethods-records-protocols/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>&#x672C;&#x6587;&#x662F;&#x6211;&#x5BF9;Clojure&#x4E66;&#x7C4D; <a href="http://www.braveclojure.com/clojure-for-the-brave-and-true/" target="_blank" rel="external">CLOJURE FOR THE BRAVE AND TRUE</a>&#x7B2C;&#x5341;&#x4E8C;&#x7AE0;<a href="http://www.braveclojure.com/multimethods-records-protocols/" target="_blank" rel="external">Creating and Extending Abstractions with Multimethods, Protocols, and Records</a> &#x505A;&#x7684;&#x7FFB;&#x8BD1;&#x3002;&#x7FFB;&#x8BD1;&#x5F62;&#x5F0F;&#xFF0C;&#x4E2D;&#x82F1;&#x5BF9;&#x7167;&#xFF0C;&#x82F1;&#x6587;&#x5F15;&#x7528;&#x8DDF;&#x7740;&#x4E2D;&#x6587;&#x7FFB;&#x8BD1;&#x3002;&#x5982;&#x6709;&#x9519;&#x8BEF;&#xFF0C;&#x5728;&#x6240;&#x96BE;&#x514D;&#xFF0C;&#x6B22;&#x8FCE;&#x6307;&#x6B63;&#x3002;</p>
+<p><a href="https://morrxy.github.io/tags/Clojure-For-The-Branve-And-True/" target="_blank" rel="external">&#x5176;&#x4ED6;&#x7AE0;&#x7684;&#x7FFB;&#x8BD1;&#x5728;&#x8FD9;&#x91CC;</a></p>
+<p>&#x8BD1;&#x6587;&#x5F00;&#x59CB;&#x3002;</p>
+<hr>
+<blockquote>
+<p>Take a minute to contemplate how great it is to be one of Mother Nature&#x2019;s top-of-the-line products: a human. As a human, you get to gossip on social media, play Dungeons and Dragons, and wear hats. Perhaps more important, you get to think and communicate in terms of abstractions.</p>
+</blockquote>
+<p>&#x7528;&#x4E00;&#x5206;&#x949F;&#x4ED4;&#x7EC6;&#x601D;&#x8003;&#xFF1A;&#x8EAB;&#x4E3A;&#x5927;&#x81EA;&#x7136;&#x6700;&#x597D;&#x7684;&#x4EA7;&#x54C1;&#xFF1A;&#x4EBA;&#xFF0C;&#x6709;&#x591A;&#x68D2;&#x3002;&#x4F60;&#x53EF;&#x4EE5;&#x5728;&#x793E;&#x4EA4;&#x7F51;&#x7EDC;&#x4E0A;&#x95F2;&#x804A;&#xFF0C;&#x73A9;&#x9F99;&#x4E0E;&#x5730;&#x4E0B;&#x57CE;&#xFF0C;&#x6234;&#x5E3D;&#x5B50;&#x3002;&#x4E5F;&#x8BB8;&#x66F4;&#x91CD;&#x8981;&#x7684;&#x662F;&#xFF0C;&#x4F60;&#x5F00;&#x59CB;&#x4ECE;&#x62BD;&#x8C61;&#x7684;&#x89D2;&#x5EA6;&#x601D;&#x8003;&#x548C;&#x4EA4;&#x6D41;&#x3002;</p>
+<blockquote>
+<p>The ability to think in terms of abstractions is truly one of the best human features. It lets you circumvent your cognitive limits by tying together disparate details into a neat conceptual package that you can hold in your working memory. Instead of having to think the clunky thought &#x201C;squeezable honking red ball nose adornment,&#x201D; you only need the concept &#x201C;clown nose.&#x201D;</p>
+</blockquote>
+<p>&#x62BD;&#x8C61;&#x601D;&#x8003;&#x80FD;&#x529B;&#x771F;&#x7684;&#x662F;&#x4EBA;&#x7C7B;&#x6700;&#x68D2;&#x7684;&#x4E00;&#x4E2A;&#x7279;&#x5F81;&#x3002;&#x5B83;&#x628A;&#x8BB8;&#x591A;&#x4E0D;&#x540C;&#x7684;&#x7EC6;&#x8282;&#x5408;&#x5E76;&#x6210;&#x4E00;&#x4E2A;&#x6574;&#x9F50;&#x7684;&#x3001;&#x4F60;&#x7684;&#x5DE5;&#x4F5C;&#x8BB0;&#x5FC6;&#x80FD;&#x591F;&#x6301;&#x6709;&#x7684;&#x6982;&#x5FF5;&#xFF0C;&#x4ECE;&#x800C;&#x4F7F;&#x4F60;&#x907F;&#x514D;&#x4E86;&#x8BA4;&#x77E5;&#x9650;&#x5236;&#x3002;&#x4F60;&#x53EA;&#x9700;&#x8981;&#x77E5;&#x9053;&#x201D;&#x5C0F;&#x4E11;&#x9F3B;&#x5B50;&#x201D;&#x8FD9;&#x4E2A;&#x6982;&#x5FF5;&#xFF0C;&#x800C;&#x4E0D;&#x9700;&#x8981;&#x8FD9;&#x4E2A;&#x7B28;&#x91CD;&#x7684;&#x60F3;&#x6CD5;&#xFF1A;&#x201C;&#x53EF;&#x538B;&#x7F29;&#x7684;&#xFF0C;&#x53EF;&#x51FA;&#x58F0;&#x7684;&#x7EA2;&#x8272;&#x7403;&#x72B6;&#x9F3B;&#x5B50;&#x7528;&#x7684;&#x88C5;&#x9970;&#x7269;&#x201D;&#x3002;</p>
+<blockquote>
+<p>In Clojure, an <em>abstraction</em> is a collection of operations, and <em>data types</em> implement abstractions. For example, the seq abstraction consists of operations like <code>first</code> and <code>rest</code>, and the vector data type is an implementation of that abstraction; it responds to all of the seq operations. A specific vector like <code>[:seltzer :water]</code> is an <em>instance</em> of that data type.</p>
+</blockquote>
+<p>Clojure&#x7684;<em>&#x62BD;&#x8C61;</em>&#x662F;&#x64CD;&#x4F5C;&#x7684;&#x96C6;&#x5408;&#xFF0C;&#x5E76;&#x4E14;<em>&#x6570;&#x636E;&#x7C7B;&#x578B;</em>&#x5B9E;&#x73B0;&#x62BD;&#x8C61;&#x3002;&#x4F8B;&#x5982;&#xFF0C;seq&#x62BD;&#x8C61;&#x7531;<code>first</code>,<code>rest</code>&#x8FD9;&#x6837;&#x7684;&#x64CD;&#x4F5C;&#x7EC4;&#x6210;&#xFF0C;&#x540C;&#x65F6;vector&#x6570;&#x636E;&#x7C7B;&#x578B;&#x5B9E;&#x73B0;&#x4E86;&#x8FD9;&#x4E2A;&#x62BD;&#x8C61;&#xFF0C;vector&#x5BF9;&#x6240;&#x6709;&#x7684;seq&#x64CD;&#x4F5C;&#x505A;&#x51FA;&#x54CD;&#x5E94;&#x3002;<code>[:seltzer :water]</code>&#x8FD9;&#x6837;&#x7684;&#x7279;&#x5B9A;vector&#x662F;&#x8FD9;&#x79CD;&#x6570;&#x636E;&#x7C7B;&#x578B;&#x7684;<em>&#x5B9E;&#x4F8B;</em>&#x3002;</p>
+<blockquote>
+<p>The more a programming language lets you think and write in terms of abstractions, the more productive you will be. For example, if you learn that a data structure is an instance of the seq abstraction, you can instantly call forth a large web of knowledge about what functions will work with the data structure. As a result, you spend time actually using the data structure instead of constantly looking up documentation on how it works. By the same token, if you extend a data structure to work with the seq abstraction, you can use the extensive library of seq functions on it.</p>
+</blockquote>
+<p>&#x4E00;&#x95E8;&#x7F16;&#x7A0B;&#x8BED;&#x8A00;&#x8D8A;&#x591A;&#x5730;&#x8BA9;&#x4F60;&#x9762;&#x5411;&#x62BD;&#x8C61;&#x601D;&#x8003;&#x548C;&#x7F16;&#x7A0B;&#xFF0C;&#x4F60;&#x5C31;&#x8D8A;&#x6709;&#x6548;&#x7387;&#x3002;&#x4F8B;&#x5982;&#xFF0C;&#x5982;&#x679C;&#x4F60;&#x77E5;&#x9053;&#x4E00;&#x4E2A;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x662F;seq&#x62BD;&#x8C61;&#x7684;&#x5B9E;&#x4F8B;&#xFF0C;&#x4F60;&#x5C31;&#x80FD;&#x9A6C;&#x4E0A;&#x77E5;&#x9053;&#x54EA;&#x4E9B;&#x51FD;&#x6570;&#x80FD;&#x7528;&#x4E8E;&#x8FD9;&#x4E2A;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x3002;&#x7ED3;&#x679C;&#x5C31;&#x662F;&#x4F60;&#x7684;&#x65F6;&#x95F4;&#x90FD;&#x7528;&#x5728;&#x4F7F;&#x7528;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x4E0A;&#xFF0C;&#x800C;&#x4E0D;&#x662F;&#x67E5;&#x6587;&#x6863;&#x4E86;&#x89E3;&#x5B83;&#x5982;&#x4F55;&#x5DE5;&#x4F5C;&#x3002;&#x540C;&#x6837;&#xFF0C;&#x5982;&#x679C;&#x4F60;&#x7528;seq&#x62BD;&#x8C61;&#x6269;&#x5C55;&#x4E00;&#x4E2A;&#x6570;&#x636E;&#x7ED3;&#x6784;&#xFF0C;&#x4F60;&#x5C31;&#x80FD;&#x5BF9;&#x5B83;&#x4F7F;&#x7528;seq&#x51FD;&#x6570;&#x3002;</p>
+<blockquote>
+<p>In Chapter 4, you learned that Clojure is written in terms of abstractions. This is powerful because in Clojure you can focus on what you can actually do with data structures and not worry about the nitty-gritty of implementation. This chapter introduces you to the world of creating and implementing your own abstractions. You&#x2019;ll learn the basics of multimethods, protocols, and records.</p>
+</blockquote>
+<p>&#x4F60;&#x5728;&#x7B2C;4&#x7AE0;&#x77E5;&#x9053;&#x4E86;Clojure&#x662F;&#x9762;&#x5411;&#x62BD;&#x8C61;&#x7F16;&#x7A0B;&#x7684;&#x3002;&#x8FD9;&#x5F88;&#x5F3A;&#x5927;&#xFF0C;&#x56E0;&#x4E3A;&#x4F60;&#x80FD;&#x628A;&#x6CE8;&#x610F;&#x529B;&#x96C6;&#x4E2D;&#x5728;&#x7528;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x80FD;&#x5E72;&#x4EC0;&#x4E48;&#xFF0C;&#x540C;&#x65F6;&#x4E0D;&#x7528;&#x5173;&#x5FC3;&#x5B9E;&#x73B0;&#x7EC6;&#x8282;&#x3002;&#x8FD9;&#x7AE0;&#x4ECB;&#x7ECD;&#x5982;&#x4F55;&#x521B;&#x5EFA;&#x548C;&#x5B9E;&#x73B0;&#x81EA;&#x5DF1;&#x7684;&#x62BD;&#x8C61;&#xFF0C;&#x5C06;&#x5B66;&#x4E60;multimethods, protocols&#x548C;records&#x7684;&#x57FA;&#x7840;&#x77E5;&#x8BC6;&#x3002;</p>
+<blockquote>
+<p>Polymorphism</p>
+</blockquote>
+<h2 id="&#x591A;&#x6001;"><a href="#&#x591A;&#x6001;" class="headerlink" title="&#x591A;&#x6001;"></a>&#x591A;&#x6001;</h2><blockquote>
+<p>The main way we achieve abstraction in Clojure is by associating an operation name with more than one algorithm. This technique is called <em>poly&#xAD;morphism</em>. For example, the algorithm for performing <code>conj</code> on a list is different from the one for vectors, but we unify them under the same name to indicate that they implement the same concept, namely, <em>add an element to this data structure</em>.</p>
+</blockquote>
+<p>Clojure&#x91CC;&#x83B7;&#x5F97;&#x62BD;&#x8C61;&#x7684;&#x4E3B;&#x8981;&#x65B9;&#x6CD5;&#x662F;&#x5173;&#x8054;&#x4E00;&#x4E2A;&#x64CD;&#x4F5C;&#x540D;&#x5230;&#x591A;&#x4E2A;&#x7B97;&#x6CD5;&#x4E0A;&#x3002;&#x8FD9;&#x4E2A;&#x6280;&#x672F;&#x53EB;<em>&#x591A;&#x6001;</em>&#x3002;&#x6BD4;&#x5982;&#xFF0C;list&#x4E0A;&#x6267;&#x884C;<code>conj</code>&#x7684;&#x7B97;&#x6CD5;&#x4E0E;vector&#x4E0D;&#x540C;&#xFF0C;&#x4F46;&#x6211;&#x4EEC;&#x7EDF;&#x4E00;&#x7528;&#x4E00;&#x4E2A;&#x540D;&#x5B57;&#x6307;&#x660E;&#x4ED6;&#x4EEC;&#x5B9E;&#x73B0;&#x4E86;&#x540C;&#x6837;&#x7684;&#x6982;&#x5FF5;&#xFF0C;&#x5373;<em>&#x5F80;&#x8FD9;&#x4E2A;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x6DFB;&#x52A0;&#x6210;&#x5458;</em>&#x3002;</p>
+<blockquote>
+<p>Because Clojure relies on Java&#x2019;s standard library for many of its data types, a little Java is used in this chapter. For example, Clojure strings are just Java strings, instances of the Java class <code>java.lang.String</code>. To define your own data types in Java, you use classes. Clojure provides additional type constructs: records and types. This book only covers records.</p>
+</blockquote>
+<p>&#x56E0;&#x4E3A;Clojure&#x7684;&#x5F88;&#x591A;&#x6570;&#x636E;&#x7C7B;&#x578B;&#x4F9D;&#x9760;Java&#x6807;&#x51C6;&#x5E93;&#xFF0C;&#x6240;&#x4EE5;&#x8FD9;&#x7AE0;&#x4F1A;&#x7528;&#x5230;&#x4E00;&#x70B9;Java&#x3002;&#x4F8B;&#x5982;Clojure&#x5B57;&#x7B26;&#x4E32;&#x5C31;&#x662F;Java&#x5B57;&#x7B26;&#x4E32;&#xFF0C;Java&#x7C7B;<code>java.lang.String</code>&#x7684;&#x5B9E;&#x4F8B;&#x3002;&#x5728;Java&#x91CC;&#x7528;&#x7C7B;&#x5B9A;&#x4E49;&#x81EA;&#x5DF1;&#x7684;&#x6570;&#x636E;&#x7C7B;&#x578B;&#x3002;Clojure&#x63D0;&#x4F9B;&#x4E86;&#x989D;&#x5916;&#x7684;&#x7C7B;&#x578B;&#x7ED3;&#x6784;: record&#x548C;type&#x3002;&#x8FD9;&#x672C;&#x4E66;&#x53EA;&#x8BB2;&#x89E3;record&#x3002;</p>
+<blockquote>
+<p>Before we learn about records, though, let&#x2019;s look at multimethods, our first tool for defining polymorphic behavior.</p>
+</blockquote>
+<p>&#x5B66;&#x4E60;record&#x524D;&#xFF0C;&#x5148;&#x770B;&#x770B;multimethod, &#x7B2C;&#x4E00;&#x4E2A;&#x5B9A;&#x4E49;&#x591A;&#x6001;&#x884C;&#x4E3A;&#x7684;&#x5DE5;&#x5177;&#x3002;</p>
+<blockquote>
+<p>Multimethods</p>
+</blockquote>
+<h2 id="Multimethods"><a href="#Multimethods" class="headerlink" title="Multimethods"></a>Multimethods</h2><blockquote>
+<p><em>Multimethods</em> give you a direct, flexible way to introduce polymorphism into your code. Using multimethods, you associate a name with multiple implementations by defining a <em>dispatching function</em>, which produces <em>dispatching values</em> that are used to determine which <em>method</em> to use. The dispatching function is like the host at a restaurant. The host will ask you questions like &#x201C;Do you have a reservation?&#x201D; and &#x201C;Party size?&#x201D; and then seat you accordingly. Similarly, when you call a multimethod, the dispatching function will interrogate the arguments and send them to the right method, as this example shows:</p>
+</blockquote>
+<p><em>Multimethods</em> &#x662F;&#x4E00;&#x79CD;&#x76F4;&#x63A5;&#xFF0C;&#x7075;&#x6D3B;&#x7684;&#x5F15;&#x5165;&#x591A;&#x6001;&#x7684;&#x65B9;&#x6CD5;&#x3002;&#x4F7F;&#x7528;Multimethods&#x53EF;&#x4EE5;&#x5173;&#x8054;&#x4E00;&#x4E2A;&#x540D;&#x5B57;&#x5230;&#x591A;&#x4E2A;&#x5B9E;&#x73B0;&#xFF1A;&#x5B9A;&#x4E49;&#x4E00;&#x4E2A;&#x8FD4;&#x56DE;<em>&#x8C03;&#x5EA6;&#x503C;</em>&#x7684;<em>&#x8C03;&#x5EA6;&#x51FD;&#x6570;</em>&#xFF0C;&#x9760;<em>&#x8C03;&#x5EA6;&#x503C;</em>&#x51B3;&#x5B9A;&#x4F7F;&#x7528;&#x54EA;&#x4E2A;<em>&#x65B9;&#x6CD5;</em>&#x3002;&#x8C03;&#x5EA6;&#x51FD;&#x6570;&#x5C31;&#x50CF;&#x996D;&#x5E97;&#x7684;&#x8001;&#x677F;&#x3002;&#x4F1A;&#x95EE;&#x4F60;&#x8BF8;&#x5982;&#x201C;&#x662F;&#x5426;&#x9884;&#x5B9A;&#x4E86;&#x5EA7;&#x4F4D;&#xFF1F;&#x201D;&#x548C;&#x201D;&#x805A;&#x4F1A;&#x4EBA;&#x6570;&#xFF1F;&#x201D;&#x7B49;&#x95EE;&#x9898;&#xFF0C;&#x7136;&#x540E;&#x76F8;&#x5E94;&#x5730;&#x4E3A;&#x4F60;&#x5B89;&#x6392;&#x5EA7;&#x4F4D;&#x3002;&#x7C7B;&#x4F3C;&#x5730;&#xFF0C;&#x8C03;&#x5EA6;&#x51FD;&#x6570;&#x4F1A;&#x8BE2;&#x95EE;&#x53C2;&#x6570;&#xFF0C;&#x5E76;&#x53D1;&#x9001;&#x7ED9;&#x6B63;&#x786E;&#x7684;&#x65B9;&#x6CD5;&#xFF0C;&#x5982;&#x4E0B;&#x4F8B;&#x6240;&#x793A;&#xFF1A;</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">(ns were-creatures)</span><br><span class="line">&#x278A; (defmulti full-moon-behavior (fn [were-creature] (:were-type were-creature)))</span><br><span class="line">&#x278B; (defmethod full-moon-behavior :wolf</span><br><span class="line">  [were-creature]</span><br><span class="line">  (str (:name were-creature) &quot; will howl and murder&quot;))</span><br><span class="line">&#x278C; (defmethod full-moon-behavior :simmons</span><br><span class="line">  [were-creature]</span><br><span class="line">  (str (:name were-creature) &quot; will encourage people and sweat to the oldies&quot;))</span><br><span class="line"></span><br><span class="line">(full-moon-behavior {:were-type :wolf</span><br><span class="line">&#x278D;                      :name &quot;Rachel from next door&quot;})</span><br><span class="line">; =&gt; &quot;Rachel from next door will howl and murder&quot;</span><br><span class="line"></span><br><span class="line">(full-moon-behavior {:name &quot;Andy the baker&quot;</span><br><span class="line">&#x278E;                      :were-type :simmons})</span><br><span class="line">; =&gt; &quot;Andy the baker will encourage people and sweat to the oldies&quot;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>This multimethod shows how you might define the full moon behavior of different kinds of were-creatures. Everyone knows that a werewolf turns into a wolf and runs around howling and murdering people. A lesser-known species of were-creature, the were-Simmons, turns into Richard Simmons, power perm and all, and runs around encouraging people to be their best and sweat to the oldies. You do not want to get bitten by either, lest you turn into one.</p>
+</blockquote>
+<p>&#x8FD9;&#x4E2A;multimethod&#x6F14;&#x793A;&#x4E86;&#x5982;&#x4F55;&#x5B9A;&#x4E49;&#x4E0D;&#x540C;&#x79CD;&#x7C7B;&#x7684;&#x72FC;&#x4EBA;&#x7684;&#x6708;&#x5706;&#x884C;&#x4E3A;&#x3002;</p>
+<blockquote>
+<p>We create the multimethod at &#x278A;. This tells Clojure, &#x201C;Hey, create a new multimethod named <code>full-moon-behavior</code>. Whenever someone calls <code>full-moon-behavior</code>, run the dispatching function <code>(fn [were-creature] (:were-type were-creature))</code> on the arguments. Use the result of that function, aka the dispatching value, to decide which specific method to use!&#x201D;</p>
+</blockquote>
+<p>&#x5728;&#x278A;&#x5904;&#xFF0C;&#x521B;&#x5EFA;&#x4E86;&#x540D;&#x5B57;&#x662F;<code>full-moon-behavior</code>&#x7684;multimethod&#x3002;&#x53EA;&#x8981;&#x8C03;&#x7528;<code>full-moon-behavior</code>,&#x5C31;&#x8FD0;&#x884C;&#x8C03;&#x5EA6;&#x51FD;&#x6570;<code>(fn [were-creature] (:were-type were-creature))</code>&#x3002;&#x7528;&#x7ED3;&#x679C;&#xFF0C;&#x5373;&#x8C03;&#x5EA6;&#x503C;&#x51B3;&#x5B9A;&#x4F7F;&#x7528;&#x54EA;&#x4E2A;&#x65B9;&#x6CD5;&#x3002;</p>
+<blockquote>
+<p>Next, we define two methods, one for when the value returned by the dispatching function is <code>:wolf</code> at &#x278B;, and one for when it&#x2019;s <code>:simmons</code> at &#x278C;. Method definitions look a lot like function definitions, but the major difference is that the method name is immediately followed by the dispatch value. <code>:wolf</code> and <code>:simmons</code> are both dispatch values. This is different from a dispatching value, which is what the dispatching function returns. The full dispatch sequence goes like this:</p>
+</blockquote>
+<p>&#x63A5;&#x7740;&#xFF0C;&#x6211;&#x4EEC;&#x5B9A;&#x4E49;&#x4E86;&#x4E24;&#x4E2A;&#x65B9;&#x6CD5;&#xFF0C;&#x278B;&#x5904;&#x7684;&#x7528;&#x4E8E;&#x8C03;&#x5EA6;&#x51FD;&#x6570;&#x8FD4;&#x56DE;<code>:wolf</code>&#x65F6;&#xFF0C;&#x278C;&#x5904;&#x7684;&#x7528;&#x4E8E;&#x8C03;&#x5EA6;&#x51FD;&#x6570;&#x8FD4;&#x56DE;<code>:simmons</code>&#x65F6;&#x3002;&#x65B9;&#x6CD5;&#x5B9A;&#x4E49;&#x5F88;&#x50CF;&#x51FD;&#x6570;&#x5B9A;&#x4E49;&#xFF0C;&#x4F46;&#x4E3B;&#x8981;&#x5DEE;&#x522B;&#x662F;&#x65B9;&#x6CD5;&#x540D;&#x540E;&#x9762;&#x662F;&#x8C03;&#x5EA6;&#x503C;&#x3002;<code>:wolf</code>&#x548C;<code>:simons</code>&#x90FD;&#x662F;&#x8C03;&#x5EA6;&#x503C;&#x3002;&#x5B8C;&#x6574;&#x8C03;&#x5EA6;&#x8FC7;&#x7A0B;&#x662F;&#x8FD9;&#x6837;&#x7684;&#xFF1A;</p>
+<blockquote>
+<ol>
+<li>The form <code>(full-moon-behavior {:were-type :wolf :name &quot;Rachel from next door&quot;})</code> is evaluated.</li>
+<li><code>full-moon-behavior</code>&#x2019;s dispatching function runs, returning <code>:wolf</code> as the dispatching value.</li>
+<li>Clojure compares the dispatching value <code>:wolf</code> to the dispatch values of all the methods defined for <code>full-moon-behavior</code>. The dispatch values are <code>:wolf</code> and <code>:simmons</code>.</li>
+<li>Because the dispatching value <code>:wolf</code> is equal to the dispatch value <code>:wolf</code>, the algorithm for <code>:wolf</code> runs.</li>
+</ol>
+</blockquote>
+<ol>
+<li>&#x5F62;&#x5F0F;<code>(full-moon-behavior {:were-type :wolf :name &quot;Rachel from next door&quot;})</code>&#x88AB;&#x6C42;&#x503C;&#x3002;</li>
+<li><code>full-moon-behavior</code>&#x7684;&#x8C03;&#x5EA6;&#x51FD;&#x6570;&#x8FD0;&#x884C;&#xFF0C;&#x8FD4;&#x56DE;<code>:wolf</code>&#x4F5C;&#x4E3A;&#x8C03;&#x5EA6;&#x503C;&#x3002;</li>
+<li>Clojure&#x7528;<code>:wolf</code>&#x4E0E;<code>full-moon-behavior</code>&#x7684;&#x6240;&#x6709;&#x65B9;&#x6CD5;&#x7684;&#x8C03;&#x5EA6;&#x503C;&#x6BD4;&#x8F83;&#x3002;&#x5305;&#x62EC;<code>:wolf</code>&#x548C;<code>:simmons</code>&#x3002;</li>
+<li>&#x56E0;&#x4E3A;<code>:wolf</code>&#x5339;&#x914D;&#xFF0C;&#x6240;&#x4EE5;&#x8FD0;&#x884C;<code>:wolf</code>&#x5BF9;&#x5E94;&#x7684;&#x903B;&#x8F91;&#x3002;</li>
+</ol>
+<blockquote>
+<p>Don&#x2019;t let the terminology trip you up! The main idea is that the dispatching function returns some value, and this value is used to determine which method definition to use.</p>
+</blockquote>
+<p>&#x522B;&#x8BA9;&#x672F;&#x8BED;&#x56F0;&#x6270;&#x4F60;&#x3002;&#x4E3B;&#x8981;&#x601D;&#x60F3;&#x5C31;&#x662F;&#x8C03;&#x5EA6;&#x51FD;&#x6570;&#x8FD4;&#x56DE;&#x4E00;&#x4E2A;&#x503C;&#xFF0C;&#x7528;&#x8FD9;&#x4E2A;&#x503C;&#x786E;&#x5B9A;&#x4F7F;&#x7528;&#x54EA;&#x4E2A;&#x65B9;&#x6CD5;&#x3002;</p>
+<blockquote>
+<p>Back to our example! Next we call the method twice. At &#x278D;, the dispatching function returns the value <code>:wolf</code> and the corresponding method is used, informing you that <code>&quot;Rachel from next door will howl and murder&quot;</code>. At &#x278F;, the function behaves similarly, except <code>:simmons</code> is the dispatching value.</p>
+</blockquote>
+<p>&#x56DE;&#x5230;&#x4F8B;&#x5B50;&#xFF0C;&#x5728;&#x278D;&#x8C03;&#x5EA6;&#x51FD;&#x6570;&#x8FD4;&#x56DE;&#x503C;<code>:wolf</code>,&#x5728;&#x278E;&#x5904;&#x8C03;&#x5EA6;&#x51FD;&#x6570;&#x8FD4;&#x56DE;&#x503C;<code>:simmons</code>,&#x5206;&#x522B;&#x8FD0;&#x884C;&#x5BF9;&#x5E94;&#x7684;&#x903B;&#x8F91;&#x3002;</p>
+<blockquote>
+<p>You can define a method with <code>nil</code> as the dispatch value:</p>
+</blockquote>
+<p>&#x53EF;&#x4EE5;&#x5B9A;&#x4E49;&#x8C03;&#x5EA6;&#x503C;&#x662F;<code>nil</code>&#x7684;&#x65B9;&#x6CD5;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">defmethod</span></span> full-moon-behavior <span class="literal">nil</span></span><br><span class="line">  [were-creature]</span><br><span class="line">  (<span class="name"><span class="builtin-name">str</span></span> (<span class="symbol">:name</span> were-creature) <span class="string">&quot; will stay at home and eat ice cream&quot;</span>))</span><br><span class="line"></span><br><span class="line">(<span class="name">full-moon-behavior</span> {<span class="symbol">:were-type</span> <span class="literal">nil</span></span><br><span class="line">                     <span class="symbol">:name</span> <span class="string">&quot;Martin the nurse&quot;</span>})</span><br><span class="line"><span class="comment">; =&gt; &quot;Martin the nurse will stay at home and eat ice cream&quot;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>When you call <code>full-moon-behavior</code> this time, the argument you give it has <code>nil</code> for its <code>:were-type</code>, so the method corresponding to <code>nil</code> gets evaluated and you&#x2019;re informed that <code>&quot;Martin the nurse will stay at home and eat ice cream&quot;</code>.</p>
+</blockquote>
+<p>&#x8FD9;&#x6B21;&#x8FD0;&#x884C;&#x662F;&#xFF0C;&#x53C2;&#x6570;&#x7684;<code>:were-type</code>&#x7684;&#x503C;&#x662F;<code>nil</code>,&#x6240;&#x4EE5;&#x8FD0;&#x884C;&#x5BF9;&#x5E94;&#x7684;&#x903B;&#x8F91;&#x3002;</p>
+<blockquote>
+<p>You can also define a default method to use if no other methods match by specifying <code>:default</code> as the dispatch value. In this example, the <code>:were-type</code> of the argument given doesn&#x2019;t match any of the previously defined methods, so the default method is used:</p>
+</blockquote>
+<p>&#x4E5F;&#x53EF;&#x4EE5;&#x5B9A;&#x4E49;&#x8C03;&#x5EA6;&#x503C;&#x662F;<code>:default</code>&#x7684;&#x65B9;&#x6CD5;&#xFF0C;&#x4F5C;&#x4E3A;&#x9ED8;&#x8BA4;&#x65B9;&#x6CD5;&#x3002;&#x8C03;&#x5EA6;&#x51FD;&#x6570;&#x6CA1;&#x6709;&#x5339;&#x914D;&#x503C;&#x65F6;&#x5019;&#xFF0C;&#x4F7F;&#x7528;&#x8FD9;&#x4E2A;&#x65B9;&#x6CD5;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">defmethod</span></span> full-moon-behavior <span class="symbol">:default</span></span><br><span class="line">  [were-creature]</span><br><span class="line">  (<span class="name"><span class="builtin-name">str</span></span> (<span class="symbol">:name</span> were-creature) <span class="string">&quot; will stay up all night fantasy footballing&quot;</span>))</span><br><span class="line"></span><br><span class="line">(<span class="name">full-moon-behavior</span> {<span class="symbol">:were-type</span> <span class="symbol">:office-worker</span></span><br><span class="line">                     <span class="symbol">:name</span> <span class="string">&quot;Jimmy from sales&quot;</span>})</span><br><span class="line"><span class="comment">; =&gt; &quot;Jimmy from sales will stay up all night fantasy footballing&quot;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>One cool thing about multimethods is that you can always add new methods. If you publish a library that includes the <code>were-creatures</code> namespace, other people can continue extending the multimethod to handle new dispatch values. This example shows that you&#x2019;re creating your own random namespace and including the <code>were-creatures</code> namespace, and then defining another method for the <code>full-moon-behavior</code> multimethod:</p>
+</blockquote>
+<p>multimethod&#x7684;&#x4E00;&#x4E2A;&#x4F18;&#x70B9;&#x662F;&#x603B;&#x662F;&#x53EF;&#x4EE5;&#x6DFB;&#x52A0;&#x65B0;&#x65B9;&#x6CD5;&#x3002;&#x5982;&#x679C;&#x4F60;&#x516C;&#x5E03;&#x4E86;&#x4E00;&#x4E2A;&#x5E93;&#xFF0C;&#x5305;&#x542B;<code>were-creatures</code>&#x547D;&#x540D;&#x7A7A;&#x95F4;&#xFF0C;&#x5176;&#x4ED6;&#x4EBA;&#x53EF;&#x4EE5;&#x7EE7;&#x7EED;&#x6269;&#x5C55;&#x8FD9;&#x4E2A;multimethod&#x4EE5;&#x5904;&#x7406;&#x65B0;&#x7684;&#x8C03;&#x5EA6;&#x503C;&#x3002;&#x4E0B;&#x9762;&#x7684;&#x4F8B;&#x5B50;&#x6F14;&#x793A;&#x4E86;&#x521B;&#x5EFA;&#x81EA;&#x5DF1;&#x7684;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#xFF0C;&#x5E76;&#x5305;&#x542B;&#x4E86;<code>were-creatures</code>&#x547D;&#x540D;&#x7A7A;&#x95F4;&#xFF0C;&#x7136;&#x540E;&#x5B9A;&#x4E49;&#x4E86;&#x53E6;&#x4E00;&#x4E2A;<code>full-moon-behavior</code>multimethod&#x7684;&#x65B9;&#x6CD5;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">ns</span></span> random-namespace</span><br><span class="line">  (<span class="symbol">:require</span> [were-creatures]))</span><br><span class="line">(<span class="name"><span class="builtin-name">defmethod</span></span> were-creatures/full-moon-behavior <span class="symbol">:bill-murray</span></span><br><span class="line">  [were-creature]</span><br><span class="line">  (<span class="name"><span class="builtin-name">str</span></span> (<span class="symbol">:name</span> were-creature) <span class="string">&quot; will be the most likeable celebrity&quot;</span>))</span><br><span class="line">(<span class="name">were-creatures/full-moon-behavior</span> {<span class="symbol">:name</span> <span class="string">&quot;Laura the intern&quot;</span></span><br><span class="line">                                    <span class="symbol">:were-type</span> <span class="symbol">:bill-murray</span>})</span><br><span class="line"><span class="comment">; =&gt; &quot;Laura the intern will be the most likeable celebrity&quot;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Your dispatching function can return arbitrary values using any or all of its arguments. The next example defines a multimethod that takes two arguments and returns a vector containing the type of each argument. It also defines an implementation of that method, which will be called when each argument is a string:</p>
+</blockquote>
+<p>&#x8C03;&#x5EA6;&#x51FD;&#x6570;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x4EFB;&#x610F;&#x6216;&#x5168;&#x90E8;&#x53C2;&#x6570;&#xFF0C;&#x8FD4;&#x56DE;&#x4EFB;&#x610F;&#x503C;&#xFF0C;&#x5982;&#x4E0B;&#x6240;&#x793A;&#xFF1A;</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">ns</span></span> user)</span><br><span class="line">(<span class="name"><span class="builtin-name">defmulti</span></span> types (<span class="name"><span class="builtin-name">fn</span></span> [x y] [(<span class="name"><span class="builtin-name">class</span></span> x) (<span class="name"><span class="builtin-name">class</span></span> y)]))</span><br><span class="line">(<span class="name"><span class="builtin-name">defmethod</span></span> types [java.lang.String java.lang.String]</span><br><span class="line">  [x y]</span><br><span class="line">  <span class="string">&quot;Two strings!&quot;</span>)</span><br><span class="line"></span><br><span class="line">(<span class="name">types</span> <span class="string">&quot;String 1&quot;</span> <span class="string">&quot;String 2&quot;</span>)</span><br><span class="line"><span class="comment">; =&gt; &quot;Two strings!&quot;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Incidentally, this is why they&#x2019;re called multimethods: they allow dispatch on multiple arguments. I haven&#x2019;t used this feature very often, but I could see it being used in a role-playing game to write methods that are dispatched according to, say, a mage&#x2019;s major school of magic and his magic specialization. Either way, it&#x2019;s better to have it and not need it than need it and not have it.</p>
+</blockquote>
+<p>&#x987A;&#x4FBF;&#x63D0;&#x4E00;&#x4E0B;&#xFF0C;&#x8FD9;&#x5C31;&#x662F;&#x53EB;&#x505A;multimethods&#x7684;&#x539F;&#x56E0;&#xFF1A;&#x5141;&#x8BB8;&#x4F60;&#x5728;&#x591A;&#x4E2A;&#x53C2;&#x6570;&#x4E0A;&#x8C03;&#x5EA6;&#x3002;&#x6211;&#x4E0D;&#x5E38;&#x4F7F;&#x7528;&#x8FD9;&#x4E2A;&#x7279;&#x6027;&#xFF0C;&#x4F46;&#x6211;&#x77E5;&#x9053;&#x5B83;&#x80FD;&#x7528;&#x4E8E;&#x89D2;&#x8272;&#x626E;&#x6F14;&#x6E38;&#x620F;&#xFF0C;&#x7528;&#x8FD9;&#x4E2A;&#x7279;&#x6027;&#x53EF;&#x4EE5;&#x5199;&#x51FA;&#x6839;&#x636E;&#x6CD5;&#x5E08;&#x7684;&#x4E3B;&#x8981;&#x9B54;&#x6CD5;&#x6D41;&#x6D3E;&#x548C;&#x9B54;&#x6CD5;&#x4E13;&#x7CBE;&#x8FDB;&#x884C;&#x8C03;&#x5EA6;&#x7684;&#x65B9;&#x6CD5;&#x3002;&#x6709;&#x4F46;&#x4E0D;&#x9700;&#x8981;&#x6BD4;&#x9700;&#x8981;&#x4F46;&#x6CA1;&#x6709;&#x5F3A;&#x3002;</p>
+<blockquote>
+<p>Note    Multimethods also allow hierarchical dispatching. Clojure lets you build custom hierarchies, which I won&#x2019;t cover, but you can learn about them by reading the <a href="http://clojure.org/reference/multimethods" target="_blank" rel="external">documentation</a>.</p>
+</blockquote>
+<p>&#x6CE8;&#x610F;Multimethods&#x4E5F;&#x5141;&#x8BB8;&#x5C42;&#x7EA7;&#x8C03;&#x5EA6;&#x3002;Clojure&#x5141;&#x8BB8;&#x4F60;&#x5EFA;&#x7ACB;&#x81EA;&#x5B9A;&#x4E49;&#x5C42;&#x7EA7;&#xFF0C;&#x6211;&#x4E0D;&#x4F1A;&#x8BB2;&#x89E3;&#xFF0C;&#x4F46;&#x4F60;&#x53EF;&#x4EE5;&#x9605;&#x8BFB;<a href="http://clojure.org/reference/multimethods" target="_blank" rel="external">&#x6587;&#x6863;</a>&#x3002;</p>
+<blockquote>
+<p>Protocols</p>
+</blockquote>
+<h3 id="&#x534F;&#x8BAE;"><a href="#&#x534F;&#x8BAE;" class="headerlink" title="&#x534F;&#x8BAE;"></a>&#x534F;&#x8BAE;</h3><blockquote>
+<p>Approximately 93.58 percent of the time, you&#x2019;ll want to dispatch to methods according to an argument&#x2019;s type. For example, <code>count</code> needs to use a different method for vectors than it does for maps or for lists. Although it&#x2019;s possible to perform type dispatch with multimethods, <em>protocols</em> are optimized for type dispatch. They&#x2019;re more efficient than multimethods, and Clojure makes it easy for you to succinctly specify protocol implementations.</p>
+</blockquote>
+<p>&#x5927;&#x591A;&#x6570;&#x60C5;&#x51B5;&#x4E0B;&#xFF0C;&#x4F60;&#x60F3;&#x6839;&#x636E;&#x53C2;&#x6570;&#x7C7B;&#x578B;&#x5206;&#x914D;&#x65B9;&#x6CD5;&#x3002;&#x6BD4;&#x5982;&#xFF0C;&#x5BF9;&#x4E8E;vector,map,list&#xFF0C;<code>count</code>&#x9700;&#x8981;&#x4F7F;&#x7528;&#x4E0D;&#x540C;&#x7684;&#x65B9;&#x6CD5;&#x3002;&#x5C3D;&#x7BA1;&#x53EF;&#x4EE5;&#x7528;multimethods&#x6267;&#x884C;&#x7C7B;&#x578B;&#x8C03;&#x5EA6;&#xFF0C;<em>&#x534F;&#x8BAE;</em> &#x662F;&#x66F4;&#x4F18;&#x9009;&#x62E9;&#x3002;&#x5B83;&#x6BD4;multimethods&#x66F4;&#x9AD8;&#x6548;&#xFF0C;&#x5E76;&#x4E14;Clojure&#x8BA9;&#x4F60;&#x80FD;&#x5F88;&#x5BB9;&#x6613;&#x5730;&#x7B80;&#x6D01;&#x5730;&#x6307;&#x660E;&#x534F;&#x8BAE;&#x5B9E;&#x73B0;&#x3002;</p>
+<blockquote>
+<p>A multimethod is just one polymorphic operation, whereas a protocol is a <em>collection</em> of one or more polymorphic operations. Protocol operations are called methods, just like multimethod operations. Unlike multimethods, which perform dispatch on arbitrary values returned by a dispatching function, protocol methods are dispatched based on the type of the first argument, as shown in this example:</p>
+</blockquote>
+<p>&#x4E00;&#x4E2A;multimethod&#x662F;&#x4E00;&#x4E2A;&#x591A;&#x6001;&#x64CD;&#x4F5C;&#xFF0C;&#x800C;&#x4E00;&#x4E2A;&#x534F;&#x8BAE;&#x662F;&#x4E00;&#x4E2A;&#x6216;&#x591A;&#x4E2A;&#x591A;&#x6001;&#x64CD;&#x4F5C;&#x7684;<em>&#x96C6;&#x5408;</em>&#x3002;&#x534F;&#x8BAE;&#x548C;multimethod&#x7684;&#x64CD;&#x4F5C;&#x90FD;&#x53EB;method,&#x4F46;multimethod&#x6839;&#x636E;&#x8C03;&#x5EA6;&#x51FD;&#x6570;&#x7684;&#x8FD4;&#x56DE;&#x503C;&#x51B3;&#x5B9A;&#x4F7F;&#x7528;&#x54EA;&#x4E2A;&#x65B9;&#x6CD5;&#xFF0C;&#x800C;&#x534F;&#x8BAE;&#x6839;&#x636E;&#x7B2C;&#x4E00;&#x4E2A;&#x53C2;&#x6570;&#x7684;&#x7C7B;&#x578B;&#xFF0C;&#x5982;&#x4E0B;&#x6240;&#x793A;&#xFF1A;</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(ns data-psychology)</span><br><span class="line">&#x278A;(defprotocol &#x278B;Psychodynamics</span><br><span class="line">  &#x278C;&quot;Plumb the inner depths of your data types&quot;</span><br><span class="line">  &#x278D;(thoughts [x] &quot;The data type&apos;s innermost thoughts&quot;)</span><br><span class="line">  &#x278E;(feelings-about [x] [x y] &quot;Feelings about self or other&quot;))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>First, there&#x2019;s <code>defprotocol</code> at &#x278A;. This takes a name, <code>Psychodynamics</code> &#x278B;, and an optional docstring, <code>&quot;Plumb the inner depths of your data types&quot;</code> &#x278C;. Next are the method signatures. A <em>method signature</em> consists of a name, an argument specification, and an optional docstring. The first method signature is named <code>thoughts</code> &#x278D; and can take only one argument. The second is named <code>feelings-about</code> &#x278E; and can take one or two arguments. Protocols do have one limitation: the methods can&#x2019;t have rest arguments. So a line like the following isn&#x2019;t allowed:</p>
+</blockquote>
+<p>&#x278A;&#x7684;<code>defprotocol</code>&#x5B9A;&#x4E49;&#x4E00;&#x4E2A;&#x534F;&#x8BAE;&#x3002;&#x278B;&#x5904;&#x7684;<code>Psychodynamics</code>&#x662F;&#x534F;&#x8BAE;&#x540D;&#xFF0C;&#x278C;&#x5904;&#x662F;&#x53EF;&#x9009;&#x7684;&#x6587;&#x6863;&#x5B57;&#x7B26;&#x4E32;&#x3002;&#x540E;&#x9762;&#x662F;&#x65B9;&#x6CD5;&#x7B7E;&#x540D;&#xFF0C;&#x7531;&#x65B9;&#x6CD5;&#x540D;&#x5B57;&#xFF0C;&#x53C2;&#x6570;&#x548C;&#x4E00;&#x4E2A;&#x53EF;&#x9009;&#x7684;&#x6587;&#x6863;&#x5B57;&#x7B26;&#x4E32;&#x7EC4;&#x6210;&#x3002;&#x278D;&#x5904;&#x548C;&#x278E;&#x5904;&#x7684;&#x65B9;&#x6CD5;&#x7B7E;&#x540D;&#x5206;&#x522B;&#x63A5;&#x6536;&#x4E00;&#x4E2A;&#x548C;&#x4E00;&#x4E2A;&#x6216;&#x4E24;&#x4E2A;&#x53C2;&#x6570;&#x3002;&#x534F;&#x8BAE;&#x6709;&#x4E2A;&#x9650;&#x5236;&#xFF0C;&#x65B9;&#x6CD5;&#x4E0D;&#x80FD;&#x6709;rest&#x53C2;&#x6570;&#x3002;&#x6240;&#x4EE5;&#x4E0D;&#x5141;&#x8BB8;&#x4E0B;&#x9762;&#x8FD9;&#x6837;&#xFF1A;</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">feelings-about</span> [x] [x &amp; others])</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>By defining a protocol, you&#x2019;re defining an abstraction, but you haven&#x2019;t yet defined how that abstraction is implemented. It&#x2019;s like you&#x2019;re reserving names for behavior (in this example, you&#x2019;re reserving <code>thoughts</code> and <code>feelings-about</code>), but you haven&#x2019;t defined what exactly the behavior should be. If you were to evaluate <code>(thoughts &quot;blorb&quot;)</code>, you would get an exception that reads, &#x201C;No implementation of method: thoughts of protocol: data-psychology/Psychodynamics found for class: java.lang.String.&#x201D; Protocols dispatch on the first argument&#x2019;s type, so when you call <code>(thoughts &quot;blorb&quot;)</code>, Clojure tries to look up the implementation of the <code>thoughts</code> method for strings, and fails.</p>
+</blockquote>
+<p>&#x5B9A;&#x4E49;&#x5B8C;&#x4E00;&#x4E2A;&#x534F;&#x8BAE;&#xFF0C;&#x5C31;&#x5B9A;&#x4E49;&#x4E86;&#x4E00;&#x4E2A;&#x62BD;&#x8C61;&#xFF0C;&#x4F46;&#x8FD8;&#x6CA1;&#x6709;&#x5B9A;&#x4E49;&#x5982;&#x4F55;&#x5B9E;&#x73B0;&#x8FD9;&#x4E2A;&#x62BD;&#x8C61;&#x3002;&#x5C31;&#x597D;&#x50CF;&#x4FDD;&#x7559;&#x4E86;&#x884C;&#x4E3A;&#x7684;&#x540D;&#x5B57;(&#x8FD9;&#x4E2A;&#x4F8B;&#x5B50;&#x91CC;&#x7684;<code>thoughts</code>&#x548C;<code>feelings-about</code>),&#x4F46;&#x8FD8;&#x6CA1;&#x6709;&#x786E;&#x5207;&#x5B9A;&#x4E49;&#x884C;&#x4E3A;&#x662F;&#x4EC0;&#x4E48;&#x3002;&#x5982;&#x679C;&#x4F60;&#x6C42;&#x503C;<code>(thoughts &quot;blorb&quot;)</code>,&#x4F1A;&#x5F97;&#x5230;&#x5F02;&#x5E38;&#xFF0C;&#x8BF4;&#x201D;No implementation of method: thoughts of protocol: data-psychology/Psychodynamics found for class: java.lang.String.&#x201D;&#x3002;&#x534F;&#x8BAE;&#x6839;&#x636E;&#x7B2C;&#x4E00;&#x4E2A;&#x53C2;&#x6570;&#x7684;&#x7C7B;&#x578B;&#x8C03;&#x5EA6;&#xFF0C;&#x6240;&#x4EE5;&#x8C03;&#x7528;<code>(thoughts &quot;blorb&quot;)</code>&#x65F6;&#xFF0C;&#x4F1A;&#x67E5;&#x627E;&#x5B57;&#x7B26;&#x4E32;&#x7684;<code>thoughts</code>&#x65B9;&#x6CD5;&#xFF0C;&#x7136;&#x540E;&#x5931;&#x8D25;&#x4E86;&#x3002;</p>
+<blockquote>
+<p>You can fix this sorry state of affairs by <em>extending</em> the string data type to implement the <code>Psychodynamics</code> protocol:</p>
+</blockquote>
+<p>&#x4F60;&#x53EF;&#x4EE5;<em>&#x6269;&#x5C55;</em>&#x5B57;&#x7B26;&#x4E32;&#x6570;&#x636E;&#x7C7B;&#x578B;&#xFF0C;&#x5B9E;&#x73B0;<code>Psychodynamics</code>&#x534F;&#x8BAE;:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#x278A; (extend-type java.lang.String</span><br><span class="line">&#x278B;   Psychodynamics</span><br><span class="line">&#x278C;   (thoughts [x] (str x &quot; thinks, &apos;Truly, the character defines the data type&apos;&quot;))</span><br><span class="line">&#x278D;   (feelings-about</span><br><span class="line">    ([x] (str x &quot; is longing for a simpler way of life&quot;))</span><br><span class="line">    ([x y] (str x &quot; is envious of &quot; y &quot;&apos;s simpler way of life&quot;))))</span><br><span class="line"></span><br><span class="line">(thoughts &quot;blorb&quot;)</span><br><span class="line">&#x278E; ; =&gt; &quot;blorb thinks, &apos;Truly, the character defines the data type&apos;&quot;</span><br><span class="line"></span><br><span class="line">(feelings-about &quot;schmorb&quot;)</span><br><span class="line">; =&gt; &quot;schmorb is longing for a simpler way of life&quot;</span><br><span class="line"></span><br><span class="line">(feelings-about &quot;schmorb&quot; 2)</span><br><span class="line">; =&gt; &quot;schmorb is envious of 2&apos;s simpler way of life&quot;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><code>extend-type</code> is followed by the name of the class or type you want to extend and the protocol you want it to support&#x2014;in this case, you specify the class java.lang.String at &#x278A; and the protocol you want it to support, Psychodynamics, at &#x278B;. After that, you provide an implementation for both the thoughts method at &#x278C; and the feelings-about method at &#x278D;. If you&#x2019;re extending a type to implement a protocol, you have to implement every method in the protocol or Clojure will throw an exception. In this case, you can&#x2019;t implement just thoughts or just feelings; you have to implement both.</p>
+</blockquote>
+<p><code>extend-type</code>&#x540E;&#x9762;&#x662F;&#x8981;&#x6269;&#x5C55;&#x7684;&#x7C7B;&#x6216;&#x7C7B;&#x578B;&#xFF0C;&#x7136;&#x540E;&#x662F;&#x8981;&#x652F;&#x6301;&#x7684;&#x534F;&#x8BAE;&#x3002;&#x7136;&#x540E;&#x662F;&#x534F;&#x8BAE;&#x7684;&#x6240;&#x6709;&#x65B9;&#x6CD5;&#x7684;&#x5B9E;&#x73B0;&#x3002;&#x4F60;&#x5FC5;&#x987B;&#x5B9E;&#x73B0;&#x534F;&#x8BAE;&#x7684;&#x6BCF;&#x4E2A;&#x65B9;&#x6CD5;&#xFF0C;&#x5426;&#x5219;&#x4F1A;&#x62A5;&#x9519;&#x3002;</p>
+<blockquote>
+<p>Notice that these method implementations don&#x2019;t begin with defmethod like multimethods do. In fact, they look similar to function definitions, except without <code>defn</code>. To define a method implementation, you write a form that starts with the method&#x2019;s name, like thoughts, then supply a vector of parameters and the method&#x2019;s body. These methods also allow arity overloading, just like functions, and you define multiple-arity method implementations similarly to multiple-arity functions. You can see this in the feelings-about implementation at &#x278D;.</p>
+</blockquote>
+<p>&#x65B9;&#x6CD5;&#x5B9A;&#x4E49;&#x4E0E;&#x51FD;&#x6570;&#x5B9A;&#x4E49;&#x7C7B;&#x4F3C;&#xFF0C;&#x9664;&#x4E86;&#x6CA1;&#x6709;<code>defn</code>&#x3002;&#x4E0E;&#x51FD;&#x6570;&#x5B9A;&#x4E49;&#x7C7B;&#x4F3C;&#xFF0C;&#x65B9;&#x6CD5;&#x4E5F;&#x53EF;&#x4EE5;&#x6709;&#x591A;&#x4E2A;&#x53C2;&#x6570;&#x4E2A;&#x6570;&#xFF0C;&#x5982;&#x278D;&#x5904;&#x6240;&#x793A;&#x3002;</p>
+<blockquote>
+<p>After you&#x2019;ve extended the <code>java.lang.String</code> type to implement the <code>Psychodynamics</code> protocol, Clojure knows how to dispatch the call <code>(thoughts &quot;blorb&quot;)</code>, and you get the string <code>&quot;blorb thinks, &apos;Truly, the character defines the data type&apos;&quot;</code> at &#x278E;.</p>
+</blockquote>
+<p>&#x6269;&#x5C55;<code>java.lang.String</code>&#xFF0C;&#x5B9E;&#x73B0;<code>Psychodynamics</code>&#x534F;&#x8BAE;&#x540E;&#xFF0C;&#x5C31;&#x53EF;&#x4EE5;&#x8C03;&#x7528;<code>(thoughts &quot;blorb&quot;)</code>&#xFF0C;&#x5982;&#x278E;&#x5904;&#x6240;&#x793A;&#x3002;</p>
+<blockquote>
+<p>What if you want to provide a default implementation, like you did with multimethods? To do that, you can extend <code>java.lang.Object</code>. This works because every type in Java (and hence, Clojure) is a descendant of <code>java.lang.Object</code>. If that doesn&#x2019;t quite make sense (perhaps because you&#x2019;re not familiar with object-oriented programming), don&#x2019;t worry about it&#x2014;just know that it works. Here&#x2019;s how you would use this technique to provide a default implementation for the <code>Psychodynamics</code> protocol:</p>
+</blockquote>
+<p>&#x5982;&#x679C;&#x60F3;&#x63D0;&#x4F9B;&#x9ED8;&#x8BA4;&#x5B9E;&#x73B0;&#xFF0C;&#x4F60;&#x53EF;&#x4EE5;&#x6269;&#x5C55;<code>java.lang.Object</code>&#x3002;&#x56E0;&#x4E3A;&#x6BCF;&#x4E2A;Java&#x7C7B;&#x578B;&#x90FD;&#x662F;&#x5176;&#x540E;&#x4EE3;&#xFF1A;</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">extend-type</span></span> java.lang.Object</span><br><span class="line">  Psychodynamics</span><br><span class="line">  (<span class="name">thoughts</span> [x] <span class="string">&quot;Maybe the Internet is just a vector for toxoplasmosis&quot;</span>)</span><br><span class="line">  (<span class="name">feelings-about</span></span><br><span class="line">    ([x] <span class="string">&quot;meh&quot;</span>)</span><br><span class="line">    ([x y] (<span class="name"><span class="builtin-name">str</span></span> <span class="string">&quot;meh about &quot;</span> y))))</span><br><span class="line"></span><br><span class="line">(<span class="name">thoughts</span> <span class="number">3</span>)</span><br><span class="line"><span class="comment">; =&gt; &quot;Maybe the Internet is just a vector for toxoplasmosis&quot;</span></span><br><span class="line"></span><br><span class="line">(<span class="name">feelings-about</span> <span class="number">3</span>)</span><br><span class="line"><span class="comment">; =&gt; &quot;meh&quot;</span></span><br><span class="line"></span><br><span class="line">(<span class="name">feelings-about</span> <span class="number">3</span> <span class="string">&quot;blorb&quot;</span>)</span><br><span class="line"><span class="comment">; =&gt; &quot;meh about blorb&quot;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Because we haven&#x2019;t defined a <code>Psychodynamics</code> implementation for numbers, Clojure dispatches calls to <code>thoughts</code> and <code>feelings-about</code> to the implementation defined for <code>java.lang.Object</code>.</p>
+</blockquote>
+<p>&#x53EF;&#x4EE5;&#x770B;&#x5230;&#xFF0C;&#x9ED8;&#x8BA4;&#x5B9E;&#x73B0;&#x5BF9;&#x6570;&#x5B57;&#x8D77;&#x4F5C;&#x7528;&#x4E86;&#x3002;</p>
+<blockquote>
+<p>Instead of making multiple calls to <code>extend-type</code> to extend multiple types, you can use <code>extend-protocol</code>, which lets you define protocol implementations for multiple types at once. Here&#x2019;s how you&#x2019;d define the preceding protocol implementations:</p>
+</blockquote>
+<p><code>extend-type</code>&#x4E00;&#x6B21;&#x6269;&#x5C55;&#x4E00;&#x4E2A;&#x7C7B;&#x578B;&#xFF0C;&#x60F3;&#x8981;&#x4E00;&#x6B21;&#x6269;&#x5C55;&#x591A;&#x4E2A;&#x7C7B;&#x578B;&#xFF0C;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;<code>extend-protocol</code>,&#x524D;&#x9762;&#x7684;&#x534F;&#x8BAE;&#x53EF;&#x4EE5;&#x8FD9;&#x4E48;&#x5B9A;&#x4E49;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">extend-protocol</span></span> Psychodynamics</span><br><span class="line">  java.lang.String</span><br><span class="line">  (<span class="name">thoughts</span> [x] <span class="string">&quot;Truly, the character defines the data type&quot;</span>)</span><br><span class="line">  (<span class="name">feelings-about</span></span><br><span class="line">    ([x] <span class="string">&quot;longing for a simpler way of life&quot;</span>)</span><br><span class="line">    ([x y] (<span class="name"><span class="builtin-name">str</span></span> <span class="string">&quot;envious of &quot;</span> y <span class="string">&quot;&apos;s simpler way of life&quot;</span>)))</span><br><span class="line"></span><br><span class="line">  java.lang.Object</span><br><span class="line">  (<span class="name">thoughts</span> [x] <span class="string">&quot;Maybe the Internet is just a vector for toxoplasmosis&quot;</span>)</span><br><span class="line">  (<span class="name">feelings-about</span></span><br><span class="line">    ([x] <span class="string">&quot;meh&quot;</span>)</span><br><span class="line">    ([x y] (<span class="name"><span class="builtin-name">str</span></span> <span class="string">&quot;meh about &quot;</span> y))))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>You might find this technique more convenient than using <code>extend-type</code>. Then again, you might not. How does <code>extend-type</code> make you feel? How about <code>extend-protocol</code>? Come sit down on this couch and tell me all about it.</p>
+</blockquote>
+<p>&#x53EF;&#x80FD;&#x4F60;&#x53D1;&#x73B0;&#x8FD9;&#x6837;&#x66F4;&#x65B9;&#x4FBF;&#xFF0C;&#x6216;&#x611F;&#x89C9;<code>extend-type</code>&#x66F4;&#x65B9;&#x4FBF;&#x3002;</p>
+<blockquote>
+<p>It&#x2019;s important to note that a protocol&#x2019;s methods &#x201C;belong&#x201D; to the namespace that they&#x2019;re defined in. In these examples, the fully qualified names of the <code>Psychodynamics</code> methods are <code>data-psychology/thoughts</code> and <code>data-psychology/feelings-about</code>. If you have an object-oriented background, this might seem weird because methods belong to data types in OOP. But don&#x2019;t freak out! It&#x2019;s just another way that Clojure gives primacy to abstractions. One consequence of this fact is that, if you want two different protocols to include methods with the same name, you&#x2019;ll need to put the protocols in different namespaces.</p>
+</blockquote>
+<p>&#x6CE8;&#x610F;&#xFF0C;&#x534F;&#x8BAE;&#x7684;&#x65B9;&#x6CD5;&#x5C5E;&#x4E8E;&#x534F;&#x8BAE;&#x5B9A;&#x4E49;&#x7684;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x3002;&#x8FD9;&#x4E2A;&#x4F8B;&#x5B50;&#x91CC;&#xFF0C;&#x5B8C;&#x5168;&#x9650;&#x5B9A;&#x7684;<code>Psychodynamics</code>&#x65B9;&#x6CD5;&#x662F;<code>data-psychology/thoughts</code>&#x548C;<code>data-psychology/feelings-about</code>&#x3002;&#x5982;&#x679C;&#x4F60;&#x6709;OO&#x80CC;&#x666F;&#xFF0C;&#x8FD9;&#x53EF;&#x80FD;&#x770B;&#x7740;&#x5F88;&#x602A;&#xFF0C;&#x56E0;&#x4E3A;&#x5728;OOP&#x91CC;&#xFF0C;&#x65B9;&#x6CD5;&#x5C5E;&#x4E8E;&#x6570;&#x636E;&#x7C7B;&#x578B;&#x3002;&#x4F46;&#x522B;&#x6FC0;&#x52A8;&#xFF0C;&#x8FD9;&#x53EA;&#x662F;Clojure&#x628A;&#x62BD;&#x8C61;&#x653E;&#x5728;&#x9996;&#x8981;&#x5730;&#x4F4D;&#x7684;&#x4E00;&#x4E2A;&#x65B9;&#x6CD5;&#x3002;&#x5176;&#x7ED3;&#x679C;&#x662F;&#x5982;&#x679C;&#x4F60;&#x9700;&#x8981;&#x4E0D;&#x540C;&#x7684;&#x534F;&#x8BAE;&#x5305;&#x542B;&#x540C;&#x540D;&#x7684;&#x65B9;&#x6CD5;&#xFF0C;&#x4F60;&#x9700;&#x8981;&#x628A;&#x8FD9;&#x4E9B;&#x534F;&#x8BAE;&#x653E;&#x5728;&#x4E0D;&#x540C;&#x7684;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x91CC;&#x3002;</p>
+<blockquote>
+<p>Records</p>
+</blockquote>
+<h2 id="&#x8BB0;&#x5F55;"><a href="#&#x8BB0;&#x5F55;" class="headerlink" title="&#x8BB0;&#x5F55;"></a>&#x8BB0;&#x5F55;</h2><blockquote>
+<p>Clojure allows you to create records, which are custom, maplike data types. They&#x2019;re maplike in that they associate keys with values, you can look up their values the same way you can with maps, and they&#x2019;re immutable like maps. They&#x2019;re different in that you specify fields for records. Fields are slots for data; using them is like specifying which keys a data structure should have. Records are also different from maps in that you can extend them to implement protocols.</p>
+</blockquote>
+<p>Clojure&#x5141;&#x8BB8;&#x4F60;&#x521B;&#x5EFA;&#x8BB0;&#x5F55;&#xFF0C;&#x4E00;&#x79CD;&#x81EA;&#x5B9A;&#x4E49;&#x7684;&#xFF0C;&#x7C7B;&#x4F3C;map&#x7684;&#x6570;&#x636E;&#x7C7B;&#x578B;&#x3002;&#x8BB0;&#x5F55;&#x4E0E;map&#x76F8;&#x4F3C;&#x7684;&#x5730;&#x65B9;&#x662F;&#xFF1A;&#x4E5F;&#x662F;&#x952E;&#x503C;&#x5173;&#x8054;&#xFF0C;&#x53EF;&#x4EE5;&#x7528;&#x4E0E;map&#x76F8;&#x540C;&#x7684;&#x65B9;&#x6CD5;&#x67E5;&#x627E;&#x503C;&#xFF0C;&#x4E5F;&#x662F;&#x4E0D;&#x53EF;&#x53D8;&#x7684;&#x3002;&#x4E0D;&#x540C;&#x4E4B;&#x5904;&#x662F;&#x6307;&#x5B9A;&#x8BB0;&#x5F55;&#x7684;&#x5B57;&#x6BB5;&#x3002;&#x5B57;&#x6BB5;&#x662F;&#x5B58;&#x653E;&#x6570;&#x636E;&#x7684;&#x69FD;&#xFF0C;&#x4F7F;&#x7528;&#x5B57;&#x6BB5;&#x5C31;&#x50CF;&#x6307;&#x5B9A;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x5E94;&#x8BE5;&#x6709;&#x54EA;&#x4E9B;key&#x3002;&#x53E6;&#x4E00;&#x4E2A;&#x4E0D;&#x540C;&#x662F;&#x53EF;&#x4EE5;&#x6269;&#x5C55;&#x8BB0;&#x5F55;&#x4EE5;&#x5B9E;&#x73B0;&#x534F;&#x8BAE;&#x3002;</p>
+<blockquote>
+<p>To create a record, you use <code>defrecord</code> to specify its name and fields:</p>
+</blockquote>
+<p>&#x8981;&#x521B;&#x5EFA;&#x8BB0;&#x5F55;&#xFF0C;&#x7528;<code>defrecord</code>&#x6307;&#x5B9A;&#x540D;&#x5B57;&#x548C;&#x5B57;&#x6BB5;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">ns</span></span> were-records)</span><br><span class="line">(<span class="name"><span class="builtin-name">defrecord</span></span> WereWolf [name title])</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>This record&#x2019;s name is <code>WereWolf</code>, and its two fields are <code>name</code> and <code>title</code>. You can create an instance of this record in three ways:</p>
+</blockquote>
+<p>&#x8FD9;&#x4E2A;&#x8BB0;&#x5F55;&#x540D;&#x5B57;&#x662F;<code>WereWolf</code>,&#x6709;&#x4E24;&#x4E2A;&#x5B57;&#x6BB5;<code>name</code>&#x548C;<code>title</code>&#x3002;&#x521B;&#x5EFA;&#x8BB0;&#x5F55;&#x7684;&#x5B9E;&#x4F8B;&#x6709;&#x4E09;&#x79CD;&#x65B9;&#x6CD5;&#xFF1A;</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#x278A; (WereWolf. &quot;David&quot; &quot;London Tourist&quot;)</span><br><span class="line">; =&gt; #were_records.WereWolf{:name &quot;David&quot;, :title &quot;London Tourist&quot;}</span><br><span class="line"></span><br><span class="line">&#x278B; (-&gt;WereWolf &quot;Jacob&quot; &quot;Lead Shirt Discarder&quot;)</span><br><span class="line">; =&gt; #were_records.WereWolf{:name &quot;Jacob&quot;, :title &quot;Lead Shirt Discarder&quot;}</span><br><span class="line"></span><br><span class="line">&#x278C; (map-&gt;WereWolf {:name &quot;Lucian&quot; :title &quot;CEO of Melodrama&quot;})</span><br><span class="line">; =&gt; #were_records.WereWolf{:name &quot;Lucian&quot;, :title &quot;CEO of Melodrama&quot;}</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>At &#x278A;, we create an instance the same way we&#x2019;d create a Java object, using the class instantiation interop call. (<em>Interop</em> refers to the ability to interact with native Java constructs within Clojure.) Notice that the arguments must follow the same order as the field definition. This works because records are actually Java classes under the covers.</p>
+</blockquote>
+<p>&#x5728;&#x278A;&#x5904;&#xFF0C;&#x6211;&#x4EEC;&#x7528;&#x7C7B;&#x5B9E;&#x4F8B;&#x5316;&#x4E92;&#x64CD;&#x4F5C;&#x521B;&#x5EFA;&#x4E86;&#x4E00;&#x4E2A;&#x5B9E;&#x4F8B;&#xFF0C;&#x4E0E;&#x521B;&#x5EFA;Java&#x5BF9;&#x8C61;&#x7684;&#x65B9;&#x6CD5;&#x4E00;&#x6837;&#x3002;(<em>&#x4E92;&#x64CD;&#x4F5C;</em> &#x6307;&#x5728;Clojure&#x5185;&#x4E0E;&#x6E90;&#x751F;Java&#x7ED3;&#x6784;&#x4EA4;&#x4E92;&#x7684;&#x80FD;&#x529B;&#x3002;)&#x6CE8;&#x610F;&#x53C2;&#x6570;&#x987A;&#x5E8F;&#x5FC5;&#x987B;&#x4E0E;&#x5B57;&#x6BB5;&#x5B9A;&#x4E49;&#x987A;&#x5E8F;&#x76F8;&#x540C;&#x3002;&#x8FD9;&#x79CD;&#x65B9;&#x6CD5;&#x6709;&#x6548;&#x662F;&#x56E0;&#x4E3A;&#x5728;&#x5185;&#x90E8;&#x8BB0;&#x5F55;&#x5B9E;&#x9645;&#x4E0A;&#x662F;Java&#x7C7B;&#x3002;</p>
+<blockquote>
+<p>The instance at &#x278B; looks nearly identical to the one at &#x278A;, but the key difference is that <code>-&gt;WereWolf</code> is a function. When you create a record, the factory functions <code>-&gt;RecordName</code> and <code>map-&gt;RecordName</code> are created automatically. At &#x278C;, <code>map-&gt;WereWolf</code> takes a map as an argument with keywords that correspond to the record type&#x2019;s fields and returns a record.</p>
+</blockquote>
+<p>&#x278B;&#x5904;&#x4E0E;&#x278A;&#x5904;&#x7684;&#x5173;&#x952E;&#x533A;&#x522B;&#x662F;<code>-&gt;WereWolf</code>&#x662F;&#x4E2A;&#x51FD;&#x6570;&#x3002;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x8BB0;&#x5F55;&#x65F6;&#xFF0C;&#x5DE5;&#x5382;&#x51FD;&#x6570;<code>-&gt;RecordName</code>&#x548C;<code>map-&gt;RecordName</code>&#x88AB;&#x81EA;&#x52A8;&#x521B;&#x5EFA;&#x3002;&#x5728;&#x278C;&#x5904;&#xFF0C;<code>map-&gt;WereWolf</code>&#x63A5;&#x53D7;&#x4E00;&#x4E2A;map&#x4F5C;&#x4E3A;&#x53C2;&#x6570;&#xFF0C;key&#x5BF9;&#x5E94;&#x8BB0;&#x5F55;&#x7C7B;&#x578B;&#x7684;&#x5B57;&#x6BB5;&#x3002;</p>
+<blockquote>
+<p>If you want to use a record type in another namespace, you&#x2019;ll have to import it, just like you did with the Java classes in Chapter 12. Be careful to replace all dashes in the namespace with underscores. This brief example shows how you&#x2019;d import the <code>WereWolf</code> record type in another namespace:</p>
+</blockquote>
+<p>&#x5982;&#x679C;&#x60F3;&#x5728;&#x53E6;&#x4E00;&#x4E2A;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x4F7F;&#x7528;&#x4E00;&#x4E2A;&#x8BB0;&#x5F55;&#xFF0C;&#x5FC5;&#x987B;&#x5F15;&#x5165;&#xFF0C;&#x5C31;&#x50CF;&#x5728;12&#x7AE0;&#x91CC;&#x5F15;&#x5165;Java&#x4E00;&#x6837;&#x3002;&#x9700;&#x8981;&#x8981;&#x628A;&#x6A2A;&#x7EBF;&#x6362;&#x6210;&#x4E0B;&#x5212;&#x7EBF;&#x3002;&#x4E0B;&#x9762;&#x7684;&#x4F8B;&#x5B50;&#x6F14;&#x793A;&#x5982;&#x4F55;&#x5728;&#x53E6;&#x4E00;&#x4E2A;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x5F15;&#x5165;<code>WereWolf</code>&#xFF1A;</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">ns</span></span> monster-mash</span><br><span class="line">  (<span class="symbol">:import</span> [were_records WereWolf]))</span><br><span class="line">(<span class="name">WereWolf.</span> <span class="string">&quot;David&quot;</span> <span class="string">&quot;London Tourist&quot;</span>)</span><br><span class="line"><span class="comment">; =&gt; #were_records.WereWolf{:name &quot;David&quot;, :title &quot;London Tourist&quot;}</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Notice that <code>were_records</code> has an underscore, not a dash.</p>
+</blockquote>
+<p>&#x6CE8;&#x610F;<code>were_records</code>&#x91CC;&#x7684;&#x4E0B;&#x5212;&#x7EBF;&#x3002;</p>
+<blockquote>
+<p>You can look up record values in the same way you look up map values, and you can also use Java field access interop:</p>
+</blockquote>
+<p>&#x67E5;&#x627E;&#x8BB0;&#x5F55;&#x503C;&#x65F6;&#xFF0C;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;map&#x7684;&#x65B9;&#x6CD5;&#xFF0C;&#x4E5F;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;Java&#x5B57;&#x6BB5;&#x8BBF;&#x95EE;&#x4E92;&#x64CD;&#x4F5C;:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">(def jacob (-&gt;WereWolf &quot;Jacob&quot; &quot;Lead Shirt Discarder&quot;))</span><br><span class="line">&#x278A; (.name jacob)</span><br><span class="line">; =&gt; &quot;Jacob&quot;</span><br><span class="line"></span><br><span class="line">&#x278B; (:name jacob)</span><br><span class="line">; =&gt; &quot;Jacob&quot;</span><br><span class="line"></span><br><span class="line">&#x278C; (get jacob :name)</span><br><span class="line">; =&gt; &quot;Jacob&quot;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>The first example, <code>(.name jacob)</code> at &#x278A;, uses Java interop, and the examples at &#x278B; and &#x278C; access <code>:name</code> the same way you would with a map.</p>
+</blockquote>
+<p>&#x278A;&#x5904;&#x7684;&#x65B9;&#x6CD5;&#x4F7F;&#x7528;&#x4E86;Java&#x4E92;&#x64CD;&#x4F5C;&#xFF0C;&#x278B; &#x548C; &#x278C; &#x5904;&#x4F7F;&#x7528;&#x4E86;map&#x7684;&#x65B9;&#x6CD5;&#x3002;</p>
+<blockquote>
+<p>When testing for equality, Clojure will check that all fields are equal and that the two comparands have the same type:</p>
+</blockquote>
+<p>&#x68C0;&#x67E5;&#x76F8;&#x7B49;&#x65F6;&#xFF0C;Clojure&#x4F1A;&#x68C0;&#x67E5;&#x6240;&#x6709;&#x5B57;&#x6BB5;&#x76F8;&#x7B49;&#x800C;&#x4E14;&#x4E24;&#x4E2A;&#x6BD4;&#x8F83;&#x8005;&#x662F;&#x540C;&#x4E00;&#x79CD;&#x7C7B;&#x578B;:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#x278A; (= jacob (-&gt;WereWolf &quot;Jacob&quot; &quot;Lead Shirt Discarder&quot;))</span><br><span class="line">; =&gt; true</span><br><span class="line"></span><br><span class="line">&#x278B; (= jacob (WereWolf. &quot;David&quot; &quot;London Tourist&quot;))</span><br><span class="line">; =&gt; false</span><br><span class="line"></span><br><span class="line">&#x278C; (= jacob {:name &quot;Jacob&quot; :title &quot;Lead Shirt Discarder&quot;})</span><br><span class="line">; =&gt; false</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>The test at &#x278A; returns <code>true</code> because <code>jacob</code> and the newly created record are of the same type and their fields are equal. The test at &#x278B; returns <code>false</code> because the fields aren&#x2019;t equal. The final test at &#x278C; returns <code>false</code> because the two comparands don&#x2019;t have the same type: <code>jacob</code> is a <code>WereWolf</code> record, and the other argument is a map.</p>
+</blockquote>
+<p>&#x278A;&#x5904;&#x76F8;&#x7B49;&#x65F6;&#x56E0;&#x4E3A;&#x7C7B;&#x578B;&#x548C;&#x5B57;&#x6BB5;&#x90FD;&#x76F8;&#x540C;&#x3002;&#x278B;&#x5904;&#x4E0D;&#x7B49;&#x662F;&#x56E0;&#x4E3A;&#x5B57;&#x6BB5;&#x4E0D;&#x540C;&#x3002;&#x278C;&#x5904;&#x4E0D;&#x540C;&#x662F;&#x56E0;&#x4E3A;&#x7C7B;&#x578B;&#x4E0D;&#x540C;&#x3002;</p>
+<blockquote>
+<p>Any function you can use on a map, you can also use on a record:</p>
+</blockquote>
+<p>&#x4EFB;&#x4F55;&#x53EF;&#x4EE5;&#x7528;&#x4E8E;map&#x7684;&#x51FD;&#x6570;&#x4E5F;&#x53EF;&#x4EE5;&#x7528;&#x4E8E;&#x8BB0;&#x5F55;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">assoc</span></span> jacob <span class="symbol">:title</span> <span class="string">&quot;Lead Third Wheel&quot;</span>)</span><br><span class="line"><span class="comment">; =&gt; #were_records.WereWolf{:name &quot;Jacob&quot;, :title &quot;Lead Third Wheel&quot;}</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>However, if you <code>dissoc</code> a field, the result&#x2019;s type will be a plain ol&#x2019; Clojure map; it won&#x2019;t have the same data type as the original record:</p>
+</blockquote>
+<p>&#x4F46;&#x5982;&#x679C;<code>dissoc</code>&#x4E00;&#x4E2A;&#x5B57;&#x6BB5;&#xFF0C;&#x7ED3;&#x679C;&#x4F1A;&#x53D8;&#x6210;&#x4E00;&#x4E2A;&#x666E;&#x901A;Clojure map,&#x4E0E;&#x539F;&#x6765;&#x7684;&#x8BB0;&#x5F55;&#x7C7B;&#x578B;&#x4E0D;&#x540C;:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">dissoc</span></span> jacob <span class="symbol">:title</span>)</span><br><span class="line"><span class="comment">; =&gt; {:name &quot;Jacob&quot;} &lt;- that&apos;s not a were_records.WereWolf</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>This matters for at least two reasons: first, accessing map values is slower than accessing record values, so watch out if you&#x2019;re building a high-performance program. Second, when you create a new record type, you can extend it to implement a protocol, similar to how you extended a type using <code>extend-type</code> earlier. If you <code>dissoc</code> a record and then try to call a protocol method on the result, the record&#x2019;s protocol method won&#x2019;t be called.</p>
+</blockquote>
+<p>&#x7C7B;&#x578B;&#x4E0D;&#x540C;&#x5F88;&#x91CD;&#x8981;&#x7684;&#x539F;&#x56E0;&#x6709;&#x4E24;&#x4E2A;&#xFF1A;&#x9996;&#x5148;&#xFF0C;&#x8BBF;&#x95EE;map&#x503C;&#x6BD4;&#x8BBF;&#x95EE;&#x8BB0;&#x5F55;&#x503C;&#x6162;&#xFF0C;&#x6240;&#x4EE5;&#x5199;&#x9AD8;&#x6027;&#x80FD;&#x7A0B;&#x5E8F;&#x65F6;&#x5019;&#x8981;&#x7559;&#x5FC3;&#x3002;&#x7B2C;&#x4E8C;&#xFF0C;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x65B0;&#x8BB0;&#x5F55;&#x65F6;&#xFF0C;&#x53EF;&#x4EE5;&#x6269;&#x5C55;&#x5B83;&#x4EE5;&#x5B9E;&#x73B0;&#x4E00;&#x4E2A;&#x534F;&#x8BAE;&#xFF0C;&#x4E0E;&#x7528;<code>extend-type</code>&#x6269;&#x5C55;&#x4E00;&#x4E2A;&#x7C7B;&#x578B;&#x7C7B;&#x4F3C;&#x3002;&#x5982;&#x679C;&#x4F60;<code>dissoc</code>&#x4E00;&#x4E2A;&#x8BB0;&#x5F55;&#x7136;&#x540E;&#x5728;&#x7ED3;&#x679C;&#x4E0A;&#x8C03;&#x7528;&#x534F;&#x8BAE;&#x65B9;&#x6CD5;&#xFF0C;&#x65B9;&#x6CD5;&#x4E0D;&#x4F1A;&#x88AB;&#x8C03;&#x7528;&#x3002;</p>
+<blockquote>
+<p>Here&#x2019;s how you would extend a protocol when defining a record:</p>
+</blockquote>
+<p>&#x4E0B;&#x9762;&#x662F;&#x5B9A;&#x4E49;&#x8BB0;&#x5F55;&#x65F6;&#x5982;&#x4F55;&#x6269;&#x5C55;&#x534F;&#x8BAE;&#xFF1A;</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#x278A; (defprotocol WereCreature</span><br><span class="line">&#x278B;   (full-moon-behavior [x]))</span><br><span class="line"></span><br><span class="line">&#x278C; (defrecord WereWolf [name title]</span><br><span class="line">  WereCreature</span><br><span class="line">  (full-moon-behavior [x]</span><br><span class="line">    (str name &quot; will howl and murder&quot;)))</span><br><span class="line"></span><br><span class="line">(full-moon-behavior (map-&gt;WereWolf {:name &quot;Lucian&quot; :title &quot;CEO of Melodrama&quot;}))</span><br><span class="line">; =&gt; &quot;Lucian will howl and murder&quot;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>We&#x2019;ve created a new protocol, <code>WereCreature</code> &#x278A;, with one method, <code>full-moon-behavior</code> &#x278B;. At &#x278C;, <code>defrecord</code> implements <code>WereCreature</code> for <code>WereWolf</code>. The most interesting part of the <code>full-moon-behavior</code> implementation is that you have access to <code>name</code>. You also have access to <code>title</code> and any other fields that might be defined for your record. You can also extend records using <code>extend-type</code> and <code>extend-protocol</code>.</p>
+</blockquote>
+<p>&#x278A;&#x278B;&#x5904;&#x521B;&#x5EFA;&#x4E86;&#x6709;&#x4E00;&#x4E2A;&#x65B9;&#x6CD5;&#x7684;&#x534F;&#x8BAE;&#x3002;&#x278C;&#x5904;&#x5B9A;&#x4E49;&#x4E86;<code>WereWolf</code>&#x8BB0;&#x5F55;&#x5E76;&#x5B9E;&#x73B0;&#x4E86;<code>WereCreature</code>&#x534F;&#x8BAE;&#x3002;&#x6CE8;&#x610F;&#xFF0C;<code>full-moon-behavior</code>&#x53EF;&#x4EE5;&#x8BBF;&#x95EE;&#x8BB0;&#x5F55;&#x7684;&#x6240;&#x6709;&#x5B57;&#x6BB5;&#x3002;&#x4E5F;&#x53EF;&#x4EE5;&#x7528;<code>extend-type</code>&#x548C;<code>extend-protocol</code>&#x6269;&#x5C55;&#x8BB0;&#x5F55;&#x3002;</p>
+<blockquote>
+<p>When should you use records, and when should you use maps? In general, you should consider using records if you find yourself creating maps with the same fields over and over. This tells you that that set of data represents information in your application&#x2019;s domain, and your code will communicate its purpose better if you provide a name based on the concept you&#x2019;re trying to model. Not only that, but record access is more performant than map access, so your program will become a bit more efficient. Finally, if you want to use protocols, you&#x2019;ll need to create a record.</p>
+</blockquote>
+<p>&#x4EC0;&#x4E48;&#x65F6;&#x5019;&#x5E94;&#x8BE5;&#x7528;&#x8BB0;&#x5F55;&#x5462;&#xFF1F;&#x5F53;&#x4F60;&#x53D1;&#x73B0;&#x81EA;&#x5DF1;&#x4E00;&#x6B21;&#x53C8;&#x4E00;&#x6B21;&#x7528;map&#x521B;&#x5EFA;&#x540C;&#x6837;&#x7684;&#x5B57;&#x6BB5;&#xFF0C;&#x8FD9;&#x8BF4;&#x660E;&#x8FD9;&#x662F;&#x5E94;&#x7528;&#x7A0B;&#x5E8F;&#x7279;&#x5B9A;&#x9886;&#x57DF;&#x7684;&#x4FE1;&#x606F;&#xFF0C;&#x7528;&#x8BB0;&#x5F55;&#x8868;&#x793A;&#x5408;&#x9002;&#xFF0C;&#x56E0;&#x4E3A;&#x66F4;&#x6E05;&#x6670;&#x3002;&#x800C;&#x4E14;&#x8BBF;&#x95EE;&#x8BB0;&#x5F55;&#x6BD4;&#x8BBF;&#x95EE;map&#x6027;&#x80FD;&#x66F4;&#x9AD8;&#x3002;&#x53E6;&#x5916;&#x5982;&#x679C;&#x60F3;&#x4F7F;&#x7528;&#x534F;&#x8BAE;&#xFF0C;&#x9700;&#x8981;&#x4F7F;&#x7528;&#x8BB0;&#x5F55;&#x3002;</p>
+<blockquote>
+<p>Further Study</p>
+</blockquote>
+<h2 id="&#x8FDB;&#x4E00;&#x6B65;&#x5B66;&#x4E60;"><a href="#&#x8FDB;&#x4E00;&#x6B65;&#x5B66;&#x4E60;" class="headerlink" title="&#x8FDB;&#x4E00;&#x6B65;&#x5B66;&#x4E60;"></a>&#x8FDB;&#x4E00;&#x6B65;&#x5B66;&#x4E60;</h2><blockquote>
+<p>Clojure offers other tools for working with abstractions and data types. These tools, which I consider advanced, include <code>deftype</code>, <code>reify</code>, and <code>proxy</code>. If you&#x2019;re interested in learning more, check out the documentation on data types at <a href="http://clojure.org/reference/datatypes" target="_blank" rel="external">http://clojure.org/reference/datatypes</a>.</p>
+</blockquote>
+<p>Clojure&#x63D0;&#x4F9B;&#x4E86;&#x5176;&#x4ED6;&#x62BD;&#x8C61;&#x548C;&#x6570;&#x636E;&#x7C7B;&#x578B;&#x5DE5;&#x5177;&#x3002;&#x6211;&#x8BA4;&#x4E3A;&#x8FD9;&#x4E9B;&#x662F;&#x9AD8;&#x7EA7;&#x5DE5;&#x5177;&#xFF0C;&#x5305;&#x62EC;<code>deftype</code>,<code>reify</code>&#x548C;<code>proxy</code>&#x3002;&#x5982;&#x679C;&#x4F60;&#x611F;&#x5174;&#x8DA3;&#xFF0C;&#x67E5;&#x770B;&#x6587;&#x6863; <a href="http://clojure.org/reference/datatypes" target="_blank" rel="external">http://clojure.org/reference/datatypes</a> &#x3002;</p>
+<blockquote>
+<p>Summary</p>
+</blockquote>
+<h2 id="&#x603B;&#x7ED3;"><a href="#&#x603B;&#x7ED3;" class="headerlink" title="&#x603B;&#x7ED3;"></a>&#x603B;&#x7ED3;</h2><blockquote>
+<p>One of Clojure&#x2019;s design principles is to write to abstractions. In this chapter, you learned how to define your own abstractions using multimethods and prototypes. These constructs provide polymorphism, allowing the same operation to behave differently based on the arguments it&#x2019;s given. You also learned how to create and use your own associative data types with <code>defrecord</code> and how to extend records to implement protocols.</p>
+</blockquote>
+<p>Clojure&#x7684;&#x4E00;&#x4E2A;&#x8BBE;&#x8BA1;&#x539F;&#x5219;&#x662F;&#x9762;&#x5411;&#x62BD;&#x8C61;&#x7F16;&#x7A0B;&#x3002;&#x8FD9;&#x7AE0;&#x5B66;&#x4E60;&#x4E86;&#x5982;&#x4F55;&#x7528;multimethods&#x548C;protocols&#x5B9A;&#x4E49;&#x81EA;&#x5DF1;&#x7684;&#x62BD;&#x8C61;&#x3002;&#x8FD9;&#x4E9B;&#x7ED3;&#x6784;&#x63D0;&#x4F9B;&#x4E86;&#x591A;&#x6001;&#xFF0C;&#x5141;&#x8BB8;&#x540C;&#x6837;&#x7684;&#x64CD;&#x4F5C;&#x57FA;&#x4E8E;&#x53C2;&#x6570;&#x884C;&#x4E3A;&#x4E0D;&#x540C;&#x3002;&#x8FD8;&#x5B66;&#x4E60;&#x4E86;&#x5982;&#x4F55;&#x7528;<code>defrecord</code>&#x521B;&#x5EFA;&#x81EA;&#x5DF1;&#x7684;&#x5173;&#x8054;&#x6570;&#x636E;&#x7C7B;&#x578B;,&#x548C;&#x5982;&#x4F55;&#x6269;&#x5C55;&#x8BB0;&#x5F55;&#x5B9E;&#x73B0;protocols&#x3002;</p>
+<blockquote>
+<p>When I first started learning Clojure, I was pretty shy about using multi&#xAD;methods, protocols, and records. However, they are used often in Clojure libraries, so it&#x2019;s good to know how they work. Once you get the hang of them, they&#x2019;ll help you write cleaner code.</p>
+</blockquote>
+<p>&#x6211;&#x521A;&#x5F00;&#x59CB;&#x5B66;&#x4E60;Clojure&#x65F6;&#xFF0C;&#x5F88;&#x5C11;&#x4F7F;&#x7528;multi&#xAD;methods, protocols, &#x548C; records&#xFF0C;&#x4ED6;&#x4EEC;&#x7ECF;&#x5E38;&#x7528;&#x4E8E;Clojure&#x5E93;&#xFF0C;&#x6240;&#x4EE5;&#x6700;&#x597D;&#x77E5;&#x9053;&#x4ED6;&#x4EEC;&#x7528;&#x6CD5;&#x3002;&#x4E00;&#x65E6;&#x5B66;&#x4F1A;&#x4E86;&#x5982;&#x4F55;&#x4F7F;&#x7528;&#xFF0C;&#x5B83;&#x4EEC;&#x4F1A;&#x5E2E;&#x52A9;&#x4F60;&#x5199;&#x51FA;&#x66F4;&#x6E05;&#x6670;&#x7684;&#x4EE3;&#x7801;&#x3002;</p>
+<blockquote>
+<p>Exercises</p>
+</blockquote>
+<h2 id="&#x7EC3;&#x4E60;"><a href="#&#x7EC3;&#x4E60;" class="headerlink" title="&#x7EC3;&#x4E60;"></a>&#x7EC3;&#x4E60;</h2><blockquote>
+<ol>
+<li>Extend the full-moon-behavior multimethod to add behavior for your own kind of were-creature.</li>
+<li>Create a WereSimmons record type, and then extend the WereCreature protocol.</li>
+<li>Create your own protocol, and then extend it using extend-type and extend-protocol.</li>
+<li>Create a role-playing game that implements behavior using multiple dispatch.</li>
+</ol>
+</blockquote>
+<hr>
+<p>&#x8BD1;&#x6587;&#x7ED3;&#x675F;&#x3002;</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Clojure/" rel="tag">#Clojure</a>
+          
+            <a href="/tags/Clojure-For-The-Branve-And-True/" rel="tag">#Clojure For The Branve And True</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/08/20/brave-clojure-java/" rel="next" title="【译】Brave Clojure 第十二章:与JVM共事">
+                <i class="fa fa-chevron-left"></i> 【译】Brave Clojure 第十二章:与JVM共事
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/09/03/brave-clojure-multimethods-records-protocols/"
+     data-title="【译】Brave Clojure 第十三章:用Multimethod,Protocol和Record创建并扩展抽象"
+     data-content=""
+     data-url="http://yoursite.com/2016/09/03/brave-clojure-multimethods-records-protocols/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/09/03/brave-clojure-multimethods-records-protocols/"
+           data-title="【译】Brave Clojure 第十三章:用Multimethod,Protocol和Record创建并扩展抽象" data-url="http://yoursite.com/2016/09/03/brave-clojure-multimethods-records-protocols/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://s.gravatar.com/avatar/954a8b1f4c32dbb5a11399ae5e236a5f?s=80"
+               alt="胡军" />
+          <p class="site-author-name" itemprop="name">胡军</p>
+          <p class="site-description motion-element" itemprop="description">学习是一种生活方式</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">24</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+          
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/morrxy" target="_blank">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/morrxy" target="_blank">
+                  
+                    <i class="fa fa-twitter"></i> Twitter
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#多态"><span class="nav-number">1.</span> <span class="nav-text">多态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Multimethods"><span class="nav-number">2.</span> <span class="nav-text">Multimethods</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#协议"><span class="nav-number">2.1.</span> <span class="nav-text">协议</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#记录"><span class="nav-number">3.</span> <span class="nav-text">记录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进一步学习"><span class="nav-number">4.</span> <span class="nav-text">进一步学习</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#练习"><span class="nav-number">6.</span> <span class="nav-text">练习</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">胡军</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+
+  
+
+
+
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=0.5.0"></script>
+
+
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.scheme !== 'Pisces' && (CONFIG.sidebar.display === 'post' || CONFIG.sidebar.display === 'always')) {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"morrxy"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+
+</body>
+</html>
